@@ -1,0 +1,73 @@
+{
+  "path": "NRS_STATION.csv",
+  "name": "nrs_station",
+  "profile": "tabular-data-resource",
+  "scheme": "file",
+  "format": "csv",
+  "hashing": "md5",
+  "encoding": "utf-8",
+  "schema": {
+    "fields": [
+      {
+        "name": "FID",
+        "type": "string"
+      },
+      {
+        "name": "IMOS_SITE_CODE",
+        "type": "string",
+        "title": "IMOS unique code identifying the site",
+        "required": true,
+        "unique": true
+      },
+      {
+        "name": "STATION_NAME",
+        "type": "string",
+        "title": "Human-readable name of the station"
+      },
+      {
+        "name": "NODE",
+        "type": "string",
+        "title": "IMOS Node operating the station"
+      },
+      {
+        "name": "STATE",
+        "type": "string"
+      },
+      {
+        "name": "START_DATE",
+        "type": "date",
+        "title": "Station start date",
+        "description": "Date the station was first sampled (YYYY-MM-DD format)"
+      },
+      {
+        "name": "STATION_DEPTH_M",
+        "type": "number",
+        "title": "Water depth at the station in metres"
+      },
+      {
+        "name": "LONGITUDE",
+        "type": "number",
+        "title": "longitude",
+        "standard_name": "longitude",
+        "description": "Longitude (decimal degrees East)",
+        "minimum": -180,
+        "maximum": 180
+      },
+      {
+        "name": "LATITUDE",
+        "type": "number",
+        "title": "latitude",
+        "standard_name": "latitude",
+        "description": "Latitude (decimal degrees North)",
+        "minimum": -90,
+        "maximum": 90
+      },
+      {
+        "name": "STATION_PT",
+        "type": "string",
+        "required": true
+      }
+    ],
+    "primaryKey": "IMOS_SITE_CODE"
+  }
+}
