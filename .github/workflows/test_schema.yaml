@@ -1,0 +1,17 @@
+name: Test Schemas
+on: [push]
+jobs:
+  Test-NRS:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.5
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r code/requirements.txt
+      - name: Test NRS_StationInfo
+        run: frictionless validate csiro_harvest/NRS_StationInfo.resource.yaml
