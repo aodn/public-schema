@@ -14,4 +14,4 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r code/requirements.txt
       - name: Test NRS_StationInfo
-        run: frictionless validate csiro_harvest/NRS_StationInfo.resource.yaml
+        run: frictionless validate imos_bgc_db/NRS_StationInfo.resource.yaml
