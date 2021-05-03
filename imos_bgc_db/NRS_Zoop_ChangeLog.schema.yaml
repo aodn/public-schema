@@ -1,0 +1,8 @@
+fields:
+  - name: TAXON_NAME
+    type: string
+  - name: START_DATE
+    type: datetime
+  - name: PARENT_NAME
+    type: string
+primaryKey: TAXON_NAME
