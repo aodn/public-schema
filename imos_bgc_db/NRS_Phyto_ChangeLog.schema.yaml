@@ -12,3 +12,4 @@ primaryKey: TAXON_NAME
 missingValues:
   - ''
   - (null)
+version: 0.1.0

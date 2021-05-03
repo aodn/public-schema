@@ -40,5 +40,6 @@ fields:
     type: string
 primaryKey: STATIONCODE
 missingValues:
-  - ""
-  - "(null)"
+  - ''
+  - (null)
+version: 0.1.0
