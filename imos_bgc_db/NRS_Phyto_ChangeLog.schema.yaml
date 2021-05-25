@@ -1,0 +1,15 @@
+fields:
+  - name: TAXON_NAME
+    type: string
+  - name: START_DATE
+    description: Date the taxon was first searched for in samples
+    type: datetime
+  - name: PARENT_NAME
+    type: string
+  - name: TROPHY
+    type: string
+primaryKey: TAXON_NAME
+missingValues:
+  - ''
+  - (null)
+version: 0.1.0
