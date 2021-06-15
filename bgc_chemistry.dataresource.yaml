@@ -16,7 +16,7 @@ schema:
   - name: sampledepth_m
     title: Sample depth (m)
     type: integer
-    required: false
+    required: true
     unique: false
   - name: sampledatelocal
     title: Date & time of sample in local time
@@ -106,9 +106,10 @@ schema:
     title: Oxygen comments
     type: string
     required: false
+  primaryKey:
+  - trip_code
+  - sampledepth_m
 licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
   path: https://creativecommons.org/licenses/by/4.0/
-
-
