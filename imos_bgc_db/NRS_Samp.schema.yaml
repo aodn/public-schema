@@ -1,0 +1,34 @@
+fields:
+  - name: TRIP_CODE
+    description: Unique code for each sampling trip
+    type: string
+  - name: SAMPLE
+    description: Sample id
+    type: integer
+    unique: true
+  - name: STATION
+    description: Station name
+    type: string
+  - name: LATITUDE
+    description: Latitude (decimal degrees North)
+    type: number
+    maximum: 90
+    minimum: -90
+  - name: LONGITUDE
+    description: Longitude (decimal degrees East)
+    type: number
+    maximum: 180
+    minimum: -180
+  - name: SAMPLEDATELOCAL
+    description: Date and time of sample collection in local time zone (YYYY-MM-DD hh:mm:ss format)
+    type: datetime
+  - name: BIOMASS_MGM3
+    description: Biomass (mg/m3)
+    type: number
+  - name: SAMPLETYPE
+    type: string
+primaryKey: SAMPLE
+missingValues:
+  - ''
+  - (null)
+version: 0.1.0
