@@ -1,0 +1,63 @@
+comment on view bgc_phyto_countraw is 'A table of all BGC phytoplankton count data';
+comment on column bgc_phyto_countraw.trip_code is 'Unique identifier for sample';
+comment on column bgc_phyto_countraw.taxon_name is 'Scientific name of taxa';
+comment on column bgc_phyto_countraw.taxon_group is 'Functional group assigned to taxa';
+comment on column bgc_phyto_countraw.genus is 'Genus name of taxa';
+comment on column bgc_phyto_countraw.species is 'Species name of taxa';
+comment on column bgc_phyto_countraw.spcode is 'Species code for taxa AphiaID Worms';
+comment on column bgc_phyto_countraw.cell_count is 'Number of the taxa counted in sample';
+comment on column bgc_phyto_countraw.sampvol_l is 'Volume of sample analysed';
+
+--------------------------------------------------------------------------------
+
+profile: tabular-data-resource
+name: bgc_phyto_countraw
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_phyto_countraw
+title: bgc_phyto_countraw
+description: A table of all BGC phytoplankton count data
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: TRIP_CODE
+    title: Unique identifier for sample
+    type: string
+    required: true
+  - name: TAXON_NAME
+    title: Scientific name of taxa
+    type: string
+    required: true
+  - name: TAXON_GROUP
+    title: Functional group assigned to taxa
+    type: string
+    required: true
+  - name: GENUS
+    title: Genus name of taxa
+    type: string
+    required: false  
+  - name: SPECIES
+    title: Species name of taxa
+    type: string
+    required: false
+  - name: SPCODE
+    title: Species code for taxa AphiaID Worms
+    type: integer
+    required: false
+  - name: CELL_COUNT
+    title: Number of the taxa counted in sample
+    type: number
+    required: true
+  - name: SAMPVOL_L
+    title: Volume of sample analysed
+    type: number
+    required: false
+  primaryKey:
+  - TRIP_CODE
+  - TAXON_NAME
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
+
+
