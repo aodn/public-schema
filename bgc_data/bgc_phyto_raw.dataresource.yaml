@@ -1,8 +1,8 @@
 profile: tabular-data-resource
-name: bgc_phyto_countraw
-path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_phyto_countraw
-title: bgc_phyto_countraw
-description: A table of all BGC phytoplankton count data
+name: bgc_phyto_raw
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_phyto_raw
+title: bgc_phyto_raw
+description: A table of all BGC phytoplankton abundance data
 format: csv
 mediatype: text/csv
 encoding: utf-8
@@ -32,12 +32,12 @@ schema:
     title: Species code for taxa AphiaID Worms
     type: integer
     required: false
-  - name: CELL_COUNT
-    title: Number of the taxa counted in sample
+  - name: CELL_L
+    title: Abundance of the taxa in cells per litre of water
     type: number
     required: true
-  - name: SAMPVOL_L
-    title: Volume of sample analysed
+  - name: BIOVOLUME_UM3L
+    title: Biovolume of the taxa in um3 per litre of water
     type: number
     required: false
   primaryKey:
