@@ -8,67 +8,67 @@ mediatype: text/csv
 encoding: utf-8
 schema:
   fields:
-  - name: projectname
+  - name: PROJECTNAME
     title: Source project name
     type: string
     required: true
-  - name: stationcode
+  - name: STATIONCODE
     title: Station code used to build trip code
     type: string
     required: true
-  - name: stationname
+  - name: STATIONNAME
     title: Long station name
     type: string
     required: true
     unique: true
-  - name: node
-    title: Station node
+  - name: NODE
+    title: Name of relevant IMOS node
     type: string
     required: true
-  - name: statecode
+  - name: STATECODE
     title: State code for station location
     type: string
     required: true
-  - name: longitude
+  - name: LONGITUDE
     title: Longitude of station in decimal degrees East
     type: number
     minimum: -180
     maximum: 180
     required: false
-  - name: latitude
+  - name: LATITUDE
     title: Latitude of station in decimal degrees North
     type: number
     required: false
     minimum: -90
     maximum: 90
-  - name: stationstartdate
-    title: Date sampling started at that station
+  - name: STATIONSTARTDATE
+    title: "Date sampling started at that station (formatted string: YYYY-MM-DD)"
     type: date
     # format string *must* be specified using standard Python/C strptime specification
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d"
-    required: false
-  - name: stationdepth_m
+    required: true
+  - name: STATIONDEPTH_M
     title: Depth of station location in metres
     type: number
     required: false
-  - name: samplingeffort
+  - name: SAMPLINGEFFORT
     title: Frequency of sampling at station
     type: string
     required: true     
-  - name: imcra
+  - name: IMCRA
     title: The IMCRA bioregion
     type: string
     required: false
-  - name: imcra_pb
+  - name: IMCRA_PB
     title: The larger IMCRA bioregion
     type: string
     required: false
-  - name: managementregion
+  - name: MANAGEMENTREGION
     title: The bioregion as defined by Dept of Env
     type: string
     required: false
-  primaryKey: stationcode
+  primaryKey: STATIONCODE
 licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
