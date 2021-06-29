@@ -1,0 +1,77 @@
+profile: tabular-data-resource
+name: bgc_stationinfo
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_stationinfo
+title: bgc_stationinfo
+description: A table of fixed station information
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: projectname
+    title: Source project name
+    type: string
+    required: true
+  - name: stationcode
+    title: Station code used to build trip code
+    type: string
+    required: true
+  - name: stationname
+    title: Long station name
+    type: string
+    required: true
+    unique: true
+  - name: node
+    title: Station node
+    type: string
+    required: true
+  - name: statecode
+    title: State code for station location
+    type: string
+    required: true
+  - name: longitude
+    title: Longitude of station in decimal degrees East
+    type: number
+    minimum: -180
+    maximum: 180
+    required: false
+  - name: latitude
+    title: Latitude of station in decimal degrees North
+    type: number
+    required: false
+    minimum: -90
+    maximum: 90
+  - name: stationstartdate
+    title: Date sampling started at that station
+    type: date
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d"
+    required: false
+  - name: stationdepth_m
+    title: Depth of station location in metres
+    type: number
+    required: false
+  - name: samplingeffort
+    title: Frequency of sampling at station
+    type: string
+    required: true     
+  - name: imcra
+    title: The IMCRA bioregion
+    type: string
+    required: false
+  - name: imcra_pb
+    title: The larger IMCRA bioregion
+    type: string
+    required: false
+  - name: managementregion
+    title: The bioregion as defined by Dept of Env
+    type: string
+    required: false
+  primaryKey: stationcode
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
+
+
