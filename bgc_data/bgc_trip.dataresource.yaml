@@ -43,6 +43,10 @@ schema:
     title: Biomass in mg per m3 for Trip
     type: number
     required: false
+  - name: SECCHI_M
+    title: Secchi depth in m for Trip
+    type: number
+    required: false    
   - name: SAMPLETYPE
     title: Code for which analysis is available for that segment
     type: string
