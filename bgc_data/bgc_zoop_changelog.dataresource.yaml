@@ -1,8 +1,8 @@
 profile: tabular-data-resource
-name: bgc_phyto_changelog
-path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_phyto_changelog
-title: bgc_phyto_changelog
-description: A table of all BGC phytoplankton change log data
+name: bgc_zoop_changelog
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_zoop_changelog
+title: bgc_zoop_changelog
+description: A table of all BGC zooplankton change log data
 format: csv
 mediatype: text/csv
 encoding: utf-8
