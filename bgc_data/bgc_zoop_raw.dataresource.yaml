@@ -33,7 +33,7 @@ schema:
     type: string
     required: false 
   - name: SPCODE
-    title: "Species code assigned to taxa"
+    title: "Species code for taxa AphiaID Worms"
     type: string
     required: false     
   - name: ZOOP_ABUNDANCE_M3
