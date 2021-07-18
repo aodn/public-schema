@@ -20,6 +20,10 @@ schema:
     title: Station name sample was taken at
     type: string
     required: true
+  - name: STATIONCODE
+    title: Station name sample was taken at
+    type: string
+    required: true    
   - name: LONGITUDE
     title: Longitude of mid point of segment in decimal degrees East
     type: number
