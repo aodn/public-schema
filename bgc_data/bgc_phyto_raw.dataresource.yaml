@@ -40,6 +40,18 @@ schema:
     title: Biovolume of the taxa in um3 per litre of water
     type: number
     required: false
+  - name: CELL_COUNT
+    title: Number of the taxa counted in sample
+    type: number
+    required: true
+  - name: SAMPVOL_L
+    title: Volume of sample analysed
+    type: number
+    required: true
+  - name: COMMENTS
+    title: Comments
+    type: string                               
+    required: false    
   primaryKey:
   - TRIP_CODE
   - TAXON_NAME
