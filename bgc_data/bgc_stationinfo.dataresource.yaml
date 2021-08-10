@@ -1,0 +1,75 @@
+profile: tabular-data-resource
+name: bgc_stationinfo
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_stationinfo
+title: bgc_stationinfo
+description: A table of fixed station information
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: PROJECTNAME
+    title: Source project name
+    type: string
+    required: true
+  - name: STATIONCODE
+    title: Station code used to build trip code
+    type: string
+    required: true
+  - name: STATIONNAME
+    title: Long station name
+    type: string
+    required: true
+    unique: true
+  - name: NODE
+    title: Name of relevant IMOS node
+    type: string
+    required: true
+  - name: STATECODE
+    title: State code for station location
+    type: string
+    required: true
+  - name: LONGITUDE
+    title: Longitude of station in decimal degrees East
+    type: number
+    minimum: -180
+    maximum: 180
+    required: false
+  - name: LATITUDE
+    title: Latitude of station in decimal degrees North
+    type: number
+    required: false
+    minimum: -90
+    maximum: 90
+  - name: STATIONSTARTDATE
+    title: "Date sampling started at that station (formatted string: YYYY-MM-DD)"
+    type: date
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d"
+    required: true
+  - name: STATIONDEPTH_M
+    title: Depth of station location in metres
+    type: number
+    required: false
+  - name: SAMPLINGEFFORT
+    title: Frequency of sampling at station
+    type: string
+    required: true     
+  - name: IMCRA
+    title: The IMCRA bioregion
+    type: string
+    required: false
+  - name: IMCRA_PB
+    title: The larger IMCRA bioregion
+    type: string
+    required: false
+  - name: MANAGEMENTREGION
+    title: The bioregion as defined by Dept of Env
+    type: string
+    required: false
+  primaryKey: STATIONCODE
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/

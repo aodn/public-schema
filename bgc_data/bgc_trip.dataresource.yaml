@@ -1,0 +1,64 @@
+profile: tabular-data-resource
+name: bgc_trip
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_trip
+title: bgc_trip
+description: A table of all BGC Trips where there are data listed
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: PROJECTNAME
+    title: Source project name
+    type: string
+    required: true
+  - name: TRIP_CODE
+    title: Unique identifier for trip
+    type: string
+    required: true
+  - name: STATION
+    title: Station name sample was taken at
+    type: string
+    required: true
+  - name: STATIONCODE
+    title: Station name sample was taken at
+    type: string
+    required: true    
+  - name: LONGITUDE
+    title: Longitude of mid point of segment in decimal degrees East
+    type: number
+    minimum: -180
+    maximum: 180
+    required: true
+  - name: LATITUDE
+    title: Latitude of mid point of segment in decimal degrees North
+    type: number
+    required: true
+    minimum: -90
+    maximum: 90
+  - name: SAMPLEDATELOCAL
+    title: Date & time of sample in local time (formatted string)
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d %H:%M:%S"
+    required: true
+  - name: BIOMASS_MGM3
+    title: Biomass in mg per m3 for Trip
+    type: number
+    required: false
+  - name: SECCHI_M
+    title: Secchi depth in m for Trip
+    type: number
+    required: false    
+  - name: SAMPLETYPE
+    title: Code for which analysis is available for that segment
+    type: string
+    required: false
+  primaryKey: TRIP_CODE
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
+
+
