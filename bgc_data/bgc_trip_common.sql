@@ -18,6 +18,7 @@ CREATE VIEW bgc_trip_common AS
   --  "CTDSST_degC",
   --  "CTDChlaSurf_mgm3",
   --  "CTDSalinity_psu",
+    trip_code,
     sampletype,
     st_geomfromtext('POINT(' || longitude::text || ' ' || latitude::text || ')', 4326) AS geom
   FROM bgc_trip
