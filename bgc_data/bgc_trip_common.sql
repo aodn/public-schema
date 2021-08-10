@@ -8,11 +8,10 @@ CREATE VIEW bgc_trip_common AS
     trip_code AS "TripCode",
   --  TODO: sampledatelocal AT TIME ZONE "UTC" AS "SampleTime_UTC",
     sampledatelocal AS "SampleTime_local",
-  --  TODO: year/month/day/time24hr:
-  --  "Year_local",
-  --  "Month_local",
-  --  "Day_local",
-  --  "Time_local24hr",
+    extract(year from sampledatelocal)::int AS "Year_local",
+    extract(month from sampledatelocal)::int AS "Month_local",
+    extract(day from sampledatelocal)::int AS "Day_local",
+    to_char(sampledatelocal, 'HH24:MI') AS "Time_local24hr",
   --  TODO: "SampleDepth_m",
   --  TODO: CTD derived params:
   --  "CTDSST_degC",
