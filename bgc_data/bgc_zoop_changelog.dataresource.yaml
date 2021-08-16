@@ -2,17 +2,17 @@ profile: tabular-data-resource
 name: bgc_zoop_changelog
 path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_zoop_changelog
 title: bgc_zoop_changelog
-description: A table of all BGC zooplankton change log data
+description: "A table of all BGC zooplankton change log data"
 format: csv
 mediatype: text/csv
 encoding: utf-8
 schema:
   fields:
   - name: TAXON_NAME
-    title: "Taxonomic name that the species is currently identified as post start date"
+    title: "Taxonomic name that the species is currently identified as (post startdate)"
     type: string
     required: true
-  - name: START_DATE
+  - name: STARTDATE
     title: "Date from which the taxon_name was first consistently used (formatted string: YYYY-MM-DD)"
     type: date
     format: "%Y-%m-%d"
