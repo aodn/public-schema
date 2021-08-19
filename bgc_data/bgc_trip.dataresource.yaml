@@ -9,35 +9,43 @@ encoding: utf-8
 schema:
   fields:
   - name: PROJECTNAME
-    title: Source project name
+    title: "Source project name"
     type: string
     required: true
   - name: TRIP_CODE
-    title: Unique identifier for trip
+    title: "Unique identifier for trip"
     type: string
     required: true
-  - name: STATION
-    title: Station name sample was taken at
+  - name: STATIONNAME
+    title: "Station name sample was taken at"
     type: string
     required: true
   - name: STATIONCODE
-    title: Station name sample was taken at
+    title: "Station code (used to build trip code)"
     type: string
     required: true    
   - name: LONGITUDE
-    title: Longitude of mid point of segment in decimal degrees East
+    title: "Longitude of mid point of segment in decimal degrees East"
     type: number
     minimum: -180
     maximum: 180
-    required: true
+    required: true    
   - name: LATITUDE
-    title: Latitude of mid point of segment in decimal degrees North
+    title: "Latitude of mid point of segment in decimal degrees North"
     type: number
     required: true
     minimum: -90
     maximum: 90
+  - name: ZOOPSAMPLEDEPTH_M
+    title: "Depth (m) that zooplankton sample was obtained"
+    type: number
+    required: true
+  - name: PHYTOSAMPLEDEPTH_M
+    title: "Depth (m) that phytoplankton sample was obtained"
+    type: number
+    required: true    
   - name: SAMPLEDATELOCAL
-    title: Date & time of sample in local time (formatted string)
+    title: "Date & time of sample in local time (formatted string)"
     type: datetime
     # format string *must* be specified using standard Python/C strptime specification
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
@@ -60,5 +68,3 @@ licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
   path: https://creativecommons.org/licenses/by/4.0/
-
-
