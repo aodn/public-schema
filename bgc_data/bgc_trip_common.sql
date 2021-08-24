@@ -1,7 +1,7 @@
 CREATE VIEW bgc_trip_common AS
   SELECT
     projectname AS "Project",
-    station AS "StationName",
+    stationname AS "StationName",
     stationcode AS "StationCode",
     latitude AS "Latitude",
     longitude AS "Longitude",
