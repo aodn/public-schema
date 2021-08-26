@@ -1,0 +1,137 @@
+profile: tabular-data-resource
+name: bgc_chemistry
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_chemistry
+title: bgc_chemistry
+description: A table of fixed station information
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: PROJECTNAME
+    title: "Source project name"
+    type: string
+    required: true
+  - name: TRIP_CODE
+    title: "Identifier for trip"
+    type: string
+    required: true
+  - name: SAMPLEDEPTH_M
+    title: "Depth (m) that sample was obtained"
+    type: integer
+    required: true
+  - name: SAMPLEDATELOCAL
+    title: "Date & time of sample in local time (formatted string)"
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d %H:%M:%S"
+    required: false
+  - name: REPLICATE
+    title: ""
+    type: string
+    required: true
+  - name: SALINITY_PSU
+    title: "Salinity PSU value"
+    type: number
+    required: false
+  - name: SALINITY_FLAG
+    title: "FLAG value"
+    type: integer
+    required: true
+  - name: SALINITY_COMMENTS
+    title: ""
+    type: string
+    required: false
+  - name: SILICATE_UMOLL
+    title: "Silicate umoll"
+    type: number
+    required: false
+  - name: SILICATE_FLAG
+    title: "FLAG value"
+    type: integer
+    required: true
+  - name: NITRATE_UMOLL
+    title: ""
+    type: number
+    required: false
+  - name: NITRATE_FLAG
+    title: "FLAG value"
+    type: integer
+    required: true
+  - name: PHOSPHATE_UMOLL
+    title: ""
+    type: number
+    required: false
+  - name: PHOSPHATE_FLAG
+    title: "FLAG value"
+    type: integer
+    required: true
+  - name: AMMONIUM_UMOLL
+    title: ""
+    type: number
+    required: false
+  - name: AMMONIUM_FLAG
+    title: "FLAG value"
+    type: integer
+    required: true
+  - name: NITRITE_UMOLL
+    title: ""
+    type: number
+    required: false
+  - name: NITRITE_FLAG
+    title: "FLAG value"
+    type: integer
+    required: true
+  - name: NUTRIENT_COMMENTS
+    title: ""
+    type: string
+    required: false
+  - name: DIC_UMOLKG
+    title: ""
+    type: number
+    required: false
+  - name: CARBON_FLAG
+    title: "FLAG value"
+    type: integer
+    required: true
+  - name: CARBON_COMMENTS
+    title: ""
+    type: string
+    required: false
+  - name: TALKALINITY_UMOLKG
+    title: ""
+    type: number
+    required: false
+  - name: ALKALINITY_FLAG
+    title: "FLAG value"
+    type: integer
+    required: true    
+  - name: ALKALINITY_COMMENTS
+    title: ""
+    type: string
+    required: false
+  - name: OXYGEN_UMOLL
+    title: ""
+    type: number
+    required: false
+  - name: OXYGEN_FLAG
+    title: "FLAG value"
+    type: integer
+    required: true
+  - name: OXYGEN_COMMENTS
+    title: ""
+    type: string
+    required: false
+  - name: MICROBIOMESAMPLE_ID
+    title: "Microbiomesample_id"
+    type: string
+    required: false
+  primaryKey:
+  - TRIP_CODE
+  - SAMPLEDEPTH_M
+  - REPLICATE
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
