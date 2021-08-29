@@ -15,17 +15,17 @@ schema:
     unique: false
   - name: TRIP_CODE
     title: "Identifier for trip"
-    type: integer
+    type: string
     required: true
     unique: false
-  - name: SCIENTIFICNAME  
+  - name: SCIENTIFICNAME
     title: "Scientific name of taxa"
-    type: integer
+    type: string
     required: true
-    unique: false    
+    unique: false
   - name: TAXON_COUNT
     title: "Number of individuals"
-    type: number
+    type: integer
     required: true
   - name: COMMENTS
     title: "Optional comments"
