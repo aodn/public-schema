@@ -27,10 +27,6 @@ schema:
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
     required: false
-  - name: REPLICATE
-    title: ""
-    type: string
-    required: true
   - name: SALINITY_PSU
     title: "Salinity PSU value"
     type: number
