@@ -88,8 +88,7 @@ schema:
     title: "Optional comments on QC_FLAG"
     type: string
     required: false  
-  primaryKey:
-  - I_SAMPLE_ID
+  primaryKey: I_SAMPLE_ID
 licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0

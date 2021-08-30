@@ -23,6 +23,10 @@ schema:
     type: string
     required: true
     unique: false
+  - name: SPCODE
+    title: "Species code for taxa"
+    type: integer
+    required: true   
   - name: TAXON_COUNT
     title: "Number of individuals"
     type: integer
