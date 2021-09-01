@@ -2,7 +2,7 @@ profile: tabular-data-resource
 name: cpr_trip
 path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Acpr_trip
 title: cpr_trip
-description: A table of all CPR Trips where there are data listed
+description: "A table of all CPR Trips where there are data listed"
 format: csv
 mediatype: text/csv
 encoding: utf-8
