@@ -1,8 +1,8 @@
 profile: tabular-data-resource
-name: cpr_phyto_raw
-path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Acpr_phyto_raw
-title: cpr_phyto_raw
-description: "A table of all CPR phytoplankton abundance data"
+name: cpr_zoop_countraw
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Acpr_zoop_countraw
+title: cpr_zoop_countraw
+description: "A table of all CPR zooplankton raw count data"
 format: csv
 mediatype: text/csv
 encoding: utf-8
@@ -15,11 +15,15 @@ schema:
   - name: TAXON_NAME
     title: "Scientific name of taxa"
     type: string
-    required: true
+    required: true  
   - name: TAXON_GROUP
     title: "Functional group assigned to taxa"
     type: string
     required: true
+  - name: TAXON_GRP01 
+    title: "Custom taxonomic group name"
+    type: string
+    required: true    
   - name: GENUS
     title: "Genus name of taxa"
     type: string
@@ -32,20 +36,12 @@ schema:
     title: "Species code for taxa AphiaID Worms"
     type: integer
     required: false
-  - name: PHYTO_ABUNDANCE_M3
-    title: "Abundance of the taxa in cells per litre of water"
-    type: number
-    required: true
-  - name: BIOVOL_UM3M3
-    title: "Biovolume of the taxa in um3 per cubic metre of water"
-    type: number
-    required: false
-  - name: FOV_COUNT
+  - name: COUNTS
     title: "Number of the taxa counted"
     type: number
     required: true
-  - name: SAMPVOL_M3
-    title: "Volume of sample analysed (cubic metres)"
+  - name: SAMPVOL_L
+    title: "Volume of sample analysed (L)"
     type: number
     required: true   
   primaryKey:
