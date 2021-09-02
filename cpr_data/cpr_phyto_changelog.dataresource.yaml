@@ -1,0 +1,37 @@
+profile: tabular-data-resource
+name: cpr_phyto_changelog
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Acpr_phyto_changelog
+title: cpr_phyto_changelog
+description: "A table of all CPR phytoplankton change log data"
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: TAXON_NAME
+    title: "Taxonomic name that the species is currently identified as (post startdate)"
+    type: string
+    required: true
+  - name: STARTDATE
+    title: "Date from which the taxon_name was first consistently used (formatted string: YYYY-MM-DD)"
+    type: date
+    format: "%Y-%m-%d"
+    required: true    
+  - name: PARENT_NAME
+    title: "Taxon name which the species was known by before the start date"
+    type: string
+    required: false
+  - name: TRAINING
+    title: "Training from which the taxon_name was first consistently used"
+    type: string
+    required: false  
+  - name: COMMENTS
+    title: "Comments"
+    type: string                               
+    required: false
+  primaryKey:
+  - TAXON_NAME
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
