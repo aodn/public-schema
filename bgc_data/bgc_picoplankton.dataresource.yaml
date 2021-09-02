@@ -36,6 +36,7 @@ schema:
     type: number
     required: false  
   - name: SYNECOCHOCCUS_CELLSML
+<<<<<<< HEAD
     title: "Comments"
     type: number                               
     required: false  
@@ -53,6 +54,25 @@ schema:
     required: false  
   - name: PICOEUKARYOTES_FLAG
     title: "Comments"
+=======
+    title: ""
+    type: number                               
+    required: false  
+  - name: PICOEUKARYOTES_CELLSML
+    title: ""
+    type: number                               
+    required: false  
+  - name: PROCHLOROCOCCUS_FLAG
+    title: ""
+    type: integer                               
+    required: false  
+  - name: SYNECOCHOCCUS_FLAG
+    title: ""
+    type: integer                               
+    required: false  
+  - name: PICOEUKARYOTES_FLAG
+    title: ""
+>>>>>>> 79fae45... Added bgc_tss, minor mod to bgc_picoplankton
     type: integer                               
     required: false  
   - name: PICO_COMMENTS
