@@ -1,14 +1,14 @@
--- Materialized view for Phytoplankton Species abundance product
+-- Materialized view for Phytoplankton Species biovolume product
 -- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
--- which will convert the josnb `abundances` column into separate CSV columns on output.
-CREATE MATERIALIZED VIEW bgc_phytoplankton_abundance_species_data AS
+-- which will convert the josnb `biovolumes` column into separate CSV columns on output.
+CREATE MATERIALIZED VIEW bgc_phytoplankton_biovolume_species_data AS
 WITH bgc_phyto_raw_species AS (
     -- filter out rows where species hasn't been identified,
     -- concatenate genus and species to create a simplifed taxon name
     -- (without comments about with flagellates, cilliates etc...)
     SELECT trip_code,
            genus || ' ' || species AS taxon_name,
-           cell_l
+           biovolume_um3l
     FROM bgc_phyto_raw
     WHERE species IS NOT NULL AND
           species != 'spp.' AND
@@ -21,7 +21,7 @@ WITH bgc_phyto_raw_species AS (
            taxon_name,
            c.startdate,
            taxon_name != c.parent_name AS species_changed,
-           sum(r.cell_l) AS cell_l
+           sum(r.biovolume_um3l) AS biovolume_um3l
     FROM bgc_phyto_raw_species r LEFT JOIN bgc_phyto_changelog c USING (taxon_name)
     GROUP BY trip_code, taxon_name, startdate, species_changed
 ), species_affected AS (
@@ -30,39 +30,39 @@ WITH bgc_phyto_raw_species AS (
     FROM grouped
     WHERE species_changed
 
-), default_abundances AS (
-    -- for species affected by taxonomy change, set default abundance values
+), default_biovolumes AS (
+    -- for species affected by taxonomy change, set default biovolume values
     -- (NULL for 'not looked for', 0 for 'not found')
     SELECT m.trip_code,
            s.taxon_name,
            CASE
                WHEN m."SampleTime_local" < s.startdate THEN NULL
                ELSE 0.
-           END AS cell_l
+           END AS biovolume_um3l
     FROM bgc_phytoplankton_map m CROSS JOIN species_affected s
 ), defaults_and_grouped AS (
     -- stack together observations and default values
-    SELECT trip_code, taxon_name, cell_l  FROM default_abundances
+    SELECT trip_code, taxon_name, biovolume_um3l  FROM default_biovolumes
     UNION ALL
-    SELECT trip_code, taxon_name, cell_l  FROM grouped
+    SELECT trip_code, taxon_name, biovolume_um3l  FROM grouped
 ), regrouped AS (
-    -- create a single row per trip/species, making sure observed abundances override default values
+    -- create a single row per trip/species, making sure observed biovolumes override default values
     SELECT trip_code,
            taxon_name,
-           max(cell_l) AS cell_l
+           max(biovolume_um3l) AS biovolume_um3l
     FROM defaults_and_grouped
     GROUP BY trip_code, taxon_name
 ), pivoted AS (
     -- aggregate all species per trip into a single row
     SELECT trip_code,
-           jsonb_object_agg(taxon_name, cell_l) AS abundances
+           jsonb_object_agg(taxon_name, biovolume_um3l) AS biovolumes
     FROM regrouped
     GROUP BY trip_code
 )
 -- join on to metadata columns, include a row for every trip with phytoplankton samples taken
 -- add dummy entry in case no species has been identified in this sample
 SELECT m.*,
-       coalesce(p.abundances, '{"Paralia sulcata": 0}'::jsonb) AS abundances
+       coalesce(p.biovolumes, '{"Paralia sulcata": 0}'::jsonb) AS biovolumes
 FROM bgc_phytoplankton_map m LEFT JOIN pivoted p USING (trip_code)
 ORDER BY trip_code
 ;
