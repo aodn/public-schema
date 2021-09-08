@@ -62,7 +62,7 @@ WITH bgc_phyto_raw_species AS (
 -- join on to metadata columns, include a row for every trip with phytoplankton samples taken
 -- add dummy entry in case no species has been identified in this sample
 SELECT m.*,
-       coalesce(p.abundances, '{"Paralia sulcata": 0}'::jsonb) AS abundances
+       p.abundances
 FROM bgc_phytoplankton_map m LEFT JOIN pivoted p USING (trip_code)
 ORDER BY trip_code
 ;

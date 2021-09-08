@@ -21,6 +21,6 @@ WITH grouped AS (
 -- join on to metadata columns, include a row for every trip with phytoplankton samples taken
 -- add dummy entry in case no phytoplankton have been identified in this sample
 SELECT m.*,
-       coalesce(p.biovolumes, '{"Ciliate": 0}'::jsonb) AS biovolumes
+       p.biovolumes
 FROM bgc_phytoplankton_map m LEFT JOIN pivoted p USING (trip_code)
 ;
