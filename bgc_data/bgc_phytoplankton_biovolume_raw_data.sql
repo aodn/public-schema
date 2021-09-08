@@ -10,7 +10,6 @@ WITH pivoted AS (
     GROUP BY trip_code
 )
 -- join on to metadata columns, include a row for every trip with phytoplankton samples taken
--- add dummy entry in case no phytoplankton have been identified in this sample
 SELECT m.*,
        p.biovolumes
 FROM bgc_phytoplankton_map m LEFT JOIN pivoted p USING (trip_code)
