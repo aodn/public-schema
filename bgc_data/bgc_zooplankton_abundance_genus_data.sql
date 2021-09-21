@@ -1,8 +1,7 @@
 -- Materialized view for Zooplankton Genus product
 -- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
 -- which will convert the josnb `abundances` column into separate CSV columns on output.
---CREATE MATERIALIZED VIEW bgc_zooplankton_abundance_genus_data AS
-set search_path = imos_bgc_db, public;
+CREATE MATERIALIZED VIEW bgc_zooplankton_abundance_genus_data AS
 WITH grouped AS (
     -- join changelog on to raw data, pick only rows where genus identified
     -- group by trip, genus and changelog details
