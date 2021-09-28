@@ -1,0 +1,41 @@
+profile: tabular-data-resource
+name: phytoinfo
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Aphytoinfo
+title: phytoinfo
+description: "A table of Phytoinfo"
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: SPCODE
+    title: "Species code for taxa AphiaID Worms"
+    type: integer
+    required: false
+    unique: false
+  - name: TAXON_NAME
+    title: "Name of taxa"
+    type: string
+    required: true
+    unique: true
+  - name: BV_CELL
+    title: ""
+    type: number
+    required: false
+  - name: MONT2001PGN_CELL
+    title: ""
+    type: number
+    required: false
+  - name: PGC_CELL
+    title: ""
+    type: number
+    required: false
+  - name: TROPHY
+    title: ""
+    type: string
+    required: false    
+  primaryKey: TAXON_NAME
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/

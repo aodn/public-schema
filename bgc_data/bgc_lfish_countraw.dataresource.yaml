@@ -1,0 +1,44 @@
+profile: tabular-data-resource
+name: bgc_lfish_countraw
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_lfish_countraw
+title: bgc_lfish_countraw
+description: "A table of all BGC larval fish count data"
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: I_SAMPLE_ID
+    title: "Sample identifier"
+    type: integer
+    required: true
+    unique: false
+  - name: TRIP_CODE
+    title: "Identifier for trip"
+    type: string
+    required: true
+    unique: false
+  - name: SCIENTIFICNAME
+    title: "Scientific name of taxa"
+    type: string
+    required: true
+    unique: false
+  - name: SPCODE
+    title: "Species code for taxa"
+    type: integer
+    required: true   
+  - name: TAXON_COUNT
+    title: "Number of individuals"
+    type: integer
+    required: true
+  - name: COMMENTS
+    title: "Optional comments"
+    type: string
+    required: false
+  primaryKey:
+  - I_SAMPLE_ID
+  - SCIENTIFICNAME
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
