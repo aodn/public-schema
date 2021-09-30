@@ -85,7 +85,7 @@ schema:
     required: false
   - name: DIC_UMOLKG
     title: ""
-    type: number
+    type: string
     required: false
   - name: CARBON_FLAG
     title: "FLAG value"
@@ -109,7 +109,7 @@ schema:
     required: false
   - name: OXYGEN_UMOLL
     title: ""
-    type: number
+    type: string
     required: false
   - name: OXYGEN_FLAG
     title: "FLAG value"

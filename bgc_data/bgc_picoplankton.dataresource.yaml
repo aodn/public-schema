@@ -18,7 +18,7 @@ schema:
     required: true
   - name: SAMPLEDEPTH_M
     title: "Depth (m) that sample was obtained, contains Flag Value"
-    type: number
+    type: string
     required: true    
   - name: SAMPLEDATELOCAL
     title: "Date & time of sample in local time (formatted string)"
@@ -36,25 +36,6 @@ schema:
     type: number
     required: false  
   - name: SYNECOCHOCCUS_CELLSML
-<<<<<<< HEAD
-    title: "Comments"
-    type: number                               
-    required: false  
-  - name: PICOEUKARYOTES_CELLSML
-    title: "Comments"
-    type: number                               
-    required: false  
-  - name: PROCHLOROCOCCUS_FLAG
-    title: "Comments"
-    type: integer                               
-    required: false  
-  - name: SYNECOCHOCCUS_FLAG
-    title: "Comments"
-    type: integer                               
-    required: false  
-  - name: PICOEUKARYOTES_FLAG
-    title: "Comments"
-=======
     title: ""
     type: number                               
     required: false  
@@ -72,7 +53,6 @@ schema:
     required: false  
   - name: PICOEUKARYOTES_FLAG
     title: ""
->>>>>>> 79fae45... Added bgc_tss, minor mod to bgc_picoplankton
     type: integer                               
     required: false  
   - name: PICO_COMMENTS
@@ -118,7 +98,7 @@ schema:
     required: false  
   - name: ANALYSIS_VOLUME_UL
     title: ""
-    type: integer                               
+    type: string                               
     required: false  
   - name: FLOW_RATE_UL_PER_MIN
     title: ""
@@ -138,3 +118,4 @@ licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
   path: https://creativecommons.org/licenses/by/4.0/
+
