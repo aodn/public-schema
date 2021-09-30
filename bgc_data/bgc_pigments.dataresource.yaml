@@ -29,7 +29,7 @@ schema:
     title: "Depth (m) that sample was obtained"
     type: string
     required: false
-    - name: CPHL_C3
+  - name: CPHL_C3
     title: ""
     type: number
     required: false
@@ -49,7 +49,7 @@ schema:
     title: ""
     type: number
     required: false
-    - name: CPHLIDE_A
+  - name: CPHLIDE_A
     title: ""
     type: number
     required: false
@@ -69,7 +69,7 @@ schema:
     title: ""
     type: number
     required: false    
-    - name: FUCO
+  - name: FUCO
     title: ""
     type: number
     required: false
@@ -89,7 +89,7 @@ schema:
     title: ""
     type: number
     required: false    
-    - name: HEX_FUCO
+  - name: HEX_FUCO
     title: ""
     type: number
     required: false
@@ -109,7 +109,7 @@ schema:
     title: ""
     type: number
     required: false    
-    - name: ANTH
+  - name: ANTH
     title: ""
     type: number
     required: false
@@ -129,7 +129,7 @@ schema:
     title: ""
     type: number
     required: false     
-    - name: LUT
+  - name: LUT
     title: ""
     type: number
     required: false
@@ -149,7 +149,7 @@ schema:
     title: ""
     type: number
     required: false   
-    - name: DV_CPHL_B_AND_CPHL_B
+  - name: DV_CPHL_B_AND_CPHL_B
     title: ""
     type: number
     required: false
@@ -169,7 +169,7 @@ schema:
     title: ""
     type: number
     required: false  
-    - name: PHYTIN_B
+  - name: PHYTIN_B
     title: ""
     type: number
     required: false
