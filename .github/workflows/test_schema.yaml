@@ -3,6 +3,8 @@ on: push
 jobs:
   Test-IMOS-BGC-schemas:
     runs-on: ubuntu-latest
+    env:
+      files: bgc_data/*.dataresource.yaml
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
@@ -15,7 +17,9 @@ jobs:
           pip install -r code/requirements.txt
       - name: Validate schema definitions
         run: |
-          for schema in imos_bgc_db/*.schema.yaml; do
+          for schema in ${{ env.files }} ; do
             echo Validating ${schema}
             frictionless validate $schema
           done
+      - name: Validate data against schemas
+        run: code/validate.py ${{ env.files }}
