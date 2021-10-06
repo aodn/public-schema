@@ -17,10 +17,14 @@ jobs:
           pip install -r code/requirements.txt
       - name: Validate schema definitions
         run: |
+          errors=0
           for schema in ${{ env.files }} ; do
+            echo
             echo Validating ${schema}
-            frictionless validate $schema
+            (frictionless validate ${schema} --limit-errors 5 --skip-fields FID)
+            (( errors+=$? ))
           done
+          exit $errors
   Validate_data:
     runs-on: ubuntu-latest
     steps:
