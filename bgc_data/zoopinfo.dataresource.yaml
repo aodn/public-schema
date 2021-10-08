@@ -1,0 +1,53 @@
+profile: tabular-data-resource
+name: zoopinfo
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Azoopinfo
+title: zoopinfo
+description: "A table of Zoopinfo"
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: TAXON_NAME
+    title: "Name of taxa"
+    type: string
+    required: true
+    unique: true
+  - name: SUBGENERA
+    title: ""
+    type: string
+    required: false     
+  - name: FUNCTIONALGROUP
+    title: ""
+    type: string
+    required: false   
+  - name: GENUS
+    title: ""
+    type: string
+    required: false 
+  - name: SPECIES
+    title: ""
+    type: string
+    required: false     
+  - name: SPCODE
+    title: "Species code for taxa AphiaID Worms"
+    type: integer
+    required: false
+    unique: false
+  - name: LENGTH_MM
+    title: ""
+    type: number
+    required: false 
+  - name: SIZEREFERENCE
+    title: ""
+    type: string
+    required: false     
+  - name: DIET
+    title: ""
+    type: string
+    required: false    
+  primaryKey: TAXON_NAME
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
