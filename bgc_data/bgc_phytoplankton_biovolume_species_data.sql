@@ -63,5 +63,4 @@ WITH bgc_phyto_raw_species AS (
 SELECT m.*,
        p.biovolumes
 FROM bgc_phytoplankton_map m LEFT JOIN pivoted p USING (trip_code)
-ORDER BY trip_code
 ;
