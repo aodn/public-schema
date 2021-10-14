@@ -7,22 +7,32 @@ Helper functions for validating schemas and resources using the Frictionless fra
 
 import sys
 
-from frictionless import Resource, Layout, validate_resource
+from frictionless import Resource, Layout, validate, FrictionlessException
+from yaml import YAMLError
+from yaml.scanner import ScannerError
 
 
-def validate_resource_from_geoserver(resouce:[str, Resource]):
+def resource_valid(resouce:[str, Resource]):
     """
-    Validate the given resource, accessing the data from
+    Validate the given resource (including data accessed from the specified path)
 
     :param resouce: frictionless.Resource object, path to a resource file
-    :return: frictionless.Report object
+    :return: tuple (valid:bool, errors:list)
     """
     if not isinstance(resouce, Resource):
-        resource = Resource(resouce)
+        try:
+            resource = Resource(resouce)
+        except FrictionlessException as e:
+            return False, [f"Not a valid resource description:\n{e}"]
 
     resource.layout = Layout(skip_fields=['FID'])
 
-    return validate_resource(resource)
+    try:
+        report = validate(resource)
+    except FrictionlessException as e:
+        return False, [f"An exception occurred during validation:\n{e}"]
+
+    return report.valid, report.flatten(['name', 'message'])
 
 
 if __name__ == '__main__':
@@ -31,14 +41,13 @@ if __name__ == '__main__':
 
     nfail = 0
     for res in sys.argv[1:]:
-        print('Validating {} ... '.format(res), end='')
-        report = validate_resource_from_geoserver(res)
-        if report.valid:
+        print('\nValidating {} ... '.format(res), end='')
+        valid, errors = resource_valid(res)
+        if valid:
             print('Valid')
         else:
             print('Not valid!')
             nfail += 1
-            errors = report.flatten(['name', 'message'])
             print(*errors[:5], sep='\n')
             if len(errors) > 5:
                 print('... ({} errors)'.format(len(errors)))

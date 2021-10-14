@@ -1,0 +1,19 @@
+name: Test Resources
+on: push
+env:
+  files: bgc_data/*.dataresource.yaml
+jobs:
+  Validate_resources:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r code/requirements.txt
+      - name: Validate data against schemas
+        run: code/validate.py ${{ env.files }}
