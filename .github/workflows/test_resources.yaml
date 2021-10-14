@@ -1,10 +1,12 @@
 name: Test Resources
 on: push
-env:
-  files: bgc_data/*.dataresource.yaml
 jobs:
   Validate_resources:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        files: ['bgc_data/bgc_*.yaml']
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
@@ -16,4 +18,4 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r code/requirements.txt
       - name: Validate data against schemas
-        run: code/validate.py ${{ env.files }}
+        run: code/validate.py ${{ matrix.files }}
