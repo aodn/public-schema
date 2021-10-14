@@ -8,8 +8,6 @@ Helper functions for validating schemas and resources using the Frictionless fra
 import sys
 
 from frictionless import Resource, Layout, validate, FrictionlessException
-from yaml import YAMLError
-from yaml.scanner import ScannerError
 
 
 def resource_valid(resouce:[str, Resource]):
@@ -24,8 +22,6 @@ def resource_valid(resouce:[str, Resource]):
             resource = Resource(resouce)
         except FrictionlessException as e:
             return False, [f"Not a valid resource description:\n{e}"]
-
-    resource.layout = Layout(skip_fields=['FID'])
 
     try:
         report = validate(resource)
