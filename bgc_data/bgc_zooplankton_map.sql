@@ -1,5 +1,5 @@
 -- This view is the basis for the WMS layer (seen on step 2 on AODN Portal).
--- It also provides the metadata columns for all the phytoplankton products.
+-- It also provides the metadata columns for all the zooplankton products.
 CREATE MATERIALIZED VIEW bgc_zooplankton_map AS
 SELECT
     projectname AS "Project",

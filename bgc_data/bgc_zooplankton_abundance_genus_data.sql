@@ -27,7 +27,7 @@ WITH grouped AS (
                WHEN m."SampleTime_local" < g.startdate THEN NULL
                ELSE 0.
            END AS zoop_abundance_m3
-    FROM bgc_phytoplankton_map m CROSS JOIN genera_affected g
+    FROM bgc_zooplankton_map m CROSS JOIN genera_affected g
 ), defaults_and_grouped AS (
     -- stack together observations and default values
     SELECT trip_code, genus, zoop_abundance_m3  FROM default_abundances
@@ -47,7 +47,7 @@ WITH grouped AS (
     FROM regrouped
     GROUP BY trip_code
 )
--- join on to metadata columns, include a row for every trip with phytoplankton samples taken
+-- join on to metadata columns, include a row for every trip with zooplankton samples taken
 SELECT m.*,
        p.abundances
 FROM bgc_zooplankton_map m LEFT JOIN pivoted p USING (trip_code)

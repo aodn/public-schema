@@ -9,7 +9,7 @@ WITH pivoted AS (
     FROM bgc_zoop_raw
     GROUP BY trip_code
 )
--- join on to metadata columns, include a row for every trip with phytoplankton samples taken
+-- join on to metadata columns, include a row for every trip with zooplankton samples taken
 SELECT m.*,
        p.abundances
 FROM bgc_zooplankton_map m LEFT JOIN pivoted p USING (trip_code)
