@@ -1,10 +1,10 @@
 -- Materialized view for Phytoplankton Species abundance product
 -- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
--- which will convert the josnb `abundances` column into separate CSV columns on output.
+-- which will convert the jsonb `abundances` column into separate CSV columns on output.
 CREATE MATERIALIZED VIEW bgc_phytoplankton_abundance_species_data AS
 WITH bgc_phyto_raw_species AS (
     -- filter out rows where species hasn't been identified,
-    -- concatenate genus and species to create a simplifed taxon name
+    -- concatenate genus and species to create a simplified taxon name
     -- (without comments about with flagellates, cilliates etc...)
     SELECT trip_code,
            genus || ' ' || species AS taxon_name,
@@ -63,5 +63,4 @@ WITH bgc_phyto_raw_species AS (
 SELECT m.*,
        p.abundances
 FROM bgc_phytoplankton_map m LEFT JOIN pivoted p USING (trip_code)
-ORDER BY trip_code
 ;
