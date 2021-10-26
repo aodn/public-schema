@@ -35,17 +35,20 @@ if __name__ == '__main__':
     if len(sys.argv) < 2:
         print('Usage: {} resource.yaml ...'.format(*sys.argv))
 
-    nfail = 0
+    invalid = []
     for res in sys.argv[1:]:
-        print('\nValidating {} ... '.format(res), end='')
+        print('\n{} ... '.format(res), end='')
         valid, errors = resource_valid(res)
         if valid:
-            print('Valid')
+            print('ok')
         else:
-            print('Not valid!')
-            nfail += 1
+            print('invalid!')
             print(*errors[:5], sep='\n')
             if len(errors) > 5:
                 print('... ({} errors)'.format(len(errors)))
+            invalid.append(res)
 
-    exit(nfail)
+    if invalid:
+        print('\n', 55*'-', 'Invalid resources:', *invalid, 55*'-', sep='\n')
+
+    exit(len(invalid))
