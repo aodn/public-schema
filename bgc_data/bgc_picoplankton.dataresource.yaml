@@ -6,6 +6,8 @@ description: "A table of all BGC picoplankton abundance data"
 format: csv
 mediatype: text/csv
 encoding: utf-8
+layout:
+  skipFields: [ FID ]
 schema:
   fields:
   - name: TRIP_CODE
