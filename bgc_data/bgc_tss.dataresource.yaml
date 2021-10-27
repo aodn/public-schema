@@ -14,13 +14,6 @@ schema:
     title: "Identifier for trip"
     type: string
     required: true
-  - name: SAMPLEDATELOCAL
-    title: "Date & time of sample in local time (formatted string)"
-    type: datetime
-    # format string *must* be specified using standard Python/C strptime specification
-    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
-    format: "%Y-%m-%d %H:%M:%S"
-    required: false      
   - name: SAMPLEDEPTH_M
     title: "Depth (m) that sample was obtained, contains Flag Value"
     type: string
@@ -30,27 +23,21 @@ schema:
     type: integer
     required: true
   - name: TSS_MGL
-    title: ""
     type: number
     required: false  
   - name: INORGANICFRACTION_MGL
-    title: ""
     type: number                               
     required: false  
   - name: ORGANICFRACTION_MGL
-    title: ""
     type: number                               
     required: false 
   - name: TSS_FLAG
-    title: ""
     type: string                               
     required: true
   - name: TSS_COMMENTS
-    title: ""
     type: string                               
     required: false
   - name: BLANKADJUSTAVAILABLE
-    title: ""
     type: string                               
     required: false      
   primaryKey:
@@ -61,3 +48,4 @@ licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
   path: https://creativecommons.org/licenses/by/4.0/
+
