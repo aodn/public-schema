@@ -10,25 +10,14 @@ layout:
   skipFields: [ FID ]
 schema:
   fields:
-  - name: PROJECTNAME
-    title: "Source project name"
-    type: string
-    required: true
   - name: TRIP_CODE
     title: "Identifier for trip"
     type: string
     required: true
   - name: SAMPLEDEPTH_M
     title: "Depth (m) that sample was obtained"
-    type: integer
+    type: number
     required: true
-  - name: SAMPLEDATELOCAL
-    title: "Date & time of sample in local time (formatted string)"
-    type: datetime
-    # format string *must* be specified using standard Python/C strptime specification
-    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
-    format: "%Y-%m-%d %H:%M:%S"
-    required: false
   - name: SALINITY_PSU
     title: "Salinity PSU value"
     type: number
@@ -38,7 +27,6 @@ schema:
     type: integer
     required: true
   - name: SALINITY_COMMENTS
-    title: ""
     type: string
     required: false
   - name: SILICATE_UMOLL
@@ -50,7 +38,6 @@ schema:
     type: integer
     required: true
   - name: NITRATE_UMOLL
-    title: ""
     type: number
     required: false
   - name: NITRATE_FLAG
@@ -58,7 +45,6 @@ schema:
     type: integer
     required: true
   - name: PHOSPHATE_UMOLL
-    title: ""
     type: number
     required: false
   - name: PHOSPHATE_FLAG
@@ -66,7 +52,6 @@ schema:
     type: integer
     required: true
   - name: AMMONIUM_UMOLL
-    title: ""
     type: number
     required: false
   - name: AMMONIUM_FLAG
@@ -74,7 +59,6 @@ schema:
     type: integer
     required: true
   - name: NITRITE_UMOLL
-    title: ""
     type: number
     required: false
   - name: NITRITE_FLAG
@@ -82,23 +66,19 @@ schema:
     type: integer
     required: true
   - name: NUTRIENT_COMMENTS
-    title: ""
     type: string
     required: false
   - name: DIC_UMOLKG
-    title: ""
-    type: string
+    type: number
     required: false
   - name: CARBON_FLAG
     title: "FLAG value"
     type: integer
     required: true
   - name: CARBON_COMMENTS
-    title: ""
     type: string
     required: false
   - name: TALKALINITY_UMOLKG
-    title: ""
     type: number
     required: false
   - name: ALKALINITY_FLAG
@@ -106,19 +86,16 @@ schema:
     type: integer
     required: true    
   - name: ALKALINITY_COMMENTS
-    title: ""
     type: string
     required: false
   - name: OXYGEN_UMOLL
-    title: ""
-    type: string
+    type: number
     required: false
   - name: OXYGEN_FLAG
     title: "FLAG value"
     type: integer
     required: true
   - name: OXYGEN_COMMENTS
-    title: ""
     type: string
     required: false
   - name: MICROBIOMESAMPLE_ID
@@ -128,8 +105,8 @@ schema:
   primaryKey:
   - TRIP_CODE
   - SAMPLEDEPTH_M
-  - REPLICATE
 licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
   path: https://creativecommons.org/licenses/by/4.0/
+
