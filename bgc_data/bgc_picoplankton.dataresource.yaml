@@ -22,41 +22,27 @@ schema:
     title: "Depth (m) that sample was obtained, contains Flag Value"
     type: string
     required: true    
-  - name: SAMPLEDATELOCAL
-    title: "Date & time of sample in local time (formatted string)"
-    type: datetime
-    # format string *must* be specified using standard Python/C strptime specification
-    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
-    format: "%Y-%m-%d %H:%M:%S"
-    required: true  
   - name: REPLICATE
-    title: ""
-    type: string
+    type: integer
     required: true
   - name: PROCHLOROCOCCUS_CELLSML
-    title: ""
     type: number
     required: false  
   - name: SYNECOCHOCCUS_CELLSML
-    title: ""
     type: number                               
     required: false  
   - name: PICOEUKARYOTES_CELLSML
-    title: ""
     type: number                               
     required: false  
   - name: PROCHLOROCOCCUS_FLAG
-    title: ""
     type: integer                               
-    required: false  
+    required: true  
   - name: SYNECOCHOCCUS_FLAG
-    title: ""
     type: integer                               
-    required: false  
+    required: true  
   - name: PICOEUKARYOTES_FLAG
-    title: ""
     type: integer                               
-    required: false  
+    required: true  
   - name: PICO_COMMENTS
     title: "Comments"
     type: string                               
@@ -71,15 +57,12 @@ schema:
     format: "%Y-%m-%d"
     required: false 
   - name: ANALYST_NAME
-    title: ""
     type: string                               
     required: false  
   - name: TEMP_THAWED_DEGC
-    title: ""
     type: number                               
     required: false  
   - name: INTERNAL_STANDARD
-    title: ""
     type: string                               
     required: false  
   - name: INSTRUMENT_BRAND_MODEL
@@ -99,15 +82,12 @@ schema:
     type: string                               
     required: false  
   - name: ANALYSIS_VOLUME_UL
-    title: ""
-    type: string                               
+    type: number                               
     required: false  
   - name: FLOW_RATE_UL_PER_MIN
-    title: ""
     type: integer                               
     required: false  
   - name: ANALYSIS_TIME_MINUTES
-    title: ""
     type: integer                               
     required: false  
   - name: BATCH_COMMENTS
@@ -115,7 +95,7 @@ schema:
     type: string                               
     required: false
   primaryKey:
-  - TAXON_NAME
+  - SAMPLE_CODE
 licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
