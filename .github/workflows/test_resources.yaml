@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        files: ['bgc_data/bgc_*.yaml']
+        files: ['bgc_data/bgc_*.yaml', 'cpr_data/cpr_*.yaml']
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
