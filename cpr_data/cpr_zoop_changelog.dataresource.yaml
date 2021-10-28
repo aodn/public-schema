@@ -6,6 +6,8 @@ description: "A table of all CPR zooplankton change log data"
 format: csv
 mediatype: text/csv
 encoding: utf-8
+layout:
+  skipFields: [ FID ]
 schema:
   fields:
   - name: TAXON_NAME
@@ -35,3 +37,4 @@ licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
   path: https://creativecommons.org/licenses/by/4.0/
+

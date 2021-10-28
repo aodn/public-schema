@@ -6,6 +6,8 @@ description: "A table of all CPR Trips where there are data listed"
 format: csv
 mediatype: text/csv
 encoding: utf-8
+layout:
+  skipFields: [ FID ]
 schema:
   fields:
   - name: TRIP_CODE
@@ -21,7 +23,6 @@ schema:
     type: string
     required: true  
   - name: REGION
-    title: ""
     type: string
     required: false  
   - name: STARTLATITUDE
@@ -63,7 +64,6 @@ schema:
     format: "%Y-%m-%d %H:%M:%S"
     required: true      
   - name: MILES
-    title: ""
     type: number
     required: true
   - name: VESSEL_NAME
@@ -71,7 +71,6 @@ schema:
     type: string
     required: true    
   - name: ACKNOWLEDGEMENTS
-    title: ""
     type: string
     required: true
   primaryKey: TRIP_CODE
@@ -79,3 +78,4 @@ licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
   path: https://creativecommons.org/licenses/by/4.0/
+
