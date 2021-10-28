@@ -1,8 +1,16 @@
-name: Test Schemas
-on: push
+name: Test Resources
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 jobs:
-  Test-IMOS-BGC-schemas:
+  Validate:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        files: ['bgc_data/bgc_*.yaml']
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
@@ -13,9 +21,5 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r code/requirements.txt
-      - name: Validate schema definitions
-        run: |
-          for schema in imos_bgc_db/*.schema.yaml; do
-            echo Validating ${schema}
-            frictionless validate $schema
-          done
+      - name: Validate data against schemas
+        run: code/validate.py ${{ matrix.files }}

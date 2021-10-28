@@ -1,0 +1,98 @@
+profile: tabular-data-resource
+name: bgc_lfish_samples
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_lfish_samples
+title: bgc_lfish_samples
+description: "A table of all BGC larval fish sampling information"
+format: csv
+mediatype: text/csv
+encoding: utf-8
+layout:
+  skipFields: [ FID ]
+schema:
+  fields:
+  - name: I_SAMPLE_ID
+    title: "Sample identifier"
+    type: integer
+    required: true
+    unique: true
+  - name: PROJECTNAME
+    title: "Source project name"
+    type: string
+    required: true   
+  - name: TRIP_CODE
+    title: "Identifier for trip"
+    type: string
+    required: true
+  - name: SAMPLEDATELOCAL
+    title: "Date & time of sample in local time (formatted string)"
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d %H:%M:%S"
+    required: true
+  - name: LATITUDE
+    title: "Latitude of station in decimal degrees North"
+    type: number
+    minimum: -90
+    maximum: 90    
+    required: true
+  - name: LONGITUDE
+    title: "Longitude of station in decimal degrees East"
+    type: number
+    minimum: -180
+    maximum: 180
+    required: true
+  - name: STATIONNAME
+    title: "Station name"
+    type: string
+    required: false
+  - name: SAMPVOL_M3
+    title: "Volume of sample analysed (cubic metres)"
+    type: number
+    required: true
+  - name: VESSEL
+    title: "Name of sampling vessel"
+    type: string
+    required: true
+  - name: TOWTYPE
+    title: "Type of tow (e.g. 'Surface', 'Oblong')"
+    type: string
+    required: true    
+  - name: GEARDEPTH_M
+    title: "Depth of gear (metres) - may be a depth range"
+    type: string
+    required: false    
+  - name: GEARMESH_UM
+    title: "Gear mesh descriptor"
+    type: string
+    required: true    
+  - name: DEPTH_M
+    title: ""
+    type: number
+    required: false    
+  - name: TEMPERATURE_C
+    title: "Temperature (deg C)"
+    type: number
+    required: false    
+  - name: SALINITY_PSU
+    title: "Salinity"
+    type: number
+    required: false    
+  - name: COMMENTS
+    title: "Comments (optional)"
+    type: string
+    required: false
+  - name: QC_FLAG
+    title: "Quality control flag value"
+    type: integer
+    required: true
+  - name: FLAG_COMMENT
+    title: "Optional comments on QC_FLAG"
+    type: string
+    required: false  
+  primaryKey: I_SAMPLE_ID
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
+
