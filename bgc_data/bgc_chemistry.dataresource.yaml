@@ -18,6 +18,13 @@ schema:
     title: "Depth (m) that sample was obtained"
     type: number
     required: true
+  - name: SAMPLEDATELOCAL
+    title: "Date & time of sample in local time (formatted string)"
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification         
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior               
+    format: "%Y-%m-%d %H:%M:%S"
+    required: false
   - name: SALINITY_PSU
     title: "Salinity PSU value"
     type: number
