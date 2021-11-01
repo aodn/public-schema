@@ -67,7 +67,6 @@ schema:
     type: string
     required: true    
   - name: DEPTH_M
-    title: ""
     type: number
     required: false    
   - name: TEMPERATURE_C
