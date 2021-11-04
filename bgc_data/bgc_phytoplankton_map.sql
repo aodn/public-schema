@@ -22,5 +22,6 @@ CREATE MATERIALIZED VIEW bgc_phytoplankton_map AS
     trip_code,
     st_geomfromtext('POINT(' || longitude::text || ' ' || latitude::text || ')', 4326) AS geom
   FROM bgc_trip
-  WHERE sampletype LIKE '%P%'
+  WHERE sampletype LIKE '%P%' AND
+        trip_code IN (SELECT DISTINCT trip_code from bgc_phyto_raw)
 ;
