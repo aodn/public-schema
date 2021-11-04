@@ -17,14 +17,14 @@ schema:
   - name: SAMPLEDATELOCAL
     title: "Date & time of sample in local time (formatted string)"
     type: datetime
-    # format string *must* be specified using standard Python/C strptime specification         
-    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior               
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
     required: false
   - name: SAMPLEDEPTH_M
-    title: "Depth (m) that sample was obtained, contains Flag Value"
+    title: "Depth (m) that sample was obtained, or 'WC' if combined water-column sample"
     type: string
-    required: true    
+    required: true
   - name: REPLICATE
     title: "Sample replicate"
     type: integer
@@ -55,4 +55,3 @@ licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
   path: https://creativecommons.org/licenses/by/4.0/
-
