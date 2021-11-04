@@ -84,7 +84,6 @@ ctd_profiles AS (
          cc."CPHL_quality_control" AS "Chla_flag", 
          cc."TURB" AS "Turbidity_NTU", 
          cc."TURB_quality_control" AS "Turbidity_flag", 
-         cc."PRES_REL" AS "Pressure_dbar", --should we add the quality control for pressure ore remove pressure? -wait for Claire answer
          cc."CNDC" AS "Conductivity_Sm", 
          cc."CNDC_quality_control" AS "Conductivity_flag", 
          cc."DENS" AS "WaterDensity_kgm3", 
