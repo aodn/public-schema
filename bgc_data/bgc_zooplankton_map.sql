@@ -23,5 +23,6 @@ SELECT
     trip_code,
     st_geomfromtext('POINT(' || longitude::text || ' ' || latitude::text || ')', 4326) AS geom
   FROM bgc_trip
-  WHERE sampletype LIKE '%Z%'
+  WHERE sampletype LIKE '%Z%' AND
+        trip_code IN (SELECT DISTINCT trip_code from bgc_zoop_raw)
 ;
