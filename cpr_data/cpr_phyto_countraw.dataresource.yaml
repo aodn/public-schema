@@ -1,0 +1,52 @@
+profile: tabular-data-resource
+name: cpr_phyto_countraw
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Acpr_phyto_countraw
+title: cpr_phyto_countraw
+description: "A table of all CPR phytoplankton raw count data"
+format: csv
+mediatype: text/csv
+encoding: utf-8
+layout:
+  skipFields: [ FID ]
+schema:
+  fields:
+  - name: SAMPLE
+    title: "Unique identifier for sample"
+    type: string
+    required: true
+  - name: TAXON_NAME
+    title: "Scientific name of taxa"
+    type: string
+    required: true
+  - name: TAXON_GROUP
+    title: "Functional group assigned to taxa"
+    type: string
+    required: true
+  - name: GENUS
+    title: "Genus name of taxa"
+    type: string
+    required: false  
+  - name: SPECIES
+    title: "Species name of taxa"
+    type: string
+    required: false
+  - name: SPCODE
+    title: "Species code for taxa AphiaID Worms"
+    type: integer
+    required: false
+  - name: COUNTS
+    title: "Number of the taxa counted"
+    type: number
+    required: true
+  - name: SAMPVOL_L
+    title: "Volume of sample analysed (L)"
+    type: number
+    required: true   
+  primaryKey:
+  - SAMPLE
+  - TAXON_NAME
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
+
