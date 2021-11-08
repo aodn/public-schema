@@ -15,6 +15,10 @@ schema:
     type: integer
     required: true
     unique: true
+  - name: PROJECTNAME
+    title: "Source project name"
+    type: string
+    required: true
   - name: TRIP_CODE
     title: "Identifier for trip"
     type: string
@@ -26,6 +30,22 @@ schema:
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
     required: true
+  - name: LATITUDE
+    title: "Latitude of station in decimal degrees North"
+    type: number
+    minimum: -90
+    maximum: 90
+    required: true
+  - name: LONGITUDE
+    title: "Longitude of station in decimal degrees East"
+    type: number
+    minimum: -180
+    maximum: 180
+    required: true
+  - name: STATIONNAME
+    title: "Station name"
+    type: string
+    required: false
   - name: SAMPVOL_M3
     title: "Volume of sample analysed (cubic metres)"
     type: number
