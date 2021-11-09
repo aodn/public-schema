@@ -7,24 +7,27 @@ Helper functions for validating schemas and resources using the Frictionless fra
 
 import sys
 
-from frictionless import Resource, Layout, validate, FrictionlessException
+from frictionless import Resource, validate, FrictionlessException
+from frictionless.plugins.remote import RemoteControl
 
 
-def resource_valid(resouce:[str, Resource]):
+def resource_valid(resouce:[str, Resource], http_timeout=100):
     """
     Validate the given resource (including data accessed from the specified path)
 
     :param resouce: frictionless.Resource object, path to a resource file
+    :param http_timeout: http response timeout in seconds
     :return: tuple (valid:bool, errors:list)
     """
-    if not isinstance(resouce, Resource):
-        try:
-            resource = Resource(resouce)
-        except FrictionlessException as e:
-            return False, [f"Not a valid resource description:\n{e}"]
+    try:
+        # create (a copy of) Resource object
+        # set longer timeout to allow for slow response
+        res = Resource(resouce, control=RemoteControl(http_timeout=http_timeout))
+    except FrictionlessException as e:
+        return False, [f"Not a valid resource description:\n{e}"]
 
     try:
-        report = validate(resource)
+        report = validate(res)
     except FrictionlessException as e:
         return False, [f"An exception occurred during validation:\n{e}"]
 

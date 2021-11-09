@@ -18,7 +18,7 @@ schema:
   - name: PROJECTNAME
     title: "Source project name"
     type: string
-    required: true   
+    required: true
   - name: TRIP_CODE
     title: "Identifier for trip"
     type: string
@@ -34,7 +34,7 @@ schema:
     title: "Latitude of station in decimal degrees North"
     type: number
     minimum: -90
-    maximum: 90    
+    maximum: 90
     required: true
   - name: LONGITUDE
     title: "Longitude of station in decimal degrees East"
@@ -67,7 +67,6 @@ schema:
     type: string
     required: true    
   - name: DEPTH_M
-    title: ""
     type: number
     required: false    
   - name: TEMPERATURE_C
@@ -95,4 +94,3 @@ licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
   path: https://creativecommons.org/licenses/by/4.0/
-

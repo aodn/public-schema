@@ -10,11 +10,6 @@ layout:
   skipFields: [ FID ]
 schema:
   fields:
-  - name: PROJECTNAME
-    title: "Source project name"
-    type: string
-    required: false
-    unique: false
   - name: TRIP_CODE
     title: "Identifier for trip"
     type: string
@@ -26,185 +21,141 @@ schema:
     # format string *must* be specified using standard Python/C strptime specification
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
-    required: false
+    required: true
   - name: SAMPLEDEPTH_M
-    title: "Depth (m) that sample was obtained"
+    title: "Depth (m) that sample was obtained, or 'WC' if combined water-column sample"
     type: string
-    required: false
-    - name: CPHL_C3
-    title: ""
+    required: true
+  - name: CPHL_C3
     type: number
     required: false
   - name: MG_DVP
-    title: ""
     type: number
     required: false
   - name: CPHL_C2
-    title: ""
     type: number
     required: false
   - name: CPHL_C1
-    title: ""
     type: number
     required: false
   - name: CPHL_C1C2
-    title: ""
     type: number
     required: false
-    - name: CPHLIDE_A
-    title: ""
+  - name: CPHLIDE_A
     type: number
     required: false
   - name: PHIDE_A
-    title: ""
     type: number
     required: false
   - name: PERID
-    title: ""
     type: number
     required: false
   - name: PYROPHIDE_A
-    title: ""
     type: number
     required: false
   - name: BUT_FUCO
-    title: ""
     type: number
     required: false    
-    - name: FUCO
-    title: ""
+  - name: FUCO
     type: number
     required: false
   - name: NEO
-    title: ""
     type: number
     required: false
   - name: KETO_HEX_FUCO
-    title: ""
     type: number
     required: false
   - name: PRAS
-    title: ""
     type: number
     required: false
   - name: VIOLA
-    title: ""
     type: number
     required: false    
-    - name: HEX_FUCO
-    title: ""
+  - name: HEX_FUCO
     type: number
     required: false
   - name: ASTA
-    title: ""
     type: number
     required: false
   - name: DIADCHR
-    title: ""
     type: number
     required: false
   - name: DIADINO
-    title: ""
     type: number
     required: false
   - name: DINO
-    title: ""
     type: number
     required: false    
-    - name: ANTH
-    title: ""
+  - name: ANTH
     type: number
     required: false
   - name: ALLO
-    title: ""
     type: number
     required: false
   - name: MYXO
-    title: ""
     type: number
     required: false
   - name: DIATO
-    title: ""
     type: number
     required: false
   - name: ZEA
-    title: ""
     type: number
     required: false     
-    - name: LUT
-    title: ""
+  - name: LUT
     type: number
     required: false
   - name: CANTHA
-    title: ""
     type: number
     required: false
   - name: GYRO
-    title: ""
     type: number
     required: false
   - name: DV_CPHL_B
-    title: ""
     type: number
     required: false
   - name: CPHL_B
-    title: ""
     type: number
     required: false   
-    - name: DV_CPHL_B_AND_CPHL_B
-    title: ""
+  - name: DV_CPHL_B_AND_CPHL_B
     type: number
     required: false
   - name: DV_CPHL_A
-    title: ""
     type: number
     required: false
   - name: CPHL_A
-    title: ""
     type: number
     required: false
   - name: DV_CPHL_A_AND_CPHL_A
-    title: ""
     type: number
     required: false
   - name: ECHIN
-    title: ""
     type: number
     required: false  
-    - name: PHYTIN_B
-    title: ""
+  - name: PHYTIN_B
     type: number
     required: false
   - name: PHYTIN_A
-    title: ""
     type: number
     required: false
   - name: LYCO
-    title: ""
     type: number
     required: false
   - name: BETA_EPI_CAR
-    title: ""
     type: number
     required: false
   - name: BETA_BETA_CAR
-    title: ""
     type: number
     required: false    
   - name: ALPHA_BETA_CAR
-    title: ""
     type: number
     required: false
   - name: PYROPHYTIN_A
-    title: ""
     type: number
     required: false
   - name: PIGMENTS_FLAG
-    title: ""
     type: integer
     required: true
   - name: PIGMENTS_COMMENTS
-    title: ""
     type: string
     required: false    
   primaryKey:
