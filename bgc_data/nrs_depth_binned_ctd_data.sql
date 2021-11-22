@@ -1,78 +1,57 @@
 -- Materialized view for nrs depth binned ctd product
 CREATE MATERIALIZED VIEW nrs_depth_binned_ctd_data AS
-WITH
+
 --modify the site code to match with the deployments table
---consider only NRS stations
-  nrs_trips AS (
+--filter only for NRS stations
+WITH nrs_trips AS (
       SELECT
-         z.stationname AS "StationName",
-         z.trip_code AS "TripCode",
-         z.latitude AS "Latitude", 
-         z.longitude AS "Longitude",
-         z.sampledatelocal AS trip_time_local,
-	 CONCAT(z.projectname,z.stationcode) AS bgc_trip_site_code_match
-      FROM imos_bgc_db.bgc_trip z
+         z.stationname,
+         z.trip_code,
+         z.sampledatelocal,
+         CONCAT(z.projectname,z.stationcode) AS site_code
+      FROM bgc_trip z
       WHERE z.projectname = 'NRS'
-),
---identify file_id obtained from NRS stations
---match file_id from NRS stations with the measurements table
-  measurements_mod AS(
-      SELECT dp.site_code,
-         dp.site_code AS site_code_match,
-         ms.file_id,
-         ms."TIME"
-      FROM anmn_nrs_ctd_profiles.deployments dp
-      LEFT JOIN anmn_nrs_ctd_profiles.measurements ms ON ms.file_id = dp.file_id
-      WHERE dp.site_code LIKE 'NRS%'
---useful to group by here as there are multiple depths that are all associated with the same file_id
-      GROUP BY ms.file_id, dp.site_code, ms."TIME"
 ),
 --calculate the absolute time difference 
 --match the site code and time
 ctd_profiles AS (
       SELECT
-         nt.trip_time_local,
-         nt."StationName",
-         nt."TripCode",
-         nt."Latitude",
-         nt."Longitude",
-         mm."TIME" AS ctd_time_utc,
-         mm.site_code_match,
-         nt.bgc_trip_site_code_match,
-         mm.file_id,
-         GREATEST((nt.trip_time_local - mm."TIME"),-(nt.trip_time_local - mm."TIME")) AS absolute_time_difference
+         nt.sampledatelocal,
+         nt.stationname,
+         nt.trip_code,
+         nt.site_code,
+         dp.file_id,
+         dp.time_coverage_start AT TIME ZONE 'UTC' AS cast_time,
+         GREATEST((nt.sampledatelocal - dp.time_coverage_start AT TIME ZONE 'UTC'),-(nt.sampledatelocal - dp.time_coverage_start AT TIME ZONE 'UTC')) AS absolute_time_difference
       FROM nrs_trips nt 
-      LEFT JOIN measurements_mod mm 
-	  ON mm."TIME" BETWEEN (nt.trip_time_local - INTERVAL '1' DAY) AND (nt.trip_time_local + INTERVAL '1' DAY)
-	  AND mm.site_code_match = nt.bgc_trip_site_code_match
+         INNER JOIN anmn_nrs_ctd_profiles.deployments dp 
+         ON dp.time_coverage_start AT TIME ZONE 'UTC' BETWEEN (nt.sampledatelocal - INTERVAL '1' DAY) AND (nt.sampledatelocal + INTERVAL '1' DAY)
+         AND dp.site_code = nt.site_code
+      WHERE nt.site_code LIKE 'NRS%'
 ),
---select the minimum absolute difference in time 
+--select the minimum absolute difference in time for every trip_code
   ctd_selection AS (
       SELECT
-         cp.file_id,
+         cp.trip_code,
          MIN(cp.absolute_time_difference) AS minimum_absolute_time_difference
       FROM ctd_profiles cp
-      GROUP BY cp.file_id
+      GROUP BY cp.trip_code
 ),
---select the ctd files id to list and the information needed from the original bgc trip table
+--identify the ctd files id to join on the measurements table
   identify_files_id AS (
       SELECT
-         cs.file_id,
-         cp."StationName",
-         cp."TripCode",
-         cp."Latitude",
-         cp."Longitude"
+         cp.file_id,
+         cp.trip_code
       FROM ctd_selection cs 
-      LEFT JOIN ctd_profiles cp ON cs.file_id = cp.file_id 
-      AND (cs.minimum_absolute_time_difference =  cp.absolute_time_difference OR cs.minimum_absolute_time_difference IS NULL)
+        LEFT JOIN ctd_profiles cp ON cs.trip_code = cp.trip_code 
+        AND (cs.minimum_absolute_time_difference =  cp.absolute_time_difference OR cs.minimum_absolute_time_difference IS NULL)
 )
 --create the final list for the materialised view
       SELECT
-         ii."StationName",
-         ii."TripCode",
+         bt.trip_code AS "TripCode",
          cc."TIME" AS "CastTimeUTC",
-         ii."Latitude",
-         ii."Longitude",
+         bt.latitude AS "Latitude",
+         bt.longitude AS "Longitude",
          cc."DEPTH" AS "Depth_m",
          cc."PSAL" AS "Salinity_psu",
          cc."PSAL_quality_control" AS "Salinity_flag",
@@ -88,6 +67,8 @@ ctd_profiles AS (
          cc."CNDC_quality_control" AS "Conductivity_flag", 
          cc."DENS" AS "WaterDensity_kgm3", 
          cc."DENS_quality_control" AS "WaterDensity_flag" 
-      FROM anmn_nrs_ctd_profiles.measurements cc
-      INNER JOIN identify_files_id ii on ii.file_id = cc.file_id
+      FROM bgc_trip bt
+         INNER JOIN identify_files_id ii ON ii.trip_code = bt.trip_code
+         INNER JOIN anmn_nrs_ctd_profiles.measurements cc ON ii.file_id = cc.file_id
 ;
+
