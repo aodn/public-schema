@@ -5,19 +5,17 @@ CREATE MATERIALIZED VIEW nrs_depth_binned_ctd_data AS
 --filter only for NRS stations
 WITH nrs_trips AS (
       SELECT
-         z.stationname,
-         z.trip_code,
-         z.sampledatelocal,
-         CONCAT(z.projectname,z.stationcode) AS site_code
-      FROM bgc_trip z
-      WHERE z.projectname = 'NRS'
+         trip_code,
+         sampledatelocal,
+         CONCAT(projectname, stationcode) AS site_code
+      FROM bgc_trip
+      WHERE projectname = 'NRS'
 ),
 --calculate the absolute time difference 
 --match the site code and time
 ctd_profiles AS (
       SELECT
          nt.sampledatelocal,
-         nt.stationname,
          nt.trip_code,
          nt.site_code,
          dp.file_id,
@@ -48,6 +46,7 @@ ctd_profiles AS (
 )
 --create the final list for the materialised view
       SELECT
+         bt.stationname AS "StationName",
          bt.trip_code AS "TripCode",
          cc."TIME" AS "CastTimeUTC",
          bt.latitude AS "Latitude",
