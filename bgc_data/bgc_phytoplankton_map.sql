@@ -2,26 +2,25 @@
 -- It also provides the metadata columns for all the phytoplankton products.
 CREATE MATERIALIZED VIEW bgc_phytoplankton_map AS
   SELECT
-    projectname AS "Project",
-    stationname AS "StationName",
-    stationcode AS "StationCode",
-    latitude AS "Latitude",
-    longitude AS "Longitude",
-    trip_code AS "TripCode",
-  --  TODO: sampledatelocal AT TIME ZONE "UTC" AS "SampleTime_UTC",
-    sampledatelocal AS "SampleTime_local",
-    extract(year from sampledatelocal)::int AS "Year_local",
-    extract(month from sampledatelocal)::int AS "Month_local",
-    extract(day from sampledatelocal)::int AS "Day_local",
-    to_char(sampledatelocal, 'HH24:MI') AS "Time_local24hr",
+    "Project",
+    "StationName",
+    "StationCode",
+    "Latitude",
+    "Longitude",
+    "TripCode",
+  --  "SampleTime_UTC",
+    "SampleTime_local",
+    "Year_local",
+    "Month_local",
+    "Day_local",
+    "Time_local24hr",
     phytosampledepth_m AS "SampleDepth_m",
-  --  TODO: CTD derived params:
   --  "CTDSST_degC",
   --  "CTDChlaSurf_mgm3",
   --  "CTDSalinity_psu",
     trip_code,
-    st_geomfromtext('POINT(' || longitude::text || ' ' || latitude::text || ')', 4326) AS geom
-  FROM bgc_trip
+    geom
+  FROM bgc_trip_metadata
   WHERE sampletype LIKE '%P%' AND
         trip_code IN (SELECT DISTINCT trip_code from bgc_phyto_raw)
 ;
