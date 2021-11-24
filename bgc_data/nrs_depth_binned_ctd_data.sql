@@ -36,7 +36,7 @@ ctd_selection AS (
       GROUP BY cp.trip_code
 ),
 --identify the ctd files id to join on the measurements table
-  identify_files_id AS (
+identify_files_id AS (
       SELECT
          cp.file_id,
          cp.trip_code
@@ -48,11 +48,11 @@ ctd_selection AS (
 )
 --create the final list for the materialised view
       SELECT
-         bt.stationname AS "StationName",
+         bt."StationName",
          trip_code AS "TripCode",
          cc."TIME" AS "CastTimeUTC",
-         bt.latitude AS "Latitude",
-         bt.longitude AS "Longitude",
+         bt."Latitude",
+         bt."Longitude",
          cc."DEPTH" AS "Depth_m",
          cc."PSAL" AS "Salinity_psu",
          cc."PSAL_quality_control" AS "Salinity_flag",
@@ -68,7 +68,7 @@ ctd_selection AS (
          cc."CNDC_quality_control" AS "Conductivity_flag", 
          cc."DENS" AS "WaterDensity_kgm3", 
          cc."DENS_quality_control" AS "WaterDensity_flag" 
-      FROM bgc_trip bt
+      FROM bgc_trip_metadata bt
          INNER JOIN identify_files_id ii USING (trip_code)
          LEFT JOIN anmn_nrs_ctd_profiles.measurements cc USING (file_id)
 ;
