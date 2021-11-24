@@ -15,9 +15,7 @@ WITH nrs_trips AS (
 --match the site code and time
 ctd_profiles AS (
       SELECT
-         nt.sampledatelocal,
          nt.trip_code,
-         nt.site_code,
          dp.file_id,
          dp.time_coverage_start AT TIME ZONE 'UTC' AS cast_time,
          GREATEST((nt.sampledatelocal - dp.time_coverage_start AT TIME ZONE 'UTC'),-(nt.sampledatelocal - dp.time_coverage_start AT TIME ZONE 'UTC')) AS absolute_time_difference
@@ -25,7 +23,6 @@ ctd_profiles AS (
          INNER JOIN anmn_nrs_ctd_profiles.deployments dp 
          ON dp.time_coverage_start AT TIME ZONE 'UTC' BETWEEN (nt.sampledatelocal - INTERVAL '1' DAY) AND (nt.sampledatelocal + INTERVAL '1' DAY)
          AND dp.site_code = nt.site_code
-      WHERE nt.site_code LIKE 'NRS%'
 ),
 --select the minimum absolute difference in time for every trip_code
   ctd_selection AS (
