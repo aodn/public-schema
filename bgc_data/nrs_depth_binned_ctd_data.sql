@@ -20,9 +20,10 @@ ctd_profiles AS (
          dp.time_coverage_start AT TIME ZONE 'UTC' AS cast_time,
          GREATEST((nt.sampledatelocal - dp.time_coverage_start AT TIME ZONE 'UTC'),-(nt.sampledatelocal - dp.time_coverage_start AT TIME ZONE 'UTC')) AS absolute_time_difference
       FROM nrs_trips nt 
-         INNER JOIN anmn_nrs_ctd_profiles.deployments dp 
-         ON dp.time_coverage_start AT TIME ZONE 'UTC' BETWEEN (nt.sampledatelocal - INTERVAL '1' DAY) AND (nt.sampledatelocal + INTERVAL '1' DAY)
-         AND dp.site_code = nt.site_code
+         LEFT JOIN anmn_nrs_ctd_profiles.deployments dp
+         ON dp.time_coverage_start AT TIME ZONE 'UTC' BETWEEN (nt.sampledatelocal - INTERVAL '1' DAY) AND
+                                                              (nt.sampledatelocal + INTERVAL '1' DAY)
+             AND dp.site_code = nt.site_code
 ),
 --select the minimum absolute difference in time for every trip_code
   ctd_selection AS (
@@ -44,7 +45,7 @@ ctd_profiles AS (
 --create the final list for the materialised view
       SELECT
          bt.stationname AS "StationName",
-         bt.trip_code AS "TripCode",
+         trip_code AS "TripCode",
          cc."TIME" AS "CastTimeUTC",
          bt.latitude AS "Latitude",
          bt.longitude AS "Longitude",
@@ -64,7 +65,7 @@ ctd_profiles AS (
          cc."DENS" AS "WaterDensity_kgm3", 
          cc."DENS_quality_control" AS "WaterDensity_flag" 
       FROM bgc_trip bt
-         INNER JOIN identify_files_id ii ON ii.trip_code = bt.trip_code
-         INNER JOIN anmn_nrs_ctd_profiles.measurements cc ON ii.file_id = cc.file_id
+         INNER JOIN identify_files_id ii USING (trip_code)
+         LEFT JOIN anmn_nrs_ctd_profiles.measurements cc USING (file_id)
 ;
 
