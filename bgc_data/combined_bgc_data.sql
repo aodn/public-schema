@@ -24,12 +24,13 @@ UNION
    FROM bgc_chemistry_data che
 )
    SELECT
-      bt.projectname AS "ProjectName", 
-      bt.stationname AS "StationName", 
-      bt.trip_code AS "TripCode",
-      bt.sampledatelocal AS "SampleDate_Local",
-      bt.latitude AS "Latitude",
-      bt.longitude AS "Longitude",
+      bt."Project", 
+      bt."StationName", 
+      bt."TripCode",
+      bt."SampleTime_local"::timestamp::date AS "SampleDate_Local",
+--TO DO: SampleDate_UTC
+      bt."Latitude",
+      bt."Longitude",
       td."Depth_m",
       che."Salinity_psu",
       che."Salinity_flag",
@@ -101,14 +102,14 @@ UNION
       pig."Pigments_flag",
       che."MicroBiomeSa BPA mple_id"
    FROM trip_depths td
-      INNER JOIN bgc_trip bt ON td."TripCode" = bt.trip_code
+      INNER JOIN bgc_trip_metadata bt ON td."TripCode" = bt.trip_code
       LEFT JOIN bgc_tss_data tss ON td."TripCode" = tss."TripCode"
-	  AND td."Depth_m" = tss."Depth_m"
-	  LEFT JOIN bgc_picoplankton_data ppl ON td."TripCode" = ppl."TripCode"
-	  AND td."Depth_m" = ppl."Depth_m"
-	  LEFT JOIN bgc_chemistry_data che ON td."TripCode" = che."TripCode"
-	  AND td."Depth_m" = che."Depth_m"::text
+         AND td."Depth_m" = tss."Depth_m"
+      LEFT JOIN bgc_picoplankton_data ppl ON td."TripCode" = ppl."TripCode"
+         AND td."Depth_m" = ppl."Depth_m"
+      LEFT JOIN bgc_chemistry_data che ON td."TripCode" = che."TripCode"
+         AND td."Depth_m" = che."Depth_m"::text
       LEFT JOIN bgc_pigments_data pig ON td."TripCode" = pig."TripCode"
-	  AND td."Depth_m" = pig."Depth_m"
+         AND td."Depth_m" = pig."Depth_m"
 ;
 

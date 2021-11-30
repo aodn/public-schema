@@ -1,6 +1,5 @@
 --create materialized view for tss
 CREATE MATERIALIZED VIEW bgc_tss_data AS
-
 --make average of all tss required measurements with same trip_code, depth and flag numbers
 --set up a rank system for flags from good to bad data with increasing numbers (i.e., lower the number -> better the data)
 WITH 
@@ -35,12 +34,13 @@ tss_flag_selection AS (
 )
 --list tss averages and metadata for materialised view
    SELECT 
-      bt.projectname AS "ProjectName", 
-      bt.stationname AS "StationName", 
-      bt.trip_code AS "TripCode",
-      bt.sampledatelocal AS "SampleDate_Local",
-      bt.latitude AS "Latitude",
-      bt.longitude AS "Longitude",
+      bt."Project", 
+      bt."StationName", 
+      bt."TripCode",
+      bt."SampleTime_local"::timestamp::date AS "SampleDate_Local",
+--TO DO: SampleDate_UTC
+      bt."Latitude",
+      bt."Longitude",
       bt.secchi_m AS "SecchiDepth_m",
       tt.sampledepth_m AS "Depth_m",
       tt.organic_avgs AS "TSSorganic_mgL",
@@ -51,6 +51,6 @@ tss_flag_selection AS (
       INNER JOIN tss_flag_selection fsl ON fsl.trip_code = tt.trip_code
       AND fsl.flag_match = tt.ranked_flags
       AND fsl.sampledepth_m = tt.sampledepth_m
-      INNER JOIN bgc_trip bt ON bt.trip_code = fsl.trip_code
+      INNER JOIN bgc_trip_metadata bt ON bt.trip_code = fsl.trip_code
 ;
 

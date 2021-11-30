@@ -3,7 +3,6 @@ CREATE MATERIALIZED VIEW bgc_picoplankton_data AS
 --make average of all picoplankton required measurements with same trip_code, depth and flag numbers
 --set up a rank system for flags from good to bad data with increasing numbers (i.e., lower the number -> better the data)
 --every of the 3 picoplankton (prochlorococcus, synecochoccus and picoeukaryotes) has to be treated separetely because of GROUP BY  
-
 WITH prochl_avg_tmp AS ( 
    SELECT 
       trip_code,
@@ -121,13 +120,14 @@ picoeuk_tmp AS (
    GROUP BY tt.trip_code, tt.sampledepth_m, tt.picoeuk_avgs, tt.picoeukaryotes_flag
 )
 --combine all required 3 picoplankton selected data with metadata for materialised view
-   SELECT 
-      bt.projectname AS "ProjectName", 
-      bt.stationname AS "StationName", 
-      bt.trip_code AS "TripCode",
-      bt.sampledatelocal AS "SampleDate_Local",
-      bt.latitude AS "Latitude",
-      bt.longitude AS "Longitude",
+   SELECT
+      bt."Project", 
+      bt."StationName", 
+      bt."TripCode",
+      bt."SampleTime_local"::timestamp::date AS "SampleDate_Local",
+--TO DO: SampleDate_UTC
+      bt."Latitude",
+      bt."Longitude",
       bt.secchi_m AS "SecchiDepth_m",
       prt.sampledepth_m AS "Depth_m",
       prt.prochl_avgs AS "Prochlorc_cellsmL",
@@ -139,10 +139,10 @@ picoeuk_tmp AS (
    FROM prochl_tmp prt
       INNER JOIN syneco_tmp st ON prt.trip_code = st.trip_code
       INNER JOIN picoeuk_tmp pt ON pt.trip_code = st.trip_code
-	  AND prt.trip_code = pt.trip_code
-	  AND prt.sampledepth_m = st.sampledepth_m
-	  AND pt.sampledepth_m = st.sampledepth_m
-	  AND prt.sampledepth_m = pt.sampledepth_m
-      INNER JOIN  bgc_trip bt ON bt.trip_code = prt.trip_code
+          AND prt.trip_code = pt.trip_code
+          AND prt.sampledepth_m = st.sampledepth_m
+          AND pt.sampledepth_m = st.sampledepth_m
+          AND prt.sampledepth_m = pt.sampledepth_m
+      INNER JOIN  bgc_trip_metadata bt ON bt.trip_code = prt.trip_code
 ;
 
