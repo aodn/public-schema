@@ -5,14 +5,14 @@ CREATE MATERIALIZED VIEW bgc_larval_fish_count_raw AS
 WITH pivoted AS (
    SELECT 
       i_sample_id, 
-      trip_code,
       jsonb_object_agg(scientificname, taxon_count) AS abundances
    FROM bgc_lfish_countraw
-   GROUP BY trip_code, i_sample_id 
+   GROUP BY i_sample_id  
 )
 -- join on to metadata columns, include a row for every trip with larval fish samples taken
    SELECT 
       m.*,
       p.abundances
-   FROM bgc_larval_fish_map m LEFT JOIN pivoted p USING (trip_code, i_sample_id)
+   FROM bgc_larval_fish_map m LEFT JOIN pivoted p USING (i_sample_id)
 ;
+
