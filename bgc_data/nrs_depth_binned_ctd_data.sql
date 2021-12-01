@@ -20,6 +20,6 @@ CREATE MATERIALIZED VIEW nrs_depth_binned_ctd_data AS
          cc."DENS" AS "WaterDensity_kgm3", 
          cc."DENS_quality_control" AS "WaterDensity_flag" 
       FROM nrs_depth_binned_ctd_map m
-         LEFT JOIN anmn_nrs_ctd_profiles.measurements cc USING (file_id)
+          INNER JOIN anmn_nrs_ctd_profiles.measurements cc USING (file_id)
 ;
 

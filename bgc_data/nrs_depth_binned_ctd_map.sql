@@ -21,11 +21,10 @@ ctd_profiles AS (
          GREATEST((nt.sampledatelocal - dp.time_coverage_start AT TIME ZONE 'UTC'),
                   -(nt.sampledatelocal - dp.time_coverage_start AT TIME ZONE 'UTC'))
              AS absolute_time_difference
-      FROM nrs_trips nt 
-         LEFT JOIN anmn_nrs_ctd_profiles.deployments dp
+      FROM nrs_trips nt INNER JOIN anmn_nrs_ctd_profiles.deployments dp
          ON dp.time_coverage_start AT TIME ZONE 'UTC' BETWEEN (nt.sampledatelocal - INTERVAL '1' DAY) AND
                                                               (nt.sampledatelocal + INTERVAL '1' DAY)
-             AND dp.site_code = nt.site_code
+         AND dp.site_code = nt.site_code
 ),
 --select the minimum absolute difference in time for every trip_code
 ctd_selection AS (
@@ -41,11 +40,9 @@ identify_files_id AS (
          cp.file_id,
          cp.cast_time,
          cp.trip_code
-      FROM ctd_selection cs 
-        LEFT JOIN ctd_profiles cp
+      FROM ctd_selection cs INNER JOIN ctd_profiles cp
             ON cs.trip_code = cp.trip_code
-            AND (cs.minimum_absolute_time_difference = cp.absolute_time_difference
-                 OR cs.minimum_absolute_time_difference IS NULL)
+            AND cs.minimum_absolute_time_difference = cp.absolute_time_difference
 )
 --create the final list for the materialised view
       SELECT
