@@ -1,24 +1,24 @@
 --create combined bgc product
-
+--set search_path = imos_bgc_db, public;
 CREATE MATERIALIZED VIEW combined_bgc_data AS 
 --create temporary table with any depths associated with trip codes
 WITH trip_depths AS (
-   SELECT DISTINCT
-      ppl."TripCode",
-      ppl."Depth_m"
-   FROM bgc_picoplankton_data ppl
-UNION
-   SELECT DISTINCT
-      tss."TripCode",
-      tss."Depth_m" 
-   FROM bgc_tss_data tss
-UNION
-   SELECT DISTINCT
+--   SELECT 
+--      ppl."TripCode",
+--      ppl."Depth_m"
+--   FROM bgc_picoplankton_data ppl
+--UNION
+--   SELECT 
+--      tss."TripCode",
+--      tss."Depth_m" 
+--   FROM bgc_tss_data tss
+--UNION
+   SELECT
       pig."TripCode",
       pig. "Depth_m"
    FROM bgc_pigments_data pig 
 UNION
-   SELECT
+   SELECT 
       che."TripCode",
       che."Depth_m"::text 
    FROM bgc_chemistry_data che
@@ -27,7 +27,7 @@ UNION
       bt."Project", 
       bt."StationName", 
       bt."TripCode",
-      bt."SampleTime_local"::timestamp::date AS "SampleDate_Local",
+      bt."SampleDate_Local",
 --TO DO: SampleDate_UTC
       bt."Latitude",
       bt."Longitude",
@@ -48,17 +48,17 @@ UNION
       che."PO4_flag",
       che."SiO4_umolL",
       che."SiO4_flag",
-      tss."TSSorganic_mgL",
-      tss."TSSinorganic_mgL",
-      tss."TSS_mgL",
-      tss."TSSall_flag",
-      bt.secchi_m AS "SecchiDepth_m",
-      ppl."Prochlorc_cellsmL",
-      ppl."Prochlorc_flag",
-      ppl."Synechoc_cellsmL",
-      ppl."Synechoc_flag",
-      ppl."Picoeukar_cellsmL",
-      ppl."Picoeukar_flag",
+--      tss."TSSorganic_mgL",
+--      tss."TSSinorganic_mgL",
+--      tss."TSS_mgL",
+--      tss."TSSall_flag",
+      bt."SecchiDepth_m",
+--      ppl."Prochlorc_cellsmL",
+--      ppl."Prochlorc_flag",
+--      ppl."Synechoc_cellsmL",
+--      ppl."Synechoc_flag",
+--      ppl."Picoeukar_cellsmL",
+--      ppl."Picoeukar_flag",
       pig."Allo_mgm3",
       pig."AlphaBetaCar_mgm3",
       pig."Anth_mgm3",
@@ -102,7 +102,7 @@ UNION
       pig."Pigments_flag",
       che."MicroBiomeSa BPA mple_id"
    FROM trip_depths td
-      INNER JOIN bgc_trip_metadata bt ON td."TripCode" = bt.trip_code
+      INNER JOIN combined_bgc_map bt USING ("TripCode")
       LEFT JOIN bgc_tss_data tss ON td."TripCode" = tss."TripCode"
          AND td."Depth_m" = tss."Depth_m"
       LEFT JOIN bgc_picoplankton_data ppl ON td."TripCode" = ppl."TripCode"
