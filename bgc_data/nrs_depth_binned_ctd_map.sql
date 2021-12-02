@@ -1,5 +1,5 @@
--- Materialized view for nrs depth binned ctd product map layer
-CREATE MATERIALIZED VIEW nrs_depth_binned_ctd_map AS
+-- View for nrs depth binned ctd product metadata (not actually used as a map layer)
+CREATE VIEW nrs_depth_binned_ctd_map AS
 
 --modify the site code to match with the deployments table
 --filter only for NRS stations
@@ -49,9 +49,14 @@ identify_files_id AS (
          bt."StationName",
          trip_code AS "TripCode",
          ii.cast_time AS "CastTimeUTC",
+         -- TODO: CastTimeLocal,
          bt."Latitude",
          bt."Longitude",
-         ii.file_id
+         -- last 4 columns only included for joining to other tables and filtering on the Portal
+         ii.file_id,
+         bt."SampleTime_local",
+         trip_code,
+         bt.geom
       FROM bgc_trip_metadata bt
          INNER JOIN identify_files_id ii USING (trip_code)
 ;
