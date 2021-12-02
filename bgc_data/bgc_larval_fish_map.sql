@@ -23,8 +23,8 @@ CREATE MATERIALIZED VIEW bgc_larval_fish_map AS
       lfs.gearmesh_um AS "GearMesh_um",
       lfs.depth_m AS "Bathymetry_m", 
       lfs.qc_flag AS "QC_flag", 
-      lfs.trip_code,  
       lfs.i_sample_id,
       st_geomfromtext('POINT(' || longitude::text || ' ' || latitude::text || ')', 4326) AS geom
-   FROM bgc_lfish_samples lf
+   FROM bgc_lfish_samples lfs
+;
 
