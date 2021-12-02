@@ -15,12 +15,12 @@ CREATE MATERIALIZED VIEW bgc_phytoplankton_map AS
     "Day_local",
     "Time_local24hr",
     phytosampledepth_m AS "SampleDepth_m",
-  --  "CTDSST_degC",
-  --  "CTDChlaSurf_mgm3",
-  --  "CTDSalinity_psu",
+    "CTDSST_degC",
+    "CTDChlaSurf_mgm3",
+    "CTDSalinity_psu",
     trip_code,
     geom
-  FROM bgc_trip_metadata
+  FROM bgc_trip_metadata t LEFT JOIN nrs_ctd_surface_values c USING (trip_code)
   WHERE sampletype LIKE '%P%' AND
         trip_code IN (SELECT DISTINCT trip_code from bgc_phyto_raw)
 ;

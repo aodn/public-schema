@@ -15,10 +15,6 @@ CREATE VIEW bgc_trip_metadata AS
     to_char(sampledatelocal, 'HH24:MI') AS "Time_local24hr",
     phytosampledepth_m,
     zoopsampledepth_m,
-  --  TODO: CTD derived params:
-  --  "CTDSST_degC",
-  --  "CTDChlaSurf_mgm3",
-  --  "CTDSalinity_psu",
     biomass_mgm3 AS "Biomass_mgm3",
     secchi_m,
     sampletype,
