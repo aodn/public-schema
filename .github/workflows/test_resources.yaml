@@ -10,13 +10,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - name: bgc_metadata
-            files: 'bgc_data/bgc_trip.dataresource.yaml bgc_data/bgc_stationinfo.dataresource.yaml'
-          - name: bgc_plankton
-            files: 'bgc_data/bgc_phyto_changelog.dataresource.yaml bgc_data/bgc_phyto_raw.dataresource.yaml bgc_data/bgc_zoop_changelog.dataresource.yaml bgc_data/bgc_zoop_raw.dataresource.yaml'
-          - name: bgc_combined
-            files: 'bgc_data/bgc_chemistry.dataresource.yaml bgc_data/bgc_picoplankton.dataresource.yaml bgc_data/bgc_pigments.dataresource.yaml bgc_data/bgc_tss.dataresource.yaml'
+        product:
+          - bgc_plankton
+          - bgc_combined
+          - bgc_lfish
+          - derived_indices
+          - cpr
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
@@ -28,4 +27,4 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r code/requirements.txt
       - name: Validate data against schemas
-        run: code/validate.py ${{ matrix.files }}
+        run: code/validate.py $(grep ${{ matrix.product }} product_index.csv | cut -d, -f2)
