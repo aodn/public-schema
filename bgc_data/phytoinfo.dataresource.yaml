@@ -20,14 +20,14 @@ schema:
     type: string
     required: true
     unique: true
-  - name: FUNCTIONALGROUP
-    title: ""
-    type: string
-    required: false    
   - name: BV_CELL
     title: ""
     type: number
     required: false
+  - name: FUNCTIONALGROUP
+    title: ""
+    type: string
+    required: false    
   - name: MONT2001PGN_CELL
     title: ""
     type: number
