@@ -6,6 +6,8 @@ description: "A table of Zoopinfo"
 format: csv
 mediatype: text/csv
 encoding: utf-8
+layout:
+  skipFields: [ FID ]
 schema:
   fields:
   - name: TAXON_NAME
