@@ -1,8 +1,8 @@
 profile: tabular-data-resource
-name: bgc_phyto_raw
-path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_phyto_raw
-title: bgc_phyto_raw
-description: A table of all BGC phytoplankton abundance data
+name: cpr_zoop_raw
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Acpr_zoop_raw
+title: cpr_zoop_raw
+description: "A table of all CPR zooplankton abundance data"
 format: csv
 mediatype: text/csv
 encoding: utf-8
@@ -10,7 +10,7 @@ layout:
   skipFields: [ FID ]
 schema:
   fields:
-  - name: TRIP_CODE
+  - name: SAMPLE
     title: "Unique identifier for sample"
     type: string
     required: true
@@ -18,6 +18,10 @@ schema:
     title: "Scientific name of taxa"
     type: string
     required: true
+  - name: COPEPOD
+    title: "Taxonomic flag value"
+    type: string
+    required: true    
   - name: TAXON_GROUP
     title: "Functional group assigned to taxa"
     type: string
@@ -34,32 +38,24 @@ schema:
     title: "Species code for taxa AphiaID Worms"
     type: integer
     required: false
-  - name: CELL_L
-    title: "Abundance of the taxa in cells per litre of water"
+  - name: TAXON_COUNT
+    title: "Number of the taxa counted"
     type: number
     required: true
-  - name: BIOVOLUME_UM3L
-    title: "Biovolume of the taxa in um3 per litre of water"
+  - name: SAMPVOL_M3
+    title: "Volume of sample analysed (cubic metres)"
     type: number
-    required: false
-  - name: CELL_COUNT
-    title: "Number of the taxa counted in sample"
-    type: number
-    required: true
-  - name: SAMPVOL_L
-    title: "Volume of sample analysed"
+    required: true 
+  - name: ZOOP_ABUNDANCE_M3
+    title: "Abundance of the taxa per cubic metre of water"
     type: number
     required: true
-  - name: COMMENTS
-    title: "Comments"
-    type: string                               
-    required: true    
+  
   primaryKey:
-  - TRIP_CODE
+  - SAMPLE
   - TAXON_NAME
 licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
   path: https://creativecommons.org/licenses/by/4.0/
-
 

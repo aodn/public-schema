@@ -1,6 +1,6 @@
 -- This view is the basis for the WMS layer (seen on step 2 on AODN Portal).
--- It also provides the metadata columns for all the phytoplankton products.
-CREATE MATERIALIZED VIEW bgc_phytoplankton_map AS
+-- It also provides the metadata columns for all the zooplankton products.
+CREATE MATERIALIZED VIEW bgc_zooplankton_map AS
   SELECT
     "Project",
     "StationName",
@@ -14,13 +14,14 @@ CREATE MATERIALIZED VIEW bgc_phytoplankton_map AS
     "Month_local",
     "Day_local",
     "Time_local24hr",
-    phytosampledepth_m AS "SampleDepth_m",
+    zoopsampledepth_m AS "SampleDepth_m",
   --  "CTDSST_degC",
   --  "CTDChlaSurf_mgm3",
   --  "CTDSalinity_psu",
+    "Biomass_mgm3",
     trip_code,
     geom
   FROM bgc_trip_metadata
-  WHERE sampletype LIKE '%P%' AND
-        trip_code IN (SELECT DISTINCT trip_code from bgc_phyto_raw)
+  WHERE sampletype LIKE '%Z%' AND
+        trip_code IN (SELECT DISTINCT trip_code from bgc_zoop_raw)
 ;
