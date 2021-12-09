@@ -4,11 +4,11 @@
 
 
 # download a resource from a URL (assumed to be geoserver) to a CSV file
-# $1 - full path to resource file
-# $2 - directory to save the CSV file into
+# $1 - directory to save the CSV file into
+# $2 - full path to resource file
 function extract_resource {
-  res_file=$1; shift
   output_dir=$1; shift
+  res_file=$1; shift
 
   echo
   echo "Extracting ${res_file} ..."
