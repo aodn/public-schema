@@ -1,7 +1,7 @@
 -- Materialized view for larval fish count raw product
 -- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
 -- which will convert the jsonb `abundances` column into separate CSV columns on output.
-CREATE MATERIALIZED VIEW bgc_larval_fish_count_raw AS
+CREATE MATERIALIZED VIEW bgc_larval_fish_count_raw_data AS
 WITH pivoted AS (
    SELECT 
       i_sample_id, 
