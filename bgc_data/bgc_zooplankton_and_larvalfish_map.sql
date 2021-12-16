@@ -14,9 +14,7 @@ CREATE MATERIALIZED VIEW bgc_zooplankton_and_larvalfish_map AS
   FROM bgc_zooplankton_map
       UNION ALL
   SELECT
-    CASE WHEN "Project" LIKE '%NRS%' THEN 'NRS'
-         ELSE "Project"
-        END AS "Project",
+    "Project",
     "StationName",
     "Latitude",
     "Longitude",
