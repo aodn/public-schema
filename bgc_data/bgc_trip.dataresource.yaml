@@ -57,6 +57,10 @@ schema:
     title: Biomass in mg per m3 for Trip
     type: number
     required: false
+  - name: ASHFREEBIOMASS_MGM3
+    title: Ash Free Biomass in mg per m3 for Trip
+    type: number
+    required: false    
   - name: SECCHI_M
     title: Secchi depth in m for Trip
     type: number

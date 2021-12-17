@@ -33,9 +33,6 @@ schema:
     title: "FLAG value"
     type: integer
     required: true
-  - name: SALINITY_COMMENTS
-    type: string
-    required: false
   - name: SILICATE_UMOLL
     title: "Silicate umoll"
     type: number
@@ -72,9 +69,6 @@ schema:
     title: "FLAG value"
     type: integer
     required: true
-  - name: NUTRIENT_COMMENTS
-    type: string
-    required: false
   - name: DIC_UMOLKG
     type: number
     required: false
@@ -82,9 +76,6 @@ schema:
     title: "FLAG value"
     type: integer
     required: true
-  - name: CARBON_COMMENTS
-    type: string
-    required: false
   - name: TALKALINITY_UMOLKG
     type: number
     required: false
@@ -92,9 +83,6 @@ schema:
     title: "FLAG value"
     type: integer
     required: true    
-  - name: ALKALINITY_COMMENTS
-    type: string
-    required: false
   - name: OXYGEN_UMOLL
     type: number
     required: false
@@ -102,9 +90,6 @@ schema:
     title: "FLAG value"
     type: integer
     required: true
-  - name: OXYGEN_COMMENTS
-    type: string
-    required: false
   - name: MICROBIOMESAMPLE_ID
     title: "Microbiomesample_id"
     type: string

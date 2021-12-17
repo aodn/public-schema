@@ -1,8 +1,8 @@
 profile: tabular-data-resource
-name: bgc_tss
-path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_tss
-title: bgc_tss
-description: "A table of all BGC TSS data"
+name: bgc_tss_meta
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_tss_meta
+title: bgc_tss_meta
+description: "A table of all BGC TSS metadata"
 format: csv
 mediatype: text/csv
 encoding: utf-8
@@ -25,6 +25,10 @@ schema:
     title: "Depth (m) that sample was obtained, or 'WC' if combined water-column sample"
     type: string
     required: true
+  - name: REPLICATE
+    title: "Sample replicate"
+    type: integer
+    required: true
   - name: TSS_MGL
     type: number
     required: false  
@@ -36,10 +40,17 @@ schema:
     required: false 
   - name: TSS_FLAG
     type: integer                               
-    required: true     
+    required: true
+  - name: TSS_COMMENTS
+    type: string                               
+    required: false
+  - name: BLANKADJUSTAVAILABLE
+    type: string                               
+    required: false      
   primaryKey:
   - TRIP_CODE
   - SAMPLEDEPTH_M
+  - REPLICATE
 licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
