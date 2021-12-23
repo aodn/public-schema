@@ -8,7 +8,7 @@ WITH cpr_phyto_raw_species AS (
     -- (without comments about with flagellates, cilliates etc...)
     SELECT sample,
            genus || ' ' || species AS taxon_name,
-           fov_count
+           phyto_abundance_m3
     FROM cpr_phyto_raw
     WHERE species IS NOT NULL AND
           species != 'spp.' AND
@@ -25,7 +25,7 @@ WITH cpr_phyto_raw_species AS (
            taxon_name,
            c.startdate,
            taxon_name != c.parent_name AS species_changed,
-           sum(r.fov_count) AS fov_count
+           sum(r.phyto_abundance_m3) AS phyto_abundance_m3
     FROM cpr_phyto_raw_species r LEFT JOIN cpr_phyto_changelog c USING (taxon_name)
     GROUP BY sample, taxon_name, startdate, species_changed
 ), species_affected AS (
@@ -41,24 +41,24 @@ WITH cpr_phyto_raw_species AS (
            CASE
                WHEN m."SampleDate_UTC" < s.startdate THEN NULL
                ELSE 0.
-           END AS fov_count
+           END AS phyto_abundance_m3
     FROM cpr_phytoplankton_map m CROSS JOIN species_affected s
 ), defaults_and_grouped AS (
     -- stack together observations and default values
-    SELECT sample, taxon_name, fov_count FROM default_abundances
+    SELECT sample, taxon_name, phyto_abundance_m3 FROM default_abundances
     UNION ALL
-    SELECT sample, taxon_name, fov_count FROM grouped
+    SELECT sample, taxon_name, phyto_abundance_m3 FROM grouped
 ), regrouped AS (
     -- create a single row per trip/species, making sure observed abundances override default values
     SELECT sample,
            taxon_name,
-           MAX(fov_count) AS fov_count
+           MAX(phyto_abundance_m3) AS phyto_abundance_m3
     FROM defaults_and_grouped
     GROUP BY sample, taxon_name
 ), pivoted AS (
     -- aggregate all species per trip into a single row
     SELECT sample,
-           jsonb_object_agg(taxon_name, fov_count) AS abundances
+           jsonb_object_agg(taxon_name, phyto_abundance_m3) AS abundances
     FROM regrouped
     GROUP BY sample
 )
