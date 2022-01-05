@@ -3,14 +3,14 @@
 CREATE MATERIALIZED VIEW cpr_phytoplankton_map AS
   SELECT
     s.trip_code AS "TripCode",
-    --TODO: Route
+    --TODO: Region
     s.latitude AS "Latitude",
     s.longitude AS "Longitude",
     s.sampledateutc AS "SampleDate_UTC",
-    --TODO extract(year from s.sampledatelocal)::int AS "Year_local",
-    --TODO extract(month from s.sampledatelocal)::int AS "Month_local",
-    --TODO extract(day from s.sampledatelocal)::int AS "Day_local"
-    --TODO: to_char(sampledatelocal, 'HH24:MI') AS "Time_local24hr",
+    extract(year from s.sampledateutc)::int AS "Year_UTC",
+    extract(month from s.sampledateutc)::int AS "Month_UTC",
+    extract(day from s.sampledateutc)::int AS "Day_UTC",
+    to_char(sampledateutc, 'HH24:MI') AS "Time_UTC24hr",
     --TODO: SatSST_degC 
     --TODO: SatChlaSurf_mgm3 
     s.pci AS "PCI",

@@ -13,8 +13,8 @@ WITH grouped AS (
     GROUP BY sample, taxon_group
 ), changelog AS (
     -- virtual changelog table for groups that were not counted before 
-    SELECT unnest(ARRAY ['Ciliate', 'Silicoflagellate', 'Radiozoa', 'Foraminifera']) AS taxon_group,
-           '2012-08-07'::date AS startdate
+    SELECT unnest(ARRAY ['Ciliate', 'Foraminifera']) AS taxon_group,
+           '2013-03-01'::date AS startdate
 ), default_abundances AS (
     -- for taxon groups affected by the change in counting, set default abundance values
     -- (NULL for 'not looked for', 0 for 'not found')
