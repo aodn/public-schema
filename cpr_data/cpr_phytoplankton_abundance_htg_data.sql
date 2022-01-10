@@ -12,7 +12,7 @@ WITH grouped AS (
     WHERE taxon_group NOT IN ('Other', 'Coccolithophore', 'Diatom', 'Protozoa')
     GROUP BY sample, taxon_group
 ), changelog AS (
-    -- virtual changelog table for groups that were not counted before 
+    -- virtual changelog table for groups that were not counted before 2013-03-01 
     SELECT unnest(ARRAY ['Ciliate', 'Foraminifera']) AS taxon_group,
            '2013-03-01'::date AS startdate
 ), default_abundances AS (
