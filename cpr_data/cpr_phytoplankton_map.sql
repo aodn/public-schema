@@ -3,7 +3,7 @@
 CREATE MATERIALIZED VIEW cpr_phytoplankton_map AS
   SELECT
     s.trip_code AS "TripCode",
-    --TODO: Region
+    s.region AS "Region",
     s.latitude AS "Latitude",
     s.longitude AS "Longitude",
     s.sampledateutc AS "SampleDate_UTC",
