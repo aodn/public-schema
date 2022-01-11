@@ -18,6 +18,10 @@ schema:
     title: "Unique sample identifier"
     type: string
     required: true  
+  - name: REGION
+    title: "Region identifier"
+    type: string
+    required: true      
   - name: LATITUDE
     title: "Latitude of sampling in decimal degrees North"
     type: number
@@ -46,7 +50,7 @@ schema:
     type: number
     required: false    
   - name: SAMPLETYPE
-    title: ""
+    title: "sample type code"
     type: string
     required: true
   primaryKey: SAMPLE

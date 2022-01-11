@@ -1,0 +1,111 @@
+profile: tabular-data-resource
+name: bgc_picoplankton_meta
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_picoplankton_meta
+title: bgc_picoplankton_meta
+description: "A table of all BGC picoplankton metadata"
+format: csv
+mediatype: text/csv
+encoding: utf-8
+layout:
+  skipFields: [ FID ]
+schema:
+  fields:
+  - name: TRIP_CODE
+    title: "Identifier for trip"
+    type: string
+    required: true
+  - name: SAMPLE_CODE
+    title: "Unique identifier for sample"
+    type: string
+    required: true
+  - name: SAMPLEDEPTH_M
+    title: "Depth (m) that sample was obtained, or 'WC' if combined water-column sample"
+    type: string
+    required: true
+  - name: SAMPLEDATELOCAL
+    title: "Date & time of sample in local time (formatted string)"
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d %H:%M:%S"
+    required: true
+  - name: REPLICATE
+    type: integer
+    required: true
+  - name: PROCHLOROCOCCUS_CELLSML
+    type: number
+    required: false  
+  - name: SYNECOCHOCCUS_CELLSML
+    type: number                               
+    required: false  
+  - name: PICOEUKARYOTES_CELLSML
+    type: number                               
+    required: false  
+  - name: PROCHLOROCOCCUS_FLAG
+    type: integer                               
+    required: true  
+  - name: SYNECOCHOCCUS_FLAG
+    type: integer                               
+    required: true  
+  - name: PICOEUKARYOTES_FLAG
+    type: integer                               
+    required: true  
+  - name: PICO_COMMENTS
+    title: "Comments"
+    type: string                               
+    required: false  
+  - name: ANALYSIS_LOCATION
+    title: "Site where sample was analysed"
+    type: string                               
+    required: false  
+  - name: ANALYSIS_DATE
+    title: "Date that sample was analysed (formatted string: YYYY-MM-DD)"
+    type: date
+    format: "%Y-%m-%d"
+    required: false 
+  - name: ANALYST_NAME
+    type: string                               
+    required: false  
+  - name: TEMP_THAWED_DEGC
+    type: number                               
+    required: false  
+  - name: INTERNAL_STANDARD
+    type: string                               
+    required: false  
+  - name: INSTRUMENT_BRAND_MODEL
+    title: "Comments"
+    type: string                               
+    required: false  
+  - name: INSTRUMENT_SERIAL_NUMBER
+    title: "Comments"
+    type: string                               
+    required: false  
+  - name: LASER_NM
+    title: "Comments"
+    type: string                               
+    required: false  
+  - name: MODE_TYPE
+    title: "Comments"
+    type: string                               
+    required: false  
+  - name: ANALYSIS_VOLUME_UL
+    type: number                               
+    required: false  
+  - name: FLOW_RATE_UL_PER_MIN
+    type: integer                               
+    required: false  
+  - name: ANALYSIS_TIME_MINUTES
+    type: integer                               
+    required: false  
+  - name: BATCH_COMMENTS
+    title: "Optional comments on batch process"
+    type: string                               
+    required: false
+  primaryKey:
+  - TRIP_CODE
+  - SAMPLEDEPTH_M
+  - REPLICATE
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
