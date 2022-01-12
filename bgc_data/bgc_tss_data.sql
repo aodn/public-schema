@@ -14,7 +14,9 @@ CREATE MATERIALIZED VIEW bgc_tss_data AS
       tt.organicfraction_mgl AS "TSSorganic_mgL", 
       tt.inorganicfraction_mgl AS "TSSinorganic_mgL", 
       tt.tss_mgl AS "TSS_mgL", 
-      tt.tss_flag AS "TSSall_flag"
+      tt.tss_flag AS "TSSall_flag",
+      tt.tss_comments AS "TSScomments",
+      tt.blankadjustavailable AS "BlankAdjustAvailable"
    FROM bgc_tss_meta tt
       INNER JOIN bgc_trip_metadata bt ON bt.trip_code = tt.trip_code
 ;
