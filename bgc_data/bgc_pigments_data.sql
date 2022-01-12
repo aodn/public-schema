@@ -2,14 +2,7 @@
 --includes metadata
 CREATE MATERIALIZED VIEW bgc_pigments_data AS 
    SELECT
-      bt."Project", 
-      bt."StationName", 
-      bt."TripCode",
-      bt."SampleTime_local"::timestamp::date AS "SampleDate_Local",
---TO DO: SampleDate_UTC
-      bt."Latitude",
-      bt."Longitude",
-      bt.secchi_m AS "SecchiDepth_m",
+      bm.*,
       pig.sampledepth_m AS "Depth_m",
       pig.allo AS "Allo_mgm3",
       pig.alpha_beta_car AS "AlphaBetaCar_mgm3",
@@ -53,7 +46,6 @@ CREATE MATERIALIZED VIEW bgc_pigments_data AS
       pig.zea AS "Zea_mgm3",
       pig.pigments_flag AS "Pigments_flag"
    FROM bgc_pigments pig
-      INNER JOIN bgc_trip_metadata bt USING (trip_code)
---      INNER JOIN bgc_trip bt ON pig.trip_code = bt.trip_code
+      INNER JOIN combined_bgc_map bm USING (trip_code)
 ;
 

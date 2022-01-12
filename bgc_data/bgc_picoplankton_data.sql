@@ -1,14 +1,7 @@
 --create materialized view for picoplankton, including metadata
 CREATE MATERIALIZED VIEW bgc_picoplankton_data AS
    SELECT
-      bt."Project", 
-      bt."StationName", 
-      bt."TripCode",
-      bt."SampleTime_local"::timestamp::date AS "SampleDate_Local",
---TO DO: SampleDate_UTC
-      bt."Latitude",
-      bt."Longitude",
-      bt.secchi_m AS "SecchiDepth_m",
+      bm.*,
       prt.sampledepth_m AS "Depth_m",
       prt.replicate AS "Replicate",
       prt.prochlorococcus_cellsml AS "Prochlorc_cellsmL",
@@ -32,5 +25,5 @@ CREATE MATERIALIZED VIEW bgc_picoplankton_data AS
       prt.analysis_time_minutes AS "AnalysisTime_min",
       prt.batch_comments AS "BatchComments"
    FROM bgc_picoplankton_meta prt
-      INNER JOIN  bgc_trip_metadata bt ON bt.trip_code = prt.trip_code
+      INNER JOIN combined_bgc_map bm USING (trip_code)
 ;

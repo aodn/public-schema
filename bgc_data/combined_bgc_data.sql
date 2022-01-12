@@ -48,13 +48,7 @@ UNION
    FROM bgc_chemistry_data che
 )
    SELECT
-      bt."Project", 
-      bt."StationName", 
-      bt."TripCode",
-      bt."SampleDate_Local",
---TO DO: SampleDate_UTC
-      bt."Latitude",
-      bt."Longitude",
+      bm.*,
       td."Depth_m",
       che."Salinity_psu",
       che."Salinity_flag",
@@ -76,7 +70,6 @@ UNION
       tss."TSSinorganic_mgL",
       tss."TSS_mgL",
       tss."TSSall_flag",
-      bt."SecchiDepth_m",
       ppl."Prochlorc_cellsmL",
       ppl."Prochlorc_flag",
       ppl."Synechoc_cellsmL",
@@ -124,9 +117,9 @@ UNION
       pig."Viola_mgm3",
       pig."Zea_mgm3",
       pig."Pigments_flag",
-      che."MicroBiomeSa BPA mple_id"
+      che."MicroBiomeSample_id"
    FROM trip_depths td
-      INNER JOIN combined_bgc_map bt USING ("TripCode")
+      INNER JOIN combined_bgc_map bm USING ("TripCode")
       LEFT JOIN tss_avg tss ON td."TripCode" = tss."TripCode"
          AND td."Depth_m" = tss."Depth_m"
       LEFT JOIN picoplankton_avg ppl ON td."TripCode" = ppl."TripCode"
