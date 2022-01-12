@@ -1,18 +1,42 @@
 --create combined bgc product
---set search_path = imos_bgc_db, public;
 CREATE MATERIALIZED VIEW combined_bgc_data AS 
+--first create temporary table with averaged picoplankton data from bgc_picoplankton
+WITH 
+picoplankton_avg AS (
+   SELECT
+      prt.trip_code AS "TripCode",
+      prt.sampledepth_m AS "Depth_m",
+      prt.prochlorococcus_cellsml AS "Prochlorc_cellsmL",
+      prt.prochlorococcus_flag AS "Prochlorc_flag",
+      prt.synecochoccus_cellsml AS "Synechoc_cellsmL", 
+      prt.synecochoccus_flag AS "Synechoc_flag",
+      prt.picoeukaryotes_cellsml AS "Picoeukar_cellsmL",
+      prt.picoeukaryotes_flag AS "Picoeukar_flag"
+   FROM bgc_picoplankton prt
+),
+--then create temporary table with averaged tss data from bgc_tss
+tss_avg AS (
+   SELECT 
+      tt.trip_code AS "TripCode",
+      tt.sampledepth_m AS "Depth_m",
+      tt.organicfraction_mgl AS "TSSorganic_mgL", 
+      tt.inorganicfraction_mgl AS "TSSinorganic_mgL", 
+      tt.tss_mgl AS "TSS_mgL", 
+      tt.tss_flag AS "TSSall_flag"
+   FROM bgc_tss tt
+),
 --create temporary table with any depths associated with trip codes
-WITH trip_depths AS (
---   SELECT 
---      ppl."TripCode",
---      ppl."Depth_m"
---   FROM bgc_picoplankton_data ppl
---UNION
---   SELECT 
---      tss."TripCode",
---      tss."Depth_m" 
---   FROM bgc_tss_data tss
---UNION
+trip_depths AS (
+   SELECT 
+      ppl."TripCode",
+      ppl."Depth_m"
+   FROM picoplankton_avg ppl
+UNION
+   SELECT 
+      tss."TripCode",
+      tss."Depth_m" 
+   FROM tss_avg tss
+UNION
    SELECT
       pig."TripCode",
       pig. "Depth_m"
@@ -48,17 +72,17 @@ UNION
       che."PO4_flag",
       che."SiO4_umolL",
       che."SiO4_flag",
---      tss."TSSorganic_mgL",
---      tss."TSSinorganic_mgL",
---      tss."TSS_mgL",
---      tss."TSSall_flag",
+      tss."TSSorganic_mgL",
+      tss."TSSinorganic_mgL",
+      tss."TSS_mgL",
+      tss."TSSall_flag",
       bt."SecchiDepth_m",
---      ppl."Prochlorc_cellsmL",
---      ppl."Prochlorc_flag",
---      ppl."Synechoc_cellsmL",
---      ppl."Synechoc_flag",
---      ppl."Picoeukar_cellsmL",
---      ppl."Picoeukar_flag",
+      ppl."Prochlorc_cellsmL",
+      ppl."Prochlorc_flag",
+      ppl."Synechoc_cellsmL",
+      ppl."Synechoc_flag",
+      ppl."Picoeukar_cellsmL",
+      ppl."Picoeukar_flag",
       pig."Allo_mgm3",
       pig."AlphaBetaCar_mgm3",
       pig."Anth_mgm3",
@@ -103,13 +127,12 @@ UNION
       che."MicroBiomeSa BPA mple_id"
    FROM trip_depths td
       INNER JOIN combined_bgc_map bt USING ("TripCode")
-      LEFT JOIN bgc_tss_data tss ON td."TripCode" = tss."TripCode"
+      LEFT JOIN tss_avg tss ON td."TripCode" = tss."TripCode"
          AND td."Depth_m" = tss."Depth_m"
-      LEFT JOIN bgc_picoplankton_data ppl ON td."TripCode" = ppl."TripCode"
+      LEFT JOIN picoplankton_avg ppl ON td."TripCode" = ppl."TripCode"
          AND td."Depth_m" = ppl."Depth_m"
       LEFT JOIN bgc_chemistry_data che ON td."TripCode" = che."TripCode"
          AND td."Depth_m" = che."Depth_m"::text
       LEFT JOIN bgc_pigments_data pig ON td."TripCode" = pig."TripCode"
          AND td."Depth_m" = pig."Depth_m"
 ;
-
