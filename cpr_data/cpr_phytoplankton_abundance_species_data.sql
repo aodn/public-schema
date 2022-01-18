@@ -5,7 +5,6 @@ CREATE MATERIALIZED VIEW cpr_phytoplankton_abundance_species_data AS
 WITH cpr_phyto_raw_species AS (
     -- filter out rows where species hasn't been identified,
     -- concatenate genus and species to create a simplified taxon name
-    -- (without comments about with flagellates, cilliates etc...)
     SELECT sample,
            genus || ' ' || species AS taxon_name,
            phyto_abundance_m3
