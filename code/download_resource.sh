@@ -41,5 +41,5 @@ if [ ! -d "$output_dir" ] || [ $# -lt 1 ]; then
 fi
 
 for t in "$@"; do
-  extract_resource "$t" "$output_dir"
+  extract_resource "$output_dir" "$t"
 done
