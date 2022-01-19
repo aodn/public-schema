@@ -7,14 +7,14 @@ CREATE MATERIALIZED VIEW cpr_phytoplankton_map AS
     s.latitude AS "Latitude",
     s.longitude AS "Longitude",
     s.sampledateutc AS "SampleDate_UTC",
+    NULL AS "SampleDate_Local", --to be updated
     extract(year from s.sampledateutc)::int AS "Year_UTC",
     extract(month from s.sampledateutc)::int AS "Month_UTC",
     extract(day from s.sampledateutc)::int AS "Day_UTC",
     to_char(sampledateutc, 'HH24:MI') AS "Time_UTC24hr",
-    --TODO: SatSST_degC 
-    --TODO: SatChlaSurf_mgm3 
+    NULL AS "SatSST_degC", --to be updated
+    NULL AS "SatChlaSurf_mgm3", --to be updated
     s.pci AS "PCI",
-    s.biomass_mgm3 AS "BiomassIndex_mgm3 ",
     trip_code,
     sample,
     st_geomfromtext('POINT(' || longitude::text || ' ' || latitude::text || ')', 4326) AS geom
