@@ -16,19 +16,15 @@ schema:
     required: true
     unique: true
   - name: SUBGENERA
-    title: ""
     type: string
     required: false     
   - name: FUNCTIONALGROUP
-    title: ""
     type: string
     required: false   
   - name: GENUS
-    title: ""
     type: string
     required: false 
   - name: SPECIES
-    title: ""
     type: string
     required: false     
   - name: SPCODE
@@ -37,15 +33,12 @@ schema:
     required: false
     unique: false
   - name: LENGTH_MM
-    title: ""
     type: number
     required: false 
   - name: SIZEREFERENCE
-    title: ""
     type: string
     required: false     
   - name: DIET
-    title: ""
     type: string
     required: false    
   primaryKey: TAXON_NAME
