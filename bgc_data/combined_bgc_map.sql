@@ -5,7 +5,7 @@ CREATE MATERIALIZED VIEW combined_bgc_map AS
     "Project",
     "StationName",
     "TripCode",
-    "SampleTime_local"::timestamp::date AS "SampleDate_Local",
+    "SampleTime_local"::date AS "SampleDate_Local",
 --  TODO: "SampleTime_UTC",
     "Latitude",
     "Longitude",
