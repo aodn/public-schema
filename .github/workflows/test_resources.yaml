@@ -10,7 +10,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        files: ['bgc_data/bgc_*.yaml', 'cpr_data/cpr_*.yaml']
+        product:
+          - bgc_plankton
+          - bgc_combined
+          - bgc_lfish
+          - derived_indices
+          - cpr
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
@@ -22,4 +27,4 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r code/requirements.txt
       - name: Validate data against schemas
-        run: code/validate.py ${{ matrix.files }}
+        run: code/validate.py $(grep ${{ matrix.product }} product_index.csv | cut -d, -f2)

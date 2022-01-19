@@ -6,6 +6,8 @@ description: "A table of Phytoinfo"
 format: csv
 mediatype: text/csv
 encoding: utf-8
+layout:
+  skipFields: [ FID ]
 schema:
   fields:
   - name: SPCODE
@@ -19,19 +21,18 @@ schema:
     required: true
     unique: true
   - name: BV_CELL
-    title: ""
     type: number
     required: false
+  - name: FUNCTIONALGROUP
+    type: string
+    required: false    
   - name: MONT2001PGN_CELL
-    title: ""
     type: number
     required: false
   - name: PGC_CELL
-    title: ""
     type: number
     required: false
   - name: TROPHY
-    title: ""
     type: string
     required: false    
   primaryKey: TAXON_NAME
