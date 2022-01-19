@@ -1,5 +1,6 @@
--- This view provides the metadata columns for the larval fish product.
-CREATE VIEW bgc_larval_fish_map AS
+-- This view is the basis for the WMS layer (seen on step 2 on AODN Portal).
+-- It also provides the metadata columns for the larval fish product.
+CREATE MATERIALIZED VIEW bgc_larval_fish_map AS
    SELECT 
       lfs.projectname AS "Project",
       lfs.stationname AS "StationName",
