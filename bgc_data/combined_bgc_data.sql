@@ -120,12 +120,9 @@ UNION
       che."MicroBiomeSample_id"
    FROM trip_depths td
       INNER JOIN combined_bgc_map bm USING ("TripCode")
-      LEFT JOIN tss_avg tss ON td."TripCode" = tss."TripCode"
-         AND td."Depth_m" = tss."Depth_m"
-      LEFT JOIN picoplankton_avg ppl ON td."TripCode" = ppl."TripCode"
-         AND td."Depth_m" = ppl."Depth_m"
+      LEFT JOIN tss_avg tss USING ("TripCode", "Depth_m")
+      LEFT JOIN picoplankton_avg ppl USING ("TripCode", "Depth_m")
+      LEFT JOIN bgc_pigments_data pig USING ("TripCode", "Depth_m")
       LEFT JOIN bgc_chemistry_data che ON td."TripCode" = che."TripCode"
          AND td."Depth_m" = che."Depth_m"::text
-      LEFT JOIN bgc_pigments_data pig ON td."TripCode" = pig."TripCode"
-         AND td."Depth_m" = pig."Depth_m"
 ;
