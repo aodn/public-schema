@@ -16,6 +16,7 @@ CREATE VIEW bgc_trip_metadata AS
     phytosampledepth_m,
     zoopsampledepth_m,
     biomass_mgm3 AS "Biomass_mgm3",
+    ashfreebiomass_mgm3 AS "AshFreeBiomass_mgm3",
     secchi_m,
     sampletype,
     trip_code,
