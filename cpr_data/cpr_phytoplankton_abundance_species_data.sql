@@ -14,8 +14,6 @@ WITH cpr_phyto_raw_species AS (
           species NOT LIKE '%cf.%' AND
           species NOT LIKE '%/%' AND
           species NOT LIKE '%complex%' AND
-          species NOT LIKE '% f.%' AND
-          species NOT LIKE '%var.%' AND
           species NOT LIKE '%type%' AND
           species NOT LIKE '%cyst%' 
 ), grouped AS (
