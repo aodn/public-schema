@@ -11,7 +11,8 @@ WITH grouped AS (
            substring(taxon_name, '^\w+') != substring(parent_name, '^\w+') AS genus_changed,
            sum(r.biovol_um3m3) AS biovol_um3m3
     FROM cpr_phyto_raw r LEFT JOIN cpr_phyto_changelog c USING (taxon_name)
-    WHERE r.genus IS NOT NULL
+    WHERE r.genus IS NOT NULL AND
+          r.genus NOT LIKE '%cf.%'
     GROUP BY sample, genus, startdate, genus_changed
 ), genera_affected AS (
     -- identify genera affected by a taxonomy change
