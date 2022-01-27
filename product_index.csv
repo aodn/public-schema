@@ -13,7 +13,6 @@ bgc_lfish,bgc_data/bgc_lfish_samples.dataresource.yaml
 derived_indices,bgc_data/phytoinfo.dataresource.yaml
 derived_indices,bgc_data/zoopinfo.dataresource.yaml
 cpr,cpr_data/cpr_samp.dataresource.yaml
-cpr,cpr_data/cpr_trip.dataresource.yaml
 cpr,cpr_data/cpr_phyto_changelog.dataresource.yaml
 cpr,cpr_data/cpr_phyto_raw.dataresource.yaml
 cpr,cpr_data/cpr_zoop_changelog.dataresource.yaml
