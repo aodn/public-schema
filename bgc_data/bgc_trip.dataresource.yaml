@@ -53,6 +53,13 @@ schema:
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
     required: true
+  - name: SAMPLEDATEUTC
+    title: "Date & time of sample in UTC time (formatted string)"
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d %H:%M:%S"
+    required: false    
   - name: BIOMASS_MGM3
     title: Biomass in mg per m3 for Trip
     type: number
@@ -69,6 +76,10 @@ schema:
     title: Code for which analysis is available for that segment
     type: string
     required: false
+  - name: METHODS
+    title: Method code
+    type: string
+    required: false    
   primaryKey: TRIP_CODE
 licenses:
 - name: CC-BY-4.0
