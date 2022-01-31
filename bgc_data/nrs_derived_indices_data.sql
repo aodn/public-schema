@@ -32,48 +32,42 @@ WITH nrs_derived_indices_map AS (
     FROM bgc_zoop_raw zr LEFT JOIN zoopinfo_mod zi USING (taxon_name)
     WHERE zr.copepod = 'COPEPOD'
     GROUP BY trip_code
-), copepod_species AS (
+), copepods_by_trip_species AS (
     -- zooplankton raw data filtered to include only correctly identified copepod species
-    --TODO: Should this be grouped by trip_code & taxon_name?
+    -- taxon_name updated to identify each unique species
+    -- grouped by trip_code & taxon_name
     SELECT trip_code,
            genus || ' ' || substring(species, '^\w+') AS taxon_name,
-           taxon_count
+           sum(taxon_count) AS taxon_count
     FROM bgc_zoop_raw
     WHERE copepod = 'COPEPOD' AND
           species != 'spp.' AND
           species NOT LIKE '%cf.%' AND
           species NOT LIKE '%/%' AND
           species NOT LIKE '%grp%'
-), copepod_species_count AS (
+    GROUP BY trip_code, genus || ' ' || substring(species, '^\w+')
+), copepod_species_stats_by_trip AS (
     -- count number of copepod species
     SELECT trip_code,
-           count(*) AS "NoCopepodSpecies_Sample"
-    FROM copepod_species
-    GROUP BY trip_code
-), copepod_diversity AS (
-    SELECT trip_code,
-           sum(taxon_count * ln(taxon_count)) AS "ShannonCopepodDiversity"
-    FROM (SELECT trip_code,
-                 taxon_name,
-                 sum(taxon_count) AS taxon_count
-          FROM copepod_species
-          GROUP BY trip_code, taxon_name
-         ) AS tt
+           count(*) AS "NoCopepodSpecies_Sample",
+           sum(taxon_count) AS total_taxon_count,
+           sum(taxon_count * ln(taxon_count)) AS total_n_logn
+    FROM copepods_by_trip_species
     GROUP BY trip_code
 )
 
 SELECT m.*,
-       zs.ZoopAbundance_m3,
-       cs.CopeAbundance_m3,
-       cs."CopeSumAbundanceLength" / zs.ZoopAbundance_m3 AS "AvgTotalLengthCopepod_mm",
-       --TODO: column below should be "OmnivoreCarnivoreCopepodRatio" ??
-       cs."CO" / (cs."CO" + cs."CC") AS "HerbivoreCarnivoreCopepodRatio",
-       cc."NoCopepodSpecies_Sample",
-       cd."ShannonCopepodDiversity",
-       cd."ShannonCopepodDiversity" / ln(cc."NoCopepodSpecies_Sample") AS "CopepodEvenness"
+--        zs.ZoopAbundance_m3,
+--        cs.CopeAbundance_m3,
+--        cs."CopeSumAbundanceLength" / zs.ZoopAbundance_m3 AS "AvgTotalLengthCopepod_mm",
+--        --TODO: column below should be "OmnivoreCarnivoreCopepodRatio" ??
+--        cs."CO" / (cs."CO" + cs."CC") AS "HerbivoreCarnivoreCopepodRatio",
+       css."NoCopepodSpecies_Sample",
+       ln(css.total_taxon_count) - (css.total_n_logn/css.total_taxon_count) AS "ShannonCopepodDiversity",
+       (ln(css.total_taxon_count) - (css.total_n_logn/css.total_taxon_count)) /
+           ln(css."NoCopepodSpecies_Sample") AS "CopepodEvenness"
 FROM nrs_derived_indices_map m LEFT JOIN zoo_stats zs USING (trip_code)
                                LEFT JOIN copepod_stats cs USING (trip_code)
-                               LEFT JOIN copepod_species_count cc USING (trip_code)
-                               LEFT JOIN copepod_diversity cd USING (trip_code)
+                               LEFT JOIN copepod_species_stats_by_trip css USING (trip_code)
 ORDER BY trip_code
 ;
