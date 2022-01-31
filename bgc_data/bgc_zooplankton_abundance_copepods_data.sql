@@ -15,7 +15,8 @@ WITH bgc_zoop_raw_species AS (
           r.species != 'spp.' AND
           r.species NOT LIKE '%cf.%' AND
           r.species NOT LIKE '%/%' AND
-          r.species NOT LIKE '%grp%'
+          r.species NOT LIKE '%grp%' AND
+          r.species NOT LIKE '%complex%'
 ), grouped AS (
     -- join changelog on to raw data, group by trip, species and changelog details
     SELECT r.trip_code,
