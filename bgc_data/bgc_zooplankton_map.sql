@@ -19,6 +19,7 @@ CREATE MATERIALIZED VIEW bgc_zooplankton_map AS
     "CTDChlaSurf_mgm3",
     "CTDSalinity_psu",
     "Biomass_mgm3",
+    "AshFreeBiomass_mgm3"
     trip_code,
     geom
   FROM bgc_trip_metadata t LEFT JOIN nrs_ctd_surface_values c USING (trip_code)
