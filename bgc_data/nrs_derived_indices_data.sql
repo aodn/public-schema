@@ -57,12 +57,13 @@ WITH nrs_derived_indices_map AS (
 ),
 
 phyto_filtered AS (
-    -- filter out taxon_group "Other" from raw phyto data
+    -- filter out taxon_group "Other" and invalid species from raw phyto data
+    -- create genus_species field for counting species
     SELECT *,
            biovolume_um3l / nullif(cell_l, 0) AS bv_cell,  -- biovolume of one cell
-           CASE WHEN (species = 'spp.' AND
-                      species LIKE '%cf.%' AND
-                      species LIKE '%/%' AND
+           CASE WHEN (species = 'spp.' OR
+                      species LIKE '%cf.%' OR
+                      species LIKE '%/%' OR
                       species LIKE '%grp%') THEN NULL
                 ELSE genus || ' ' || substring(species, '^\w+')
                END AS genus_species
@@ -85,8 +86,21 @@ phyto_filtered AS (
            sum(cell_l) FILTER ( WHERE taxon_group LIKE '%diatom' ) AS diatom_l,
            sum(cell_l) FILTER ( WHERE taxon_group = 'Dinoflagellate' ) AS dinoflagellate_l,
            sum(biovolume_um3l) / nullif(sum(cell_l), 0) AS "AvgCellVol_um3",
-           count(DISTINCT genus_species) AS "NoPhytoSpecies_Sample"
+           count(DISTINCT genus_species) AS "NoPhytoSpecies_Sample",
+           sum(cell_l) FILTER ( WHERE genus_species IS NOT NULL ) AS total_species_abundance
     FROM phyto_with_carbon
+    GROUP BY trip_code
+), phyto_species_by_trip_species AS (
+    SELECT trip_code,
+           pf.genus_species,
+           sum(pf.cell_l / pt.total_species_abundance) AS relative_abundance
+    FROM phyto_filtered pf LEFT JOIN phyto_by_trip pt USING (trip_code)
+    WHERE genus_species IS NOT NULL
+    GROUP BY trip_code, genus_species
+), phyto_species_by_trip AS (
+    SELECT trip_code,
+           -1 * sum(relative_abundance * ln(relative_abundance)) AS "ShannonPhytoDiversity"
+    FROM phyto_species_by_trip_species
     GROUP BY trip_code
 )
 
@@ -106,9 +120,9 @@ SELECT m.*,
        pt."PhytoAbund_CellsL",  -- TODO: check name - spec says "AbundancePhyto_cellsL"
        pt.diatom_l / (pt.diatom_l + pt.dinoflagellate_l) AS "DiatomDinoflagellateRatio",
        pt."AvgCellVol_um3",
-       pt."NoPhytoSpecies_Sample",  -- TODO: NOT QUITE RIGHT ??
---        "ShannonPhytoDiversity",
---        "PhytoEvenness",
+       pt."NoPhytoSpecies_Sample",
+       pst."ShannonPhytoDiversity",
+       pst."ShannonPhytoDiversity" / ln(nullif(pt."NoPhytoSpecies_Sample", 0)) AS "PhytoEvenness",  -- TODO: fix division by zero error!!
 --        "NoDiatomSpecies_Sample",
 --        "ShannonDiatomDiversity",
 --        "DiatomEvenness",
@@ -120,5 +134,6 @@ FROM nrs_derived_indices_map m LEFT JOIN zoop_by_trip zt USING (trip_code)
                                LEFT JOIN copepods_by_trip ct USING (trip_code)
                                LEFT JOIN copepod_species_by_trip cst USING (trip_code)
                                LEFT JOIN phyto_by_trip pt USING (trip_code)
+                               LEFT JOIN phyto_species_by_trip pst USING (trip_code)
 ORDER BY trip_code
 ;
