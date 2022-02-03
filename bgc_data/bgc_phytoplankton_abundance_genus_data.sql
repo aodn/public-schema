@@ -12,7 +12,7 @@ WITH grouped AS (
            sum(r.cell_l) AS cell_l
     FROM bgc_phyto_raw r LEFT JOIN bgc_phyto_changelog c USING (taxon_name)
     WHERE r.genus IS NOT NULL AND
-    r.genus NOT LIKE '%cf.%'
+          r.genus NOT LIKE '%cf.%'
     GROUP BY trip_code, genus, startdate, genus_changed
 ), genera_affected AS (
     -- identify genera affected by a taxonomy change
