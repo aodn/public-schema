@@ -37,7 +37,7 @@ WITH bgc_zoop_raw_species AS (
     SELECT m.trip_code,
            s.species,
            CASE
-               WHEN m."SampleTime_local" < s.startdate THEN NULL
+               WHEN m."SampleTime_local"::date < s.startdate THEN NULL
                ELSE 0.
            END AS zoop_abundance_m3
     FROM bgc_zooplankton_map m CROSS JOIN species_affected s

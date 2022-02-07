@@ -38,7 +38,7 @@ WITH bgc_phyto_raw_species AS (
     SELECT m.trip_code,
            s.taxon_name,
            CASE
-               WHEN m."SampleTime_local" < s.startdate THEN NULL
+               WHEN m."SampleTime_local"::date < s.startdate THEN NULL
                ELSE 0.
            END AS cell_l
     FROM bgc_phytoplankton_map m CROSS JOIN species_affected s
