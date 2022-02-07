@@ -2,7 +2,7 @@ profile: tabular-data-resource
 name: cpr_samp
 path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Acpr_samp
 title: cpr_samp
-description: "A table of all CPR Samp data"
+description: "A table of all CPR SAMP data"
 format: csv
 mediatype: text/csv
 encoding: utf-8
@@ -35,12 +35,19 @@ schema:
     maximum: 180
     required: true     
   - name: SAMPLEDATEUTC
-    title: "Date & time of sample in local time (formatted string)"
+    title: "Date & time of sample in UTC time (formatted string)"
     type: datetime
     # format string *must* be specified using standard Python/C strptime specification
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
     required: true
+  - name: SAMPLEDATELOCAL
+    title: "Date & time of sample in local time (formatted string)"
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d %H:%M:%S"
+    required: false    
   - name: PCI
     title: "pci"
     type: number
