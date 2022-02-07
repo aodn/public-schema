@@ -122,7 +122,7 @@ SELECT m.*,
        pt."AvgCellVol_um3",
        pt."NoPhytoSpecies_Sample",
        pst."ShannonPhytoDiversity",
-       pst."ShannonPhytoDiversity" / ln(nullif(pt."NoPhytoSpecies_Sample", 0)) AS "PhytoEvenness",  -- TODO: fix division by zero error!!
+       pst."ShannonPhytoDiversity" / nullif(ln(nullif(pt."NoPhytoSpecies_Sample", 0)), 0) AS "PhytoEvenness",
 --        "NoDiatomSpecies_Sample",
 --        "ShannonDiatomDiversity",
 --        "DiatomEvenness",
