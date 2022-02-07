@@ -2,7 +2,7 @@
 -- To be served as a WFS layer by Geoserver
 -- CREATE MATERIALIZED VIEW nrs_derived_indices_data AS
 WITH nrs_derived_indices_map AS (
-    SELECT "TripCode",
+    SELECT -- "TripCode",  TODO: add this back
            trip_code
     FROM bgc_trip_metadata
     WHERE "Project" = 'NRS'
@@ -66,7 +66,8 @@ phyto_filtered AS (
                       species LIKE '%/%' OR
                       species LIKE '%grp%') THEN NULL
                 ELSE genus || ' ' || substring(species, '^\w+')
-               END AS genus_species
+               END AS genus_species,
+           taxon_group LIKE '%diatom' AS is_diatom
     FROM bgc_phyto_raw
     WHERE taxon_group != 'Other'
     -- TODO: Is it valid to filter out biovolume = 0/NULL and cell_l = 0 here ??
@@ -83,23 +84,27 @@ phyto_filtered AS (
     SELECT trip_code,
            sum(carbon_pgl) AS "PhytoBiomassCarbon_pgL",
            sum(cell_l) AS "PhytoAbund_CellsL",
-           sum(cell_l) FILTER ( WHERE taxon_group LIKE '%diatom' ) AS diatom_l,
+           sum(cell_l) FILTER ( WHERE is_diatom ) AS diatom_l,
            sum(cell_l) FILTER ( WHERE taxon_group = 'Dinoflagellate' ) AS dinoflagellate_l,
            sum(biovolume_um3l) / nullif(sum(cell_l), 0) AS "AvgCellVol_um3",
            count(DISTINCT genus_species) AS "NoPhytoSpecies_Sample",
-           sum(cell_l) FILTER ( WHERE genus_species IS NOT NULL ) AS total_species_abundance
+           count(DISTINCT genus_species) FILTER ( WHERE is_diatom ) AS "NoDiatomSpecies_Sample",
+           sum(cell_l) FILTER ( WHERE genus_species IS NOT NULL ) AS total_species_abundance,
+           sum(cell_l) FILTER ( WHERE genus_species IS NOT NULL AND is_diatom ) AS total_diatom_abundance
     FROM phyto_with_carbon
     GROUP BY trip_code
 ), phyto_species_by_trip_species AS (
     SELECT trip_code,
            pf.genus_species,
-           sum(pf.cell_l / pt.total_species_abundance) AS relative_abundance
+           sum(pf.cell_l / pt.total_species_abundance) AS species_relative_abundance,
+           sum(pf.cell_l / pt.total_diatom_abundance) FILTER ( WHERE is_diatom ) AS diatom_relative_abundance
     FROM phyto_filtered pf LEFT JOIN phyto_by_trip pt USING (trip_code)
     WHERE genus_species IS NOT NULL
     GROUP BY trip_code, genus_species
 ), phyto_species_by_trip AS (
     SELECT trip_code,
-           -1 * sum(relative_abundance * ln(relative_abundance)) AS "ShannonPhytoDiversity"
+           -1 * sum(species_relative_abundance * ln(species_relative_abundance)) AS "ShannonPhytoDiversity",
+           -1 * sum(diatom_relative_abundance * ln(diatom_relative_abundance)) AS "ShannonDiatomDiversity"
     FROM phyto_species_by_trip_species
     GROUP BY trip_code
 )
@@ -123,9 +128,9 @@ SELECT m.*,
        pt."NoPhytoSpecies_Sample",
        pst."ShannonPhytoDiversity",
        pst."ShannonPhytoDiversity" / nullif(ln(nullif(pt."NoPhytoSpecies_Sample", 0)), 0) AS "PhytoEvenness",
---        "NoDiatomSpecies_Sample",
---        "ShannonDiatomDiversity",
---        "DiatomEvenness",
+       pt."NoDiatomSpecies_Sample",
+       pst."ShannonDiatomDiversity",
+       pst."ShannonDiatomDiversity" / nullif(ln(nullif(pt."NoDiatomSpecies_Sample", 0)), 0) AS "DiatomEvenness",
 --        "NoDinoSpecies_Sample",
 --        "ShannonDinoDiversity",
 --        "DinoflagellateEvenness"
