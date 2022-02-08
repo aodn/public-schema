@@ -21,7 +21,7 @@ WITH grouped AS (
     SELECT m.trip_code,
            c.taxon_group,
            CASE
-               WHEN m."SampleTime_local"::date < c.startdate THEN NULL
+               WHEN m."SampleTime_UTC" < c.startdate THEN NULL
                ELSE 0.
            END AS cell_l
     FROM bgc_phytoplankton_map m CROSS JOIN changelog c

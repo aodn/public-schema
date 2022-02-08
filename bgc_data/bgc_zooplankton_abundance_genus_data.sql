@@ -25,7 +25,7 @@ WITH grouped AS (
     SELECT m.trip_code,
            g.genus,
            CASE
-               WHEN m."SampleTime_local"::date < g.startdate THEN NULL
+               WHEN m."SampleTime_UTC" < g.startdate THEN NULL
                ELSE 0.
            END AS zoop_abundance_m3
     FROM bgc_zooplankton_map m CROSS JOIN genera_affected g

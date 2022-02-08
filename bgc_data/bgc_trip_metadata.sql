@@ -7,7 +7,7 @@ CREATE VIEW bgc_trip_metadata AS
     latitude AS "Latitude",
     longitude AS "Longitude",
     trip_code AS "TripCode",
-    sampledateutc AT TIME ZONE 'UTC' AS "SampleTime_UTC",
+    sampledateutc AS "SampleTime_UTC",
     to_char(sampledatelocal, 'YYYY-MM-DD HH:MI:SS') AS "SampleTime_local",
     extract(year from sampledatelocal)::int AS "Year_local",
     extract(month from sampledatelocal)::int AS "Month_local",
