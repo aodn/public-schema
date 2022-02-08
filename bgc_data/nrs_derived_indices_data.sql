@@ -73,6 +73,7 @@ phyto_filtered AS (
     -- TODO: Is it valid to filter out biovolume = 0/NULL and cell_l = 0 here ??
 ), phyto_with_carbon AS (
     -- convert biovolume of cell to Carbon based on taxon_group
+    -- TODO: merge this into phyto_filtered. No need for a separate query
     SELECT *,
            CASE WHEN taxon_group = 'Dinoflagellate' THEN cell_l * 0.76 * bv_cell^0.819
                 WHEN taxon_group = 'Ciliate' THEN cell_l * 0.22 * bv_cell^0.939
@@ -85,26 +86,32 @@ phyto_filtered AS (
            sum(carbon_pgl) AS "PhytoBiomassCarbon_pgL",
            sum(cell_l) AS "PhytoAbund_CellsL",
            sum(cell_l) FILTER ( WHERE is_diatom ) AS diatom_l,
-           sum(cell_l) FILTER ( WHERE taxon_group = 'Dinoflagellate' ) AS dinoflagellate_l,
+           sum(cell_l) FILTER ( WHERE taxon_group = 'Dinoflagellate' ) AS dino_l,
            sum(biovolume_um3l) / nullif(sum(cell_l), 0) AS "AvgCellVol_um3",
            count(DISTINCT genus_species) AS "NoPhytoSpecies_Sample",
            count(DISTINCT genus_species) FILTER ( WHERE is_diatom ) AS "NoDiatomSpecies_Sample",
+           count(DISTINCT genus_species) FILTER ( WHERE taxon_group = 'Dinoflagellate' ) AS "NoDinoSpecies_Sample",
            sum(cell_l) FILTER ( WHERE genus_species IS NOT NULL ) AS total_species_abundance,
-           sum(cell_l) FILTER ( WHERE genus_species IS NOT NULL AND is_diatom ) AS total_diatom_abundance
+           sum(cell_l) FILTER ( WHERE genus_species IS NOT NULL AND is_diatom ) AS total_diatom_abundance,
+           sum(cell_l) FILTER ( WHERE genus_species IS NOT NULL AND taxon_group = 'Dinoflagellate' )
+               AS total_dino_abundance
     FROM phyto_with_carbon
     GROUP BY trip_code
 ), phyto_species_by_trip_species AS (
     SELECT trip_code,
            pf.genus_species,
            sum(pf.cell_l / pt.total_species_abundance) AS species_relative_abundance,
-           sum(pf.cell_l / pt.total_diatom_abundance) FILTER ( WHERE is_diatom ) AS diatom_relative_abundance
+           sum(pf.cell_l / pt.total_diatom_abundance) FILTER ( WHERE is_diatom ) AS diatom_relative_abundance,
+           sum(pf.cell_l / pt.total_dino_abundance) FILTER ( WHERE taxon_group = 'Dinoflagellate' )
+               AS dino_relative_abundance
     FROM phyto_filtered pf LEFT JOIN phyto_by_trip pt USING (trip_code)
     WHERE genus_species IS NOT NULL
     GROUP BY trip_code, genus_species
 ), phyto_species_by_trip AS (
     SELECT trip_code,
            -1 * sum(species_relative_abundance * ln(species_relative_abundance)) AS "ShannonPhytoDiversity",
-           -1 * sum(diatom_relative_abundance * ln(diatom_relative_abundance)) AS "ShannonDiatomDiversity"
+           -1 * sum(diatom_relative_abundance * ln(diatom_relative_abundance)) AS "ShannonDiatomDiversity",
+           -1 * sum(dino_relative_abundance * ln(dino_relative_abundance)) AS "ShannonDinoDiversity"
     FROM phyto_species_by_trip_species
     GROUP BY trip_code
 )
@@ -123,7 +130,7 @@ SELECT m.*,
        -- phytoplankton indices
        pt."PhytoBiomassCarbon_pgL",
        pt."PhytoAbund_CellsL",  -- TODO: check name - spec says "AbundancePhyto_cellsL"
-       pt.diatom_l / (pt.diatom_l + pt.dinoflagellate_l) AS "DiatomDinoflagellateRatio",
+       pt.diatom_l / (pt.diatom_l + pt.dino_l) AS "DiatomDinoflagellateRatio",
        pt."AvgCellVol_um3",
        pt."NoPhytoSpecies_Sample",
        pst."ShannonPhytoDiversity",
@@ -131,9 +138,9 @@ SELECT m.*,
        pt."NoDiatomSpecies_Sample",
        pst."ShannonDiatomDiversity",
        pst."ShannonDiatomDiversity" / nullif(ln(nullif(pt."NoDiatomSpecies_Sample", 0)), 0) AS "DiatomEvenness",
---        "NoDinoSpecies_Sample",
---        "ShannonDinoDiversity",
---        "DinoflagellateEvenness"
+       pt."NoDinoSpecies_Sample",
+       pst."ShannonDinoDiversity",
+       pst."ShannonDinoDiversity" / nullif(ln(nullif(pt."NoDinoSpecies_Sample", 0)), 0) AS "DinoflagellateEvenness",
        NULL AS "_end"  -- TODO: remove
 FROM nrs_derived_indices_map m LEFT JOIN zoop_by_trip zt USING (trip_code)
                                LEFT JOIN copepods_by_trip ct USING (trip_code)
