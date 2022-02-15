@@ -13,5 +13,9 @@ CREATE MATERIALIZED VIEW combined_bgc_map AS
     trip_code,
     geom
   FROM bgc_trip_metadata bt
+  WHERE trip_code IN (SELECT DISTINCT trip_code from bgc_chemistry) OR
+        trip_code IN (SELECT DISTINCT trip_code from bgc_picoplankton) OR
+        trip_code IN (SELECT DISTINCT trip_code from bgc_pigments) OR
+        trip_code IN (SELECT DISTINCT trip_code from bgc_tss)
 ;
 
