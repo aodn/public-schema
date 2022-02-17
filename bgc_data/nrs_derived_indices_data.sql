@@ -1,12 +1,7 @@
 -- Materialized view for the NRS Derived Indices product
 -- To be served as a WFS layer by Geoserver
--- CREATE MATERIALIZED VIEW nrs_derived_indices_data AS
-WITH nrs_derived_indices_map AS (
-    SELECT "TripCode",
-           trip_code
-    FROM bgc_trip_metadata
-    WHERE "Project" = 'NRS'
-),
+CREATE MATERIALIZED VIEW nrs_derived_indices_data AS
+WITH
 
 -- Zooplankton temp tables ------------------------------------------------------------------------
 zoopinfo_mod AS (
@@ -216,7 +211,18 @@ pigments_avg AS (
 )
 
 -- Main query -------------------------------------------------------------------------------------
-SELECT m.*,
+SELECT m."Project",
+       m."StationName",
+       m."TripCode",
+       m."SampleTime_local"::date AS "SampleDateLocal",
+       --TODO: "SampleDateUTC",
+       --TODO: Year/Month/Day/Time?
+       m."Latitude",
+       m."Longitude",
+       m."Biomass_mgm3",
+       m."AshFreeBiomass_mgm3",
+       m.secchi_m as "Secchi_m",
+
        -- zooplankton indices
        zt."ZoopAbundance_m3",
        ct."CopeAbundance_m3",
@@ -259,18 +265,20 @@ SELECT m.*,
        ch."Oxygen_umolL",
        ch."DIC_umolkg",
        ch."Alkalinity_umolkg",
-       pig."PigmentChla_mgm3"
+       pig."PigmentChla_mgm3",
 
-FROM nrs_derived_indices_map m LEFT JOIN zoop_by_trip zt USING (trip_code)
-                               LEFT JOIN copepods_by_trip ct USING (trip_code)
-                               LEFT JOIN copepod_species_by_trip cst USING (trip_code)
-                               LEFT JOIN phyto_by_trip pt USING (trip_code)
-                               LEFT JOIN phyto_species_by_trip pst USING (trip_code)
-                               LEFT JOIN mld_temp mt USING (trip_code)
-                               LEFT JOIN mld_sal ms USING (trip_code)
-                               LEFT JOIN dcm d USING (trip_code)
-                               LEFT JOIN ctd_surface ctd USING (trip_code)
-                               LEFT JOIN chemistry_avg ch USING (trip_code)
-                               LEFT JOIN pigments_avg pig USING (trip_code)
-ORDER BY trip_code
+       m.geom
+
+FROM bgc_trip_metadata m LEFT JOIN zoop_by_trip zt USING (trip_code)
+                         LEFT JOIN copepods_by_trip ct USING (trip_code)
+                         LEFT JOIN copepod_species_by_trip cst USING (trip_code)
+                         LEFT JOIN phyto_by_trip pt USING (trip_code)
+                         LEFT JOIN phyto_species_by_trip pst USING (trip_code)
+                         LEFT JOIN mld_temp mt USING (trip_code)
+                         LEFT JOIN mld_sal ms USING (trip_code)
+                         LEFT JOIN dcm d USING (trip_code)
+                         LEFT JOIN ctd_surface ctd USING (trip_code)
+                         LEFT JOIN chemistry_avg ch USING (trip_code)
+                         LEFT JOIN pigments_avg pig USING (trip_code)
+WHERE m."Project" = 'NRS'
 ;
