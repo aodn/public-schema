@@ -34,6 +34,7 @@ matched_profiles AS (
 )
 --create the final list for the materialised view
       SELECT
+         bt."Project", --required for filter in Geoserver (step 2 portal)
          bt."StationName",
          trip_code AS "TripCode",
          mp.cast_time AS "CastTimeUTC",
@@ -43,6 +44,7 @@ matched_profiles AS (
          -- last 4 columns only included for joining to other tables and filtering on the Portal
          mp.file_id,
          bt."SampleTime_local",
+         bt."SampleTime_UTC", --required for filter in Geoserver (step 2 portal)
          trip_code,
          bt.geom
       FROM bgc_trip_metadata bt

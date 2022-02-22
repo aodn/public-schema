@@ -59,7 +59,7 @@ schema:
     # format string *must* be specified using standard Python/C strptime specification
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
-    required: false    
+    required: true    
   - name: BIOMASS_MGM3
     title: Biomass in mg per m3 for Trip
     type: number
