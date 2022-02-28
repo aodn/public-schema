@@ -6,7 +6,7 @@ CREATE MATERIALIZED VIEW combined_bgc_map AS
     "StationName",
     "TripCode",
     "SampleTime_local"::date AS "SampleDate_Local",
---  TODO: "SampleTime_UTC",
+    "SampleTime_UTC"::date AS "SampleDate_UTC",
     "Latitude",
     "Longitude",
     bt.secchi_m AS "SecchiDepth_m",

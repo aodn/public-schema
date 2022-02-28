@@ -21,7 +21,7 @@ WITH grouped AS (
     SELECT m.trip_code,
            c.taxon_group,
            CASE
-               WHEN m."SampleTime_local" < c.startdate THEN NULL
+               WHEN m."SampleTime_UTC" < c.startdate THEN NULL
                ELSE 0.
            END AS biovolume_um3l
     FROM bgc_phytoplankton_map m CROSS JOIN changelog c
