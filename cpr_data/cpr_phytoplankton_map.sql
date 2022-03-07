@@ -6,12 +6,12 @@ CREATE MATERIALIZED VIEW cpr_phytoplankton_map AS
     s.region AS "Region",
     s.latitude AS "Latitude",
     s.longitude AS "Longitude",
-    s.sampledateutc AT TIME ZONE 'UTC' AS "SampleDate_UTC",
-    s.sampledatelocal::text AS "SampleDate_Local", 
-    extract(year from s.sampledateutc)::int AS "Year_UTC",
-    extract(month from s.sampledateutc)::int AS "Month_UTC",
-    extract(day from s.sampledateutc)::int AS "Day_UTC",
-    to_char(sampledateutc, 'HH24:MI') AS "Time_UTC24hr",
+    s.sampledateutc AS "SampleDate_UTC",
+    to_char(s.sampledatelocal, 'YYYY-MM-DD HH24:MI:SS') AS "SampleDate_Local",
+    extract(year from s.sampledatelocal)::int AS "Year_local",
+    extract(month from s.sampledatelocal)::int AS "Month_local",
+    extract(day from s.sampledatelocal)::int AS "Day_local",
+    to_char(sampledatelocal, 'HH24:MI') AS "Time_local24hr",
     NULL AS "SatSST_degC", --to be updated
     NULL AS "SatChlaSurf_mgm3", --to be updated
     s.pci AS "PCI",
