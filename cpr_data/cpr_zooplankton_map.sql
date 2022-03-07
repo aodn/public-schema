@@ -21,5 +21,5 @@ CREATE MATERIALIZED VIEW cpr_zooplankton_map AS
     st_geomfromtext('POINT(' || longitude::text || ' ' || latitude::text || ')', 4326) AS geom
     FROM cpr_samp s
     WHERE sampletype LIKE '%Z%' AND
-          trip_code IN (SELECT DISTINCT trip_code from cpr_zoop_raw)
+          sample IN (SELECT DISTINCT z.sample from cpr_zoop_raw z)
 ;

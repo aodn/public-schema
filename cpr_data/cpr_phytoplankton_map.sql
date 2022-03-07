@@ -20,5 +20,5 @@ CREATE MATERIALIZED VIEW cpr_phytoplankton_map AS
     st_geomfromtext('POINT(' || longitude::text || ' ' || latitude::text || ')', 4326) AS geom
     FROM cpr_samp s
     WHERE sampletype LIKE '%P%' AND
-          trip_code IN (SELECT DISTINCT trip_code from cpr_phyto_raw)
+          sample IN (SELECT DISTINCT p.sample from cpr_phyto_raw p)
 ;
