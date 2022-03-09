@@ -15,7 +15,8 @@ WITH bgc_zoop_raw_species AS (
           r.species != 'spp.' AND
           r.species NOT LIKE '%cf.%' AND
           r.species NOT LIKE '%/%' AND
-          r.species NOT LIKE '%grp%'
+          r.species NOT LIKE '%grp%' AND
+          r.species NOT LIKE '%complex%'
 ), grouped AS (
     -- join changelog on to raw data, group by trip, species and changelog details
     SELECT r.trip_code,
@@ -36,7 +37,7 @@ WITH bgc_zoop_raw_species AS (
     SELECT m.trip_code,
            s.species,
            CASE
-               WHEN m."SampleTime_local" < s.startdate THEN NULL
+               WHEN m."SampleTime_UTC" < s.startdate THEN NULL
                ELSE 0.
            END AS zoop_abundance_m3
     FROM bgc_zooplankton_map m CROSS JOIN species_affected s

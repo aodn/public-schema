@@ -8,7 +8,7 @@ CREATE MATERIALIZED VIEW bgc_phytoplankton_map AS
     "Latitude",
     "Longitude",
     "TripCode",
-  --  "SampleTime_UTC",
+    "SampleTime_UTC",
     "SampleTime_local",
     "Year_local",
     "Month_local",
@@ -18,6 +18,7 @@ CREATE MATERIALIZED VIEW bgc_phytoplankton_map AS
     "CTDSST_degC",
     "CTDChlaSurf_mgm3",
     "CTDSalinity_psu",
+    "Method",
     trip_code,
     geom
   FROM bgc_trip_metadata t LEFT JOIN nrs_ctd_surface_values c USING (trip_code)

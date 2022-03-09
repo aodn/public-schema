@@ -14,7 +14,9 @@ WITH bgc_phyto_raw_species AS (
           species != 'spp.' AND
           species NOT LIKE '%cf.%' AND
           species NOT LIKE '%/%' AND
-          species NOT LIKE '%complex%'
+          species NOT LIKE '%complex%' AND
+          species NOT LIKE '%type%' AND
+          species NOT LIKE '%cyst%' 
 ), grouped AS (
     -- join changelog on to raw data, group by trip, species and changelog details
     SELECT r.trip_code,
@@ -36,7 +38,7 @@ WITH bgc_phyto_raw_species AS (
     SELECT m.trip_code,
            s.taxon_name,
            CASE
-               WHEN m."SampleTime_local" < s.startdate THEN NULL
+               WHEN m."SampleTime_UTC" < s.startdate THEN NULL
                ELSE 0.
            END AS cell_l
     FROM bgc_phytoplankton_map m CROSS JOIN species_affected s

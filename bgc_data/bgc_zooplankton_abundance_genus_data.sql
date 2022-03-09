@@ -11,7 +11,8 @@ WITH grouped AS (
            substring(taxon_name, '^\w+') != substring(parent_name, '^\w+') AS genus_changed,
            sum(r.zoop_abundance_m3) AS zoop_abundance_m3
     FROM bgc_zoop_raw r LEFT JOIN bgc_zoop_changelog c USING (taxon_name)
-    WHERE r.genus IS NOT NULL
+    WHERE r.genus IS NOT NULL AND 
+          r.genus NOT LIKE '%cf.%'
     GROUP BY trip_code, genus, startdate, genus_changed
 ), genera_affected AS (
     -- identify genera affected by a taxonomy change
@@ -24,7 +25,7 @@ WITH grouped AS (
     SELECT m.trip_code,
            g.genus,
            CASE
-               WHEN m."SampleTime_local" < g.startdate THEN NULL
+               WHEN m."SampleTime_UTC" < g.startdate THEN NULL
                ELSE 0.
            END AS zoop_abundance_m3
     FROM bgc_zooplankton_map m CROSS JOIN genera_affected g
