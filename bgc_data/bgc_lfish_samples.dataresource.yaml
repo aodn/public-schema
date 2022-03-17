@@ -30,6 +30,13 @@ schema:
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
     required: true
+  - name: SAMPLEDATEUTC
+    title: "Date & time of sample in local time (formatted string)"
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d %H:%M:%S"
+    required: false    
   - name: LATITUDE
     title: "Latitude of station in decimal degrees North"
     type: number
