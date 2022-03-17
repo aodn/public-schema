@@ -7,7 +7,7 @@ CREATE MATERIALIZED VIEW bgc_larval_fish_map AS
       lfs.latitude AS "Latitude",
       lfs.longitude AS "Longitude",
       lfs.trip_code AS "TripCode",
---  TODO: sampledatelocal AT TIME ZONE "UTC" AS "SampleTime_UTC",
+      lfs.sampledateutc AS "SampleTime_UTC",
       to_char(lfs.sampledatelocal, 'YYYY-MM-DD HH24:MI:SS') AS "SampleTime_local",
       extract(year from lfs.sampledatelocal)::int AS "Year_local",
       extract(month from lfs.sampledatelocal)::int AS "Month_local",
