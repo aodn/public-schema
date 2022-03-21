@@ -139,7 +139,7 @@ ref_values AS (
         "Temperature_degC" - 0.4 AS ref_temp,
         "Salinity_psu" - 0.03 AS ref_sal
   FROM ctd_data
-  ORDER BY trip_code, depth_diff
+  ORDER BY trip_code, depth_diff, "Depth_m"
 ),
 mld_temp AS (
     -- temp-based MLD estimate
@@ -150,7 +150,7 @@ mld_temp AS (
         c."Depth_m" AS "MLDtemp_m"
     FROM ctd_data c LEFT JOIN ref_values r USING (trip_code)
     WHERE c."Depth_m" > r.ref_depth
-    ORDER BY trip_code, temp_diff
+    ORDER BY trip_code, temp_diff, "Depth_m"
 ),
 mld_sal AS (
     -- salinity-based MLD estimate
@@ -161,7 +161,7 @@ mld_sal AS (
         c."Depth_m" AS "MLDsal_m"
     FROM ctd_data c LEFT JOIN ref_values r USING (trip_code)
     WHERE c."Depth_m" > r.ref_depth
-    ORDER BY trip_code, sal_diff
+    ORDER BY trip_code, sal_diff, "Depth_m"
 ),
 dcm AS (
     -- DCM is the depth corresponding to maximum Chlorophyll concentration
@@ -171,7 +171,7 @@ dcm AS (
         c."Depth_m" AS "DCM_m"
     FROM ctd_data c LEFT JOIN ref_values r USING (trip_code)
     WHERE c."Depth_m" > r.ref_depth
-    ORDER BY trip_code, "Chla_mgm3" DESC
+    ORDER BY trip_code, "Chla_mgm3" DESC, "Depth_m"
 ),
 ctd_surface AS (
     -- take the average of the top 15m as surface values
