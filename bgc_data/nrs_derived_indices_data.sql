@@ -225,7 +225,7 @@ SELECT m."Project",
        -- zooplankton indices
        zt."ZoopAbundance_m3",
        ct."CopeAbundance_m3",
-       ct."CopeSumAbundanceLength" / zt."ZoopAbundance_m3" AS "AvgTotalLengthCopepod_mm",
+       ct."CopeSumAbundanceLength" / ct."CopeAbundance_m3" AS "AvgTotalLengthCopepod_mm",
        ct."CO" / (ct."CO" + ct."CC") AS "OmnivoreCarnivoreCopepodRatio",
        cst."NoCopepodSpecies_Sample",
        ln(cst.total_taxon_count) - (cst.total_n_logn/cst.total_taxon_count) AS "ShannonCopepodDiversity",
