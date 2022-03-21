@@ -6,7 +6,7 @@ CREATE VIEW nrs_depth_binned_ctd_map AS
 WITH nrs_trips AS (
       SELECT
          trip_code,
-         sampledatelocal,
+         sampledateutc,
          CONCAT(projectname, stationcode) AS site_code
       FROM bgc_trip
       WHERE projectname = 'NRS'
@@ -18,12 +18,12 @@ ctd_profiles AS (
          nt.trip_code,
          dp.file_id,
          dp.time_coverage_start AT TIME ZONE 'UTC' AS cast_time,
-         GREATEST((nt.sampledatelocal - dp.time_coverage_start AT TIME ZONE 'UTC'),
-                  -(nt.sampledatelocal - dp.time_coverage_start AT TIME ZONE 'UTC'))
+         GREATEST((nt.sampledateutc - dp.time_coverage_start AT TIME ZONE 'UTC'),
+                  -(nt.sampledateutc - dp.time_coverage_start AT TIME ZONE 'UTC'))
              AS absolute_time_difference
       FROM nrs_trips nt INNER JOIN anmn_nrs_ctd_profiles.deployments dp
-         ON dp.time_coverage_start AT TIME ZONE 'UTC' BETWEEN (nt.sampledatelocal - INTERVAL '1' DAY) AND
-                                                              (nt.sampledatelocal + INTERVAL '1' DAY)
+         ON dp.time_coverage_start AT TIME ZONE 'UTC' BETWEEN (nt.sampledateutc - INTERVAL '1' DAY) AND
+                                                              (nt.sampledateutc + INTERVAL '1' DAY)
          AND dp.site_code = nt.site_code
 ),
 --for each trip, pick the cast that is closest in time
