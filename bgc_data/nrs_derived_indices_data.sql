@@ -38,7 +38,7 @@ copepod_species_by_trip_species AS (
     -- grouped by trip_code & taxon_name
     SELECT trip_code,
            genus || ' ' || substring(species, '^\w+') AS taxon_name,
-           sum(taxon_count) AS taxon_count
+           nullif(sum(taxon_count), 0) AS taxon_count
     FROM bgc_zoop_raw
     WHERE copepod = 'COPEPOD' AND
           species != 'spp.' AND
@@ -230,7 +230,7 @@ SELECT m."Project",
        cst."NoCopepodSpecies_Sample",
        ln(cst.total_taxon_count) - (cst.total_n_logn/cst.total_taxon_count) AS "ShannonCopepodDiversity",
        (ln(cst.total_taxon_count) - (cst.total_n_logn/cst.total_taxon_count)) /
-           ln(cst."NoCopepodSpecies_Sample") AS "CopepodEvenness",
+           nullif(ln(nullif(cst."NoCopepodSpecies_Sample", 0)), 0) AS "CopepodEvenness",
 
        -- phytoplankton indices
        pt."PhytoBiomassCarbon_pgL",
