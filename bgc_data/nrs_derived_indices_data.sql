@@ -174,13 +174,13 @@ dcm AS (
     ORDER BY trip_code, "Chla_mgm3" DESC, "Depth_m"
 ),
 ctd_surface AS (
-    -- take the average of the top 15m as surface values
+    -- take the average of the top 10m as surface values
     SELECT trip_code,
            avg("Temperature_degC") AS "CTDTemperature_degC",
            avg("Chla_mgm3") AS "CTDChlaF_mgm3",
            avg("Salinity_psu") AS "CTDSalinity_PSU"
     FROM nrs_depth_binned_ctd_data
-    WHERE "Depth_m" < 15  -- TODO: should this be 10m ?
+    WHERE "Depth_m" < 10
     GROUP BY trip_code
 ),
 
