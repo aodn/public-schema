@@ -6,8 +6,10 @@ bgc_plankton,bgc_data/bgc_zoop_changelog.dataresource.yaml
 bgc_plankton,bgc_data/bgc_zoop_raw.dataresource.yaml
 bgc_combined,bgc_data/bgc_chemistry.dataresource.yaml
 bgc_combined,bgc_data/bgc_picoplankton.dataresource.yaml
+bgc_combined,bgc_data/bgc_picoplankton_meta.dataresource.yaml
 bgc_combined,bgc_data/bgc_pigments.dataresource.yaml
 bgc_combined,bgc_data/bgc_tss.dataresource.yaml
+bgc_combined,bgc_data/bgc_tss_meta.dataresource.yaml
 bgc_lfish,bgc_data/bgc_lfish_countraw.dataresource.yaml
 bgc_lfish,bgc_data/bgc_lfish_samples.dataresource.yaml
 derived_indices,bgc_data/phytoinfo.dataresource.yaml
