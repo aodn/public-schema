@@ -44,7 +44,8 @@ copepod_species_by_trip_species AS (
           species != 'spp.' AND
           species NOT LIKE '%cf.%' AND
           species NOT LIKE '%/%' AND
-          species NOT LIKE '%grp%'
+          species NOT LIKE '%grp%' AND
+          species NOT LIKE '%complex%'
     GROUP BY trip_code, genus || ' ' || substring(species, '^\w+')
 ),
 copepod_species_by_trip AS (
@@ -66,7 +67,9 @@ phyto_filtered AS (
            CASE WHEN (species = 'spp.' OR
                       species LIKE '%cf.%' OR
                       species LIKE '%/%' OR
-                      species LIKE '%grp%') THEN NULL
+                      species LIKE '%complex%' OR
+                      species LIKE '%type%' OR
+                      species LIKE '%cyst%') THEN NULL
                 ELSE genus || ' ' || substring(species, '^\w+')
                END AS genus_species,
            CASE WHEN cell_l = 0 THEN 0
