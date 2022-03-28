@@ -159,7 +159,10 @@ SELECT
        pss."ShannonDiatomDiversity" / nullif(ln(nullif(ps."NoDiatomSpecies_Sample", 0)), 0) AS "DiatomEvenness",
        ps."NoDinoSpecies_Sample",
        pss."ShannonDinoDiversity",
-       pss."ShannonDinoDiversity" / nullif(ln(nullif(ps."NoDinoSpecies_Sample", 0)), 0) AS "DinoflagellateEvenness"
+       pss."ShannonDinoDiversity" / nullif(ln(nullif(ps."NoDinoSpecies_Sample", 0)), 0) AS "DinoflagellateEvenness",
+
+       --geometry for geoserver layer
+       st_geomfromtext('POINT(' || m.longitude::text || ' ' || m.latitude::text || ')', 4326) AS geom
 
 FROM cpr_samp m LEFT JOIN zoop_by_trip zt USING (sample)
                 LEFT JOIN copepods_by_trip ct USING (sample)
