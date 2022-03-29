@@ -16,6 +16,7 @@ CREATE MATERIALIZED VIEW bgc_pigments_data AS
       pig.cphl_b AS "CphlB_mgm3",
       pig.cphl_c1 AS "CphlC1_mgm3",
       pig.cphl_c2 AS "CphlC2_mgm3",
+      pig.cphl_c3 AS "CphlC3_mgm3",
       pig.cphl_c1c2 AS "CphlC1C2_mgm3",
       pig.cphlide_a AS "CphlideA_mgm3",
       pig.diadchr AS "Diadchr_mgm3",
