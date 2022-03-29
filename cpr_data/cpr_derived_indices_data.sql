@@ -134,7 +134,7 @@ SELECT
        to_char(m.sampledatelocal, 'HH24:MI') AS "Time_local24hr",
        m.pci AS "PCI",
        m.biomass_mgm3 AS "BiomassIndex_mgm3",
-       m.region AS "BioRegion", ---check with Claire as in CPR products we call it Region
+       m.region AS "Region", ---check with Claire as in CPR products we call it Region
 
        -- zooplankton indices
        zt."ZoopAbundance_m3",
