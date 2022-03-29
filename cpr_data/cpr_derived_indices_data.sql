@@ -15,14 +15,14 @@ zoopinfo_mod AS (
                END AS diet
     FROM zoopinfo zi
 ),
-zoop_by_trip AS (
+zoop_by_sample AS (
     -- per-sample stats for all zooplankton
     SELECT sample,
            sum(zoop_abundance_m3) AS "ZoopAbundance_m3"
     FROM cpr_zoop_raw
     GROUP BY sample
 ),
-copepods_by_trip AS (
+copepods_by_sample AS (
     -- per-sample stats for all copepods
     SELECT zr.sample,
            sum(zr.zoop_abundance_m3) AS "CopeAbundance_m3",
@@ -30,13 +30,13 @@ copepods_by_trip AS (
            sum(zr.zoop_abundance_m3) FILTER (WHERE zi.diet = 'CC') AS "CC",
            sum(zr.zoop_abundance_m3) FILTER (WHERE zi.diet = 'CO') AS "CO"
     FROM cpr_zoop_raw zr LEFT JOIN zoopinfo_mod zi USING (taxon_name)
-	WHERE zr.copepod = 'COPEPOD'
+    WHERE zr.copepod = 'COPEPOD'
     GROUP BY sample
 ),
-copepod_species_by_trip_species AS (
+copepod_species_by_sample_species AS (
     -- zooplankton raw data filtered to include only correctly identified copepod species
     -- taxon_name updated to identify each unique species
-    -- grouped by trip_code & taxon_name
+    -- grouped by sample & taxon_name
     SELECT sample,
            genus || ' ' || substring(species, '^\w+') AS taxon_name,
            nullif(sum(taxon_count), 0) AS taxon_count
@@ -49,13 +49,13 @@ copepod_species_by_trip_species AS (
           species NOT LIKE '%complex%'
     GROUP BY sample, genus || ' ' || substring(species, '^\w+')
 ),
-copepod_species_by_trip AS (
+copepod_species_by_sample AS (
     -- count number of copepod species
     SELECT sample,
            count(*) AS "NoCopepodSpecies_Sample",
            sum(taxon_count) AS total_taxon_count,
            sum(taxon_count * ln(taxon_count)) AS total_n_logn
-    FROM copepod_species_by_trip_species
+    FROM copepod_species_by_sample_species
     GROUP BY sample
 ),
 
@@ -142,7 +142,7 @@ SELECT
        ct."CopeSumAbundanceLength" / ct."CopeAbundance_m3" AS "AvgTotalLengthCopepod_mm",
        ct."CO" / (ct."CO" + ct."CC") AS "OmnivoreCarnivoreCopepodRatio",
        cst."NoCopepodSpecies_Sample",
-       ln(nullif(cst.total_taxon_count,0)) - (cst.total_n_logn/cst.total_taxon_count) AS "ShannonCopepodDiversity",
+       ln(cst.total_taxon_count) - (cst.total_n_logn/cst.total_taxon_count) AS "ShannonCopepodDiversity",
        (ln(cst.total_taxon_count) - (cst.total_n_logn/cst.total_taxon_count)) /
            nullif(ln(nullif(cst."NoCopepodSpecies_Sample",0)),0) AS "CopepodEvenness",
 
@@ -164,9 +164,9 @@ SELECT
        --geometry for geoserver layer
        st_geomfromtext('POINT(' || m.longitude::text || ' ' || m.latitude::text || ')', 4326) AS geom
 
-FROM cpr_samp m LEFT JOIN zoop_by_trip zt USING (sample)
-                LEFT JOIN copepods_by_trip ct USING (sample)
-                LEFT JOIN copepod_species_by_trip cst USING (sample)
+FROM cpr_samp m LEFT JOIN zoop_by_sample zt USING (sample)
+                LEFT JOIN copepods_by_sample ct USING (sample)
+                LEFT JOIN copepod_species_by_sample cst USING (sample)
                 LEFT JOIN phyto_by_samp ps USING (sample)
                 LEFT JOIN phyto_species_by_samp pss USING (sample)
 ;
