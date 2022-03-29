@@ -88,6 +88,7 @@ UNION
       pig."CphlB_mgm3",
       pig."CphlC1_mgm3",
       pig."CphlC2_mgm3",
+      pig."CphlC3_mgm3",
       pig."CphlC1C2_mgm3",
       pig."CphlideA_mgm3",
       pig."Diadchr_mgm3",
