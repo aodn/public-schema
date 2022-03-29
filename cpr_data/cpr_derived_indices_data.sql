@@ -39,7 +39,7 @@ copepod_species_by_trip_species AS (
     -- grouped by trip_code & taxon_name
     SELECT sample,
            genus || ' ' || substring(species, '^\w+') AS taxon_name,
-           sum(taxon_count) AS taxon_count
+           nullif(sum(taxon_count), 0) AS taxon_count
     FROM cpr_zoop_raw
     WHERE copepod = 'COPEPOD' AND
           species != 'spp.' AND
