@@ -69,7 +69,7 @@ phyto_filtered AS (
                       species LIKE '%cf.%' OR
                       species LIKE '%/%' OR
                       species LIKE '%complex%' OR
-                      species LIKE '%type%' AND 
+                      species LIKE '%type%' OR
                       species LIKE '%cyst%') THEN NULL
                 ELSE genus || ' ' || substring(species, '^\w+')
                END AS genus_species,
