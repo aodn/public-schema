@@ -86,7 +86,7 @@ phyto_filtered AS (
 phyto_by_samp AS (
     SELECT sample,
            sum(carbon_pgm3) AS "PhytoBiomassCarbon_pgm3",
-           sum(phyto_abundance_m3) AS "PhytoAbund_Cellsm3",
+           sum(phyto_abundance_m3) AS "PhytoAbundance_Cellsm3",
            sum(phyto_abundance_m3) FILTER ( WHERE is_diatom ) AS diatom_m3,
            sum(phyto_abundance_m3) FILTER ( WHERE taxon_group = 'Dinoflagellate' ) AS dino_m3,
            sum(biovol_um3m3) / nullif(sum(phyto_abundance_m3), 0) AS "AvgCellVol_um3",
@@ -148,7 +148,7 @@ SELECT
 
        -- phytoplankton indices
        ps."PhytoBiomassCarbon_pgm3",
-       ps."PhytoAbund_Cellsm3", -- check name - spec says "AbundancePhyto_cellsL"
+       ps."PhytoAbundance_Cellsm3", 
        ps.diatom_m3 / (ps.diatom_m3 + ps.dino_m3) AS "DiatomDinoflagellateRatio",
        ps."AvgCellVol_um3",
        ps."NoPhytoSpecies_Sample",
