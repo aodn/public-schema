@@ -86,7 +86,7 @@ phyto_filtered AS (
 phyto_by_trip AS (
     SELECT trip_code,
            sum(carbon_pgl) AS "PhytoBiomassCarbon_pgL",
-           sum(cell_l) AS "PhytoAbund_CellsL",
+           sum(cell_l) AS "PhytoAbundance_CellsL",
            sum(cell_l) FILTER ( WHERE is_diatom ) AS diatom_l,
            sum(cell_l) FILTER ( WHERE taxon_group = 'Dinoflagellate' ) AS dino_l,
            sum(biovolume_um3l) / nullif(sum(cell_l), 0) AS "AvgCellVol_um3",
@@ -237,7 +237,7 @@ SELECT m."Project",
 
        -- phytoplankton indices
        pt."PhytoBiomassCarbon_pgL",
-       pt."PhytoAbund_CellsL",  -- TODO: check name - spec says "AbundancePhyto_cellsL"
+       pt."PhytoAbundance_CellsL", 
        pt.diatom_l / (pt.diatom_l + pt.dino_l) AS "DiatomDinoflagellateRatio",
        pt."AvgCellVol_um3",
        pt."NoPhytoSpecies_Sample",
