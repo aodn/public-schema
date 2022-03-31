@@ -6,6 +6,7 @@ picoplankton_avg AS (
    SELECT
       prt.trip_code AS "TripCode",
       prt.sampledepth_m AS "Depth_m",
+      CONCAT(prt.trip_code,'_',prt.sampledepth_m) AS "SampleID",
       prt.prochlorococcus_cellsml AS "Prochlorc_cellsmL",
       prt.prochlorococcus_flag AS "Prochlorc_flag",
       prt.synecochoccus_cellsml AS "Synechoc_cellsmL", 
@@ -19,6 +20,7 @@ tss_avg AS (
    SELECT 
       tt.trip_code AS "TripCode",
       tt.sampledepth_m AS "Depth_m",
+      CONCAT(tt.trip_code,'_',tt.sampledepth_m) AS "SampleID",
       tt.organicfraction_mgl AS "TSSorganic_mgL", 
       tt.inorganicfraction_mgl AS "TSSinorganic_mgL", 
       tt.tss_mgl AS "TSS_mgL", 
@@ -29,27 +31,32 @@ tss_avg AS (
 trip_depths AS (
    SELECT 
       ppl."TripCode",
-      ppl."Depth_m"
+      ppl."Depth_m",
+      ppl."SampleID"
    FROM picoplankton_avg ppl
 UNION
    SELECT 
       tss."TripCode",
-      tss."Depth_m" 
+      tss."Depth_m",
+      tss."SampleID"
    FROM tss_avg tss
 UNION
    SELECT
       pig."TripCode",
-      pig. "Depth_m"
+      pig. "Depth_m",
+      pig."SampleID"
    FROM bgc_pigments_data pig 
 UNION
    SELECT 
       che."TripCode",
-      che."Depth_m"::text 
+      che."Depth_m"::text,
+      che."SampleID"
    FROM bgc_chemistry_data che
 )
    SELECT
       bm.*,
       td."Depth_m",
+      td."SampleID",
       che."Salinity_psu",
       che."Salinity_flag",
       che."DIC_umolkg",

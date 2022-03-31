@@ -2,6 +2,7 @@
 CREATE MATERIALIZED VIEW bgc_picoplankton_data AS
    SELECT
       bm.*,
+      CONCAT(prt.trip_code,'_',prt.sampledepth_m) AS "SampleID",
       prt.sampledepth_m AS "Depth_m",
       prt.replicate AS "Replicate",
       prt.prochlorococcus_cellsml AS "Prochlorc_cellsmL",
