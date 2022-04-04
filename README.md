@@ -4,6 +4,8 @@ Shared schema specifications for data exchange (WFS, CSV, etc...)
 Schemas are specified according to the [Table Schema](https://specs.frictionlessdata.io/table-schema) format from [Frictionless Data](https://frictionlessdata.io).
 
 The [frictionless](https://pypi.org/project/frictionless) Python package provides functionality to describe, extract, and validate tabular data (e.g. CSV files). This can be used from within Python code, or from the command line in a Linux shell.
+## Licensing
+This project is licensed under the terms of the GNU GPLv3 license.
 
 ## Set up
 All you need is Python (3.6 or higher), and
