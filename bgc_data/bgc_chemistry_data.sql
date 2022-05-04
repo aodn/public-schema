@@ -23,7 +23,7 @@ CREATE MATERIALIZED VIEW bgc_chemistry_data AS
       che.phosphate_flag AS "Phosphate_flag",
       che.silicate_umoll AS "Silicate_umolL",
       che.silicate_flag AS "Silicate_flag",
-      che.microbiomesample_id AS "MicroBiomeSample_id" 
+      che.microbiomesample_id AS "AustralianMicrobiomeId"
    FROM bgc_chemistry che
       INNER JOIN combined_bgc_map bm USING (trip_code)
 ;

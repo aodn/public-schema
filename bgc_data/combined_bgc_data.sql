@@ -127,7 +127,7 @@ UNION
       pig."Viola_mgm3",
       pig."Zea_mgm3",
       pig."Pigments_flag",
-      che."MicroBiomeSample_id"
+      che."AustralianMicrobiomeId"
    FROM trip_depths td
       INNER JOIN combined_bgc_map bm USING ("TripCode")
       LEFT JOIN tss_avg tss USING ("TripCode", "Depth_m")
