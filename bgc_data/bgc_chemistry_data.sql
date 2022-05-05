@@ -4,7 +4,7 @@ CREATE MATERIALIZED VIEW bgc_chemistry_data AS
    SELECT
       bm.*,
       CONCAT(che.trip_code,'_',che.sampledepth_m) AS "SampleID",
-      che.sampledepth_m AS "Depth_m",
+      che.sampledepth_m AS "SampleDepth_m",
       che.salinity_psu AS "Salinity",
       che.salinity_flag AS "Salinity_flag",
       che.dic_umolkg AS "DIC_umolkg",

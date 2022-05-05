@@ -5,7 +5,7 @@ WITH
 picoplankton_avg AS (
    SELECT
       prt.trip_code AS "TripCode",
-      prt.sampledepth_m AS "Depth_m",
+      prt.sampledepth_m AS "SampleDepth_m",
       CONCAT(prt.trip_code,'_',prt.sampledepth_m) AS "SampleID",
       prt.prochlorococcus_cellsml AS "Prochlorococcus_cellsmL",
       prt.prochlorococcus_flag AS "Prochlorococcus_flag",
@@ -19,7 +19,7 @@ picoplankton_avg AS (
 tss_avg AS (
    SELECT 
       tt.trip_code AS "TripCode",
-      tt.sampledepth_m AS "Depth_m",
+      tt.sampledepth_m AS "SampleDepth_m",
       CONCAT(tt.trip_code,'_',tt.sampledepth_m) AS "SampleID",
       tt.organicfraction_mgl AS "TSSorganic_mgL", 
       tt.inorganicfraction_mgl AS "TSSinorganic_mgL", 
@@ -31,31 +31,31 @@ tss_avg AS (
 trip_depths AS (
    SELECT 
       ppl."TripCode",
-      ppl."Depth_m",
+      ppl."SampleDepth_m",
       ppl."SampleID"
    FROM picoplankton_avg ppl
 UNION
    SELECT 
       tss."TripCode",
-      tss."Depth_m",
+      tss."SampleDepth_m",
       tss."SampleID"
    FROM tss_avg tss
 UNION
    SELECT
       pig."TripCode",
-      pig. "Depth_m",
+      pig. "SampleDepth_m",
       pig."SampleID"
    FROM bgc_pigments_data pig 
 UNION
    SELECT 
       che."TripCode",
-      che."Depth_m"::text,
+      che."SampleDepth_m"::text,
       che."SampleID"
    FROM bgc_chemistry_data che
 )
    SELECT
       bm.*,
-      td."Depth_m",
+      td."SampleDepth_m",
       td."SampleID",
       che."Salinity",
       che."Salinity_flag",
@@ -130,9 +130,9 @@ UNION
       che."AustralianMicrobiomeId"
    FROM trip_depths td
       INNER JOIN combined_bgc_map bm USING ("TripCode")
-      LEFT JOIN tss_avg tss USING ("TripCode", "Depth_m")
-      LEFT JOIN picoplankton_avg ppl USING ("TripCode", "Depth_m")
-      LEFT JOIN bgc_pigments_data pig USING ("TripCode", "Depth_m")
+      LEFT JOIN tss_avg tss USING ("TripCode", "SampleDepth_m")
+      LEFT JOIN picoplankton_avg ppl USING ("TripCode", "SampleDepth_m")
+      LEFT JOIN bgc_pigments_data pig USING ("TripCode", "SampleDepth_m")
       LEFT JOIN bgc_chemistry_data che ON td."TripCode" = che."TripCode"
-         AND td."Depth_m" = che."Depth_m"::text
+         AND td."SampleDepth_m" = che."SampleDepth_m"::text
 ;

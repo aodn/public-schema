@@ -4,7 +4,7 @@ CREATE MATERIALIZED VIEW nrs_depth_binned_ctd_data AS
 --create the final list for the materialised view
       SELECT
          m.*,
-         cc."DEPTH" AS "Depth_m",
+         cc."DEPTH" AS "SampleDepth_m",
          cc."PSAL" AS "Salinity_psu",
          cc."PSAL_quality_control" AS "Salinity_flag",
          cc."TEMP" AS "Temperature_degC", 
