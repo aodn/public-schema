@@ -217,7 +217,7 @@ pigments_avg AS (
 SELECT m."Project",
        m."StationName",
        m."TripCode",
-       m."SampleTime_local"::date AS "SampleDateLocal",
+       m."SampleTime_Local"::date AS "SampleDateLocal",
        m."SampleTime_UTC",
        m."Latitude",
        m."Longitude",
