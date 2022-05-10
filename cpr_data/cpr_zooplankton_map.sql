@@ -1,7 +1,7 @@
 -- This view is the basis for the WMS layer (seen on step 2 on AODN Portal).
 -- It also provides the metadata columns for all the zooplankton products.
 CREATE MATERIALIZED VIEW cpr_zooplankton_map AS
-  SELECT
+SELECT DISTINCT
     s.trip_code AS "TripCode",
     s.region AS "Region",
     s.latitude AS "Latitude",
@@ -16,10 +16,10 @@ CREATE MATERIALIZED VIEW cpr_zooplankton_map AS
     NULL AS "SatChlaSurf_mgm3", --to be updated
     s.pci AS "PCI",
     s.biomass_mgm3 AS "BiomassIndex_mgm3 ",
+    v.sampvol_m3 AS "SampleVolume_m3",
     trip_code,
     sample,
     st_geomfromtext('POINT(' || longitude::text || ' ' || latitude::text || ')', 4326) AS geom
-    FROM cpr_samp s
-    WHERE sampletype LIKE '%Z%' AND
-          sample IN (SELECT DISTINCT z.sample from cpr_zoop_raw z)
+    FROM cpr_samp s JOIN cpr_zoop_raw v USING (sample)
+    WHERE sampletype LIKE '%Z%'
 ;

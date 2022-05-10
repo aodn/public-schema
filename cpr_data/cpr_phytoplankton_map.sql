@@ -1,7 +1,7 @@
 -- This view is the basis for the WMS layer (seen on step 2 on AODN Portal).
 -- It also provides the metadata columns for all the phytoplankton products.
 CREATE MATERIALIZED VIEW cpr_phytoplankton_map AS
-  SELECT
+  SELECT DISTINCT
     s.trip_code AS "TripCode",
     s.region AS "Region",
     s.latitude AS "Latitude",
@@ -15,10 +15,10 @@ CREATE MATERIALIZED VIEW cpr_phytoplankton_map AS
     NULL AS "SatSST_degC", --to be updated
     NULL AS "SatChlaSurf_mgm3", --to be updated
     s.pci AS "PCI",
+    v.sampvol_m3 AS "SampleVolume_m3",
     trip_code,
     sample,
     st_geomfromtext('POINT(' || longitude::text || ' ' || latitude::text || ')', 4326) AS geom
-    FROM cpr_samp s
-    WHERE sampletype LIKE '%P%' AND
-          sample IN (SELECT DISTINCT p.sample from cpr_phyto_raw p)
+    FROM cpr_samp s JOIN cpr_phyto_raw v USING (sample)
+    WHERE sampletype LIKE '%P%'
 ;
