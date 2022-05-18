@@ -36,7 +36,7 @@ WITH cpr_phyto_raw_species AS (
     SELECT m.sample,
            s.taxon_name,
            CASE
-               WHEN m."SampleDate_UTC" < s.startdate THEN NULL
+               WHEN m."SampleTime_UTC" < s.startdate THEN NULL
                ELSE 0.
            END AS biovol_um3m3
     FROM cpr_phytoplankton_map m CROSS JOIN species_affected s
