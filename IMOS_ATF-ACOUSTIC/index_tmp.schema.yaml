@@ -1,0 +1,77 @@
+profile: tabular-data-resource
+name: index_tmp
+path: 
+title: index_tmp
+description: "temporary table overwritten with last updated file metadata"
+format: csv
+mediatype: text/csv
+encoding: utf-8
+layout:
+  skipFields: [ FID ]
+schema:
+  fields:
+  - name: tag_deployment_id
+    title: "unique combination of tag and animal deployment id"
+    type: string
+    required: true
+  - name: transmitter_id
+    title: "Transmitter ID"
+    type: string
+    required: true
+  - name: species
+    title: "Species common name"
+    type: string
+    required: true
+  - name: tag_project
+    title: "Project name of the deployed transmitter"
+    type: string
+    required: true
+  - name: time_coverage_start
+    title: "First tag detections datetime"
+    type: datetime
+    format: "%Y-%m-%dT%H:%M:%S"
+    required: true
+  - name: time_coverage_end
+    title: "Last detection datetime"
+    type: datetime
+    format: "%Y-%m-%dT%H:%M:%S"
+    required: true
+  - name: min_lat
+    title: "Minimum latitude of the QC'd detections"
+    type: number
+    required: true
+  - name: max_lat
+    title: "Mmaximum latitude of the QC'd detections"
+    type: number
+    required: true
+  - name: min_lon
+    title: "Minimum longitude of the QC'd detections"
+    type: number
+    required: true
+  - name: max_lon
+    title: "Maximum latitude of the QC'd detections"
+    type: number
+    required: true
+  - name: first_indexed
+    title: "Datetime of the fist index of this file"
+    type: datetime
+    format: "%Y-%m-%dT%H:%M:%S"
+    required: false
+  - name: last_indexed
+    title: "Datetime of the most recent index of this file"
+    type: datetime
+    format: "%Y-%m-%dT%H:%M:%S"
+    required: true
+  - name: url
+    title: "URL of the related file on S3"
+    type: string
+    required: true
+  - name: size
+    title: "Size of the file"
+    type: integer
+    required: true
+  primaryKey: tag_deployment_id 
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
