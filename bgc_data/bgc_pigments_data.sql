@@ -3,7 +3,8 @@
 CREATE MATERIALIZED VIEW bgc_pigments_data AS 
    SELECT
       bm.*,
-      pig.sampledepth_m AS "Depth_m",
+      CONCAT(pig.trip_code,'_',pig.sampledepth_m) AS "SampleID",
+      pig.sampledepth_m AS "SampleDepth_m",
       pig.allo AS "Allo_mgm3",
       pig.alpha_beta_car AS "AlphaBetaCar_mgm3",
       pig.anth AS "Anth_mgm3",

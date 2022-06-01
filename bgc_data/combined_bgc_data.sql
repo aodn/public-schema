@@ -5,20 +5,22 @@ WITH
 picoplankton_avg AS (
    SELECT
       prt.trip_code AS "TripCode",
-      prt.sampledepth_m AS "Depth_m",
-      prt.prochlorococcus_cellsml AS "Prochlorc_cellsmL",
-      prt.prochlorococcus_flag AS "Prochlorc_flag",
-      prt.synecochoccus_cellsml AS "Synechoc_cellsmL", 
-      prt.synecochoccus_flag AS "Synechoc_flag",
-      prt.picoeukaryotes_cellsml AS "Picoeukar_cellsmL",
-      prt.picoeukaryotes_flag AS "Picoeukar_flag"
+      prt.sampledepth_m AS "SampleDepth_m",
+      CONCAT(prt.trip_code,'_',prt.sampledepth_m) AS "SampleID",
+      prt.prochlorococcus_cellsml AS "Prochlorococcus_cellsmL",
+      prt.prochlorococcus_flag AS "Prochlorococcus_flag",
+      prt.synecochoccus_cellsml AS "Synechococcus_cellsmL",
+      prt.synecochoccus_flag AS "Synechococcus_flag",
+      prt.picoeukaryotes_cellsml AS "Picoeukaryotes_cellsmL",
+      prt.picoeukaryotes_flag AS "Picoeukaryotes_flag"
    FROM bgc_picoplankton prt
 ),
 --then create temporary table with averaged tss data from bgc_tss
 tss_avg AS (
    SELECT 
       tt.trip_code AS "TripCode",
-      tt.sampledepth_m AS "Depth_m",
+      tt.sampledepth_m AS "SampleDepth_m",
+      CONCAT(tt.trip_code,'_',tt.sampledepth_m) AS "SampleID",
       tt.organicfraction_mgl AS "TSSorganic_mgL", 
       tt.inorganicfraction_mgl AS "TSSinorganic_mgL", 
       tt.tss_mgl AS "TSS_mgL", 
@@ -29,28 +31,33 @@ tss_avg AS (
 trip_depths AS (
    SELECT 
       ppl."TripCode",
-      ppl."Depth_m"
+      ppl."SampleDepth_m",
+      ppl."SampleID"
    FROM picoplankton_avg ppl
 UNION
    SELECT 
       tss."TripCode",
-      tss."Depth_m" 
+      tss."SampleDepth_m",
+      tss."SampleID"
    FROM tss_avg tss
 UNION
    SELECT
       pig."TripCode",
-      pig. "Depth_m"
+      pig. "SampleDepth_m",
+      pig."SampleID"
    FROM bgc_pigments_data pig 
 UNION
    SELECT 
       che."TripCode",
-      che."Depth_m"::text 
+      che."SampleDepth_m"::text,
+      che."SampleID"
    FROM bgc_chemistry_data che
 )
    SELECT
       bm.*,
-      td."Depth_m",
-      che."Salinity_psu",
+      td."SampleDepth_m",
+      td."SampleID",
+      che."Salinity",
       che."Salinity_flag",
       che."DIC_umolkg",
       che."DIC_flag",
@@ -58,24 +65,26 @@ UNION
       che."Alkalinity_flag",
       che."Oxygen_umolL",
       che."Oxygen_flag",
-      che."NH4_umolL",
-      che."NH4_flag",
-      che."NO3_umolL",
-      che."NO3_flag",
-      che."PO4_umoL",
-      che."PO4_flag",
-      che."SiO4_umolL",
-      che."SiO4_flag",
+      che."Ammonium_umolL",
+      che."Ammonium_flag",
+      che."Nitrate_umolL",
+      che."Nitrate_flag",
+      che."Nitrite_umolL",
+      che."Nitrite_flag",
+      che."Phosphate_umoL",
+      che."Phosphate_flag",
+      che."Silicate_umolL",
+      che."Silicate_flag",
       tss."TSSorganic_mgL",
       tss."TSSinorganic_mgL",
       tss."TSS_mgL",
       tss."TSSall_flag",
-      ppl."Prochlorc_cellsmL",
-      ppl."Prochlorc_flag",
-      ppl."Synechoc_cellsmL",
-      ppl."Synechoc_flag",
-      ppl."Picoeukar_cellsmL",
-      ppl."Picoeukar_flag",
+      ppl."Prochlorococcus_cellsmL",
+      ppl."Prochlorococcus_flag",
+      ppl."Synechococcus_cellsmL",
+      ppl."Synechococcus_flag",
+      ppl."Picoeukaryotes_cellsmL",
+      ppl."Picoeukaryotes_flag",
       pig."Allo_mgm3",
       pig."AlphaBetaCar_mgm3",
       pig."Anth_mgm3",
@@ -118,12 +127,12 @@ UNION
       pig."Viola_mgm3",
       pig."Zea_mgm3",
       pig."Pigments_flag",
-      che."MicroBiomeSample_id"
+      che."AustralianMicrobiomeId"
    FROM trip_depths td
       INNER JOIN combined_bgc_map bm USING ("TripCode")
-      LEFT JOIN tss_avg tss USING ("TripCode", "Depth_m")
-      LEFT JOIN picoplankton_avg ppl USING ("TripCode", "Depth_m")
-      LEFT JOIN bgc_pigments_data pig USING ("TripCode", "Depth_m")
+      LEFT JOIN tss_avg tss USING ("TripCode", "SampleDepth_m")
+      LEFT JOIN picoplankton_avg ppl USING ("TripCode", "SampleDepth_m")
+      LEFT JOIN bgc_pigments_data pig USING ("TripCode", "SampleDepth_m")
       LEFT JOIN bgc_chemistry_data che ON td."TripCode" = che."TripCode"
-         AND td."Depth_m" = che."Depth_m"::text
+         AND td."SampleDepth_m" = che."SampleDepth_m"::text
 ;

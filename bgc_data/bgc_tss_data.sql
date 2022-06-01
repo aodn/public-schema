@@ -2,7 +2,8 @@
 CREATE MATERIALIZED VIEW bgc_tss_data AS
    SELECT 
       bm.*,
-      tt.sampledepth_m AS "Depth_m",
+      CONCAT(tt.trip_code,'_',tt.sampledepth_m) AS "SampleID",
+      tt.sampledepth_m AS "SampleDepth_m",
       tt.replicate AS "Replicate",
       tt.organicfraction_mgl AS "TSSorganic_mgL", 
       tt.inorganicfraction_mgl AS "TSSinorganic_mgL", 

@@ -21,7 +21,7 @@ WITH grouped AS (
     SELECT m.sample,
            c.taxon_group,
            CASE
-               WHEN m."SampleDate_UTC" < c.startdate THEN NULL
+               WHEN m."SampleTime_UTC" < c.startdate THEN NULL
                ELSE 0.
            END AS zoop_abundance_m3
     FROM cpr_zooplankton_map m CROSS JOIN changelog c

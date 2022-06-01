@@ -43,7 +43,7 @@ matched_profiles AS (
          bt."Longitude",
          -- last 4 columns only included for joining to other tables and filtering on the Portal
          mp.file_id,
-         bt."SampleTime_local",
+         bt."SampleTime_Local",
          bt."SampleTime_UTC", --required for filter in Geoserver (step 2 portal)
          trip_code,
          bt.geom

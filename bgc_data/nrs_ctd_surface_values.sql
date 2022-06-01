@@ -4,8 +4,8 @@
 CREATE VIEW nrs_ctd_surface_values AS
   SELECT DISTINCT ON (trip_code)
       trip_code,
-      "Depth_m",
-      abs("Depth_m" - 10) AS depth_diff,
+      "SampleDepth_m",
+      abs("SampleDepth_m" - 10) AS depth_diff,
       CASE WHEN "Temperature_flag" IN ('3', '4') THEN NULL
            ELSE "Temperature_degC"
           END AS "CTDSST_degC",
@@ -16,6 +16,6 @@ CREATE VIEW nrs_ctd_surface_values AS
            ELSE "Salinity_psu"
           END AS "CTDSalinity_psu"
   FROM nrs_depth_binned_ctd_data
-  WHERE abs("Depth_m" - 10) <= 5
+  WHERE abs("SampleDepth_m" - 10) <= 5
   ORDER BY trip_code, depth_diff
 ;

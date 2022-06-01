@@ -86,7 +86,7 @@ phyto_filtered AS (
 phyto_by_trip AS (
     SELECT trip_code,
            sum(carbon_pgl) AS "PhytoBiomassCarbon_pgL",
-           sum(cell_l) AS "PhytoAbund_CellsL",
+           sum(cell_l) AS "PhytoAbundance_CellsL",
            sum(cell_l) FILTER ( WHERE is_diatom ) AS diatom_l,
            sum(cell_l) FILTER ( WHERE taxon_group = 'Dinoflagellate' ) AS dino_l,
            sum(biovolume_um3l) / nullif(sum(cell_l), 0) AS "AvgCellVol_um3",
@@ -123,7 +123,7 @@ phyto_species_by_trip AS (
 -- CTD-derived temp tables ------------------------------------------------------------------------
 ctd_data AS (
     SELECT trip_code,
-           "Depth_m",
+           "SampleDepth_m",
            "Temperature_degC",
            "Salinity_psu",
            "Chla_mgm3",
@@ -137,12 +137,12 @@ ref_values AS (
     -- for MLD estimates (Ref: Condie & Dunn 2006)
     SELECT DISTINCT ON (trip_code)
         trip_code,
-        "Depth_m" AS ref_depth,
-        abs("Depth_m" - target_ref_depth) AS depth_diff,
+        "SampleDepth_m" AS ref_depth,
+        abs("SampleDepth_m" - target_ref_depth) AS depth_diff,
         "Temperature_degC" - 0.4 AS ref_temp,
         "Salinity_psu" - 0.03 AS ref_sal
   FROM ctd_data
-  ORDER BY trip_code, depth_diff, "Depth_m"
+  ORDER BY trip_code, depth_diff, "SampleDepth_m"
 ),
 mld_temp AS (
     -- temp-based MLD estimate
@@ -150,10 +150,10 @@ mld_temp AS (
     SELECT DISTINCT ON (trip_code)
         trip_code,
         abs(c."Temperature_degC" - r.ref_temp) as temp_diff,
-        c."Depth_m" AS "MLDtemp_m"
+        c."SampleDepth_m" AS "MLDtemp_m"
     FROM ctd_data c LEFT JOIN ref_values r USING (trip_code)
-    WHERE c."Depth_m" > r.ref_depth
-    ORDER BY trip_code, temp_diff, "Depth_m"
+    WHERE c."SampleDepth_m" > r.ref_depth
+    ORDER BY trip_code, temp_diff, "SampleDepth_m"
 ),
 mld_sal AS (
     -- salinity-based MLD estimate
@@ -161,20 +161,20 @@ mld_sal AS (
     SELECT DISTINCT ON (trip_code)
         trip_code,
         abs(c."Salinity_psu" - r.ref_sal) as sal_diff,
-        c."Depth_m" AS "MLDsal_m"
+        c."SampleDepth_m" AS "MLDsal_m"
     FROM ctd_data c LEFT JOIN ref_values r USING (trip_code)
-    WHERE c."Depth_m" > r.ref_depth
-    ORDER BY trip_code, sal_diff, "Depth_m"
+    WHERE c."SampleDepth_m" > r.ref_depth
+    ORDER BY trip_code, sal_diff, "SampleDepth_m"
 ),
 dcm AS (
     -- DCM is the depth corresponding to maximum Chlorophyll concentration
     -- at depth > ref_depth
     SELECT DISTINCT ON (trip_code)
         trip_code,
-        c."Depth_m" AS "DCM_m"
+        c."SampleDepth_m" AS "DCM_m"
     FROM ctd_data c LEFT JOIN ref_values r USING (trip_code)
-    WHERE c."Depth_m" > r.ref_depth
-    ORDER BY trip_code, "Chla_mgm3" DESC, "Depth_m"
+    WHERE c."SampleDepth_m" > r.ref_depth
+    ORDER BY trip_code, "Chla_mgm3" DESC, "SampleDepth_m"
 ),
 ctd_surface AS (
     -- take the average of the top 10m as surface values
@@ -183,7 +183,7 @@ ctd_surface AS (
            avg("Chla_mgm3") AS "CTDChlaF_mgm3",
            avg("Salinity_psu") AS "CTDSalinity_PSU"
     FROM nrs_depth_binned_ctd_data
-    WHERE "Depth_m" < 10
+    WHERE "SampleDepth_m" < 10
     GROUP BY trip_code
 ),
 
@@ -217,7 +217,7 @@ pigments_avg AS (
 SELECT m."Project",
        m."StationName",
        m."TripCode",
-       m."SampleTime_local"::date AS "SampleDateLocal",
+       m."SampleTime_Local",
        m."SampleTime_UTC",
        m."Latitude",
        m."Longitude",
@@ -237,7 +237,7 @@ SELECT m."Project",
 
        -- phytoplankton indices
        pt."PhytoBiomassCarbon_pgL",
-       pt."PhytoAbund_CellsL",  -- TODO: check name - spec says "AbundancePhyto_cellsL"
+       pt."PhytoAbundance_CellsL", 
        pt.diatom_l / (pt.diatom_l + pt.dino_l) AS "DiatomDinoflagellateRatio",
        pt."AvgCellVol_um3",
        pt."NoPhytoSpecies_Sample",

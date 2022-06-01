@@ -25,7 +25,7 @@ WITH grouped AS (
     SELECT m.sample,
            g.genus,
            CASE
-               WHEN m."SampleDate_UTC" < g.startdate THEN NULL
+               WHEN m."SampleTime_UTC" < g.startdate THEN NULL
                ELSE 0.
            END AS biovol_um3m3
     FROM cpr_phytoplankton_map m CROSS JOIN genera_affected g
