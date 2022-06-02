@@ -9,6 +9,11 @@ fi
 product=$1; shift
 incoming_dir=$1; shift
 
+if [ ! -d $incoming_dir ]; then
+    echo "No such directory: $incoming_dir"
+    exit 1
+fi
+
 SCRIPT_PATH=$(dirname $(realpath $0))
 SCHEMA_PATH=$(dirname "${SCRIPT_PATH}")
 echo "Script path: ${SCRIPT_PATH}"
@@ -19,7 +24,7 @@ tmpdir=$(mktemp -p "${DATA_SERVICES_TMP_DIR:-/tmp}" -d imos_bgc_db.XXXXXX)
 echo "Temp dir: ${tmpdir}"
 
 # Select required resource files and download
-resources=$(grep ${product} ${SCHEMA_PATH}/product_index.csv | cut -d, -f2)
+resources=$(grep "${product}" ${SCHEMA_PATH}/product_index.csv | cut -d, -f2)
 for f in ${resources}; do
   ${SCRIPT_PATH}/download_resource.sh "$tmpdir" "${SCHEMA_PATH}/${f}"
 done
