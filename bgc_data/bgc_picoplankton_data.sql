@@ -11,6 +11,8 @@ CREATE MATERIALIZED VIEW bgc_picoplankton_data AS
       prt.synecochoccus_flag AS "Synechococcus_flag",
       prt.picoeukaryotes_cellsml AS "Picoeukaryotes_cellsmL",
       prt.picoeukaryotes_flag AS "Picoeukaryotes_flag",
+      prt.bacteria_cellsml AS "Bacteria_cellsmL",
+      prt.bacteria_flag AS "Bacteria_flag",
       prt.pico_comments AS "PicoplankComments",
       prt.analysis_location AS "AnalysisLocation",
       prt.analysis_date AS "AnalysisDate",
