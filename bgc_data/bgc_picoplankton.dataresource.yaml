@@ -36,7 +36,10 @@ schema:
     required: false  
   - name: BACTERIA_CELLSML
     type: number                               
-    required: false      
+    required: false   
+  - name: VIRUS_CELLSML
+    type: number                               
+    required: false     
   - name: PROCHLOROCOCCUS_FLAG
     type: integer                               
     required: true  
@@ -48,7 +51,10 @@ schema:
     required: true  
   - name: BACTERIA_FLAG
     type: integer                               
-    required: false       
+    required: false
+  - name: VIRUS_FLAG
+    type: integer                               
+    required: false    
   primaryKey:
   - TRIP_CODE
   - SAMPLEDEPTH_M
