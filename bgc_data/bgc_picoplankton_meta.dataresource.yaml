@@ -113,10 +113,7 @@ schema:
     title: "Optional comments on batch process"
     type: string                               
     required: false
-  primaryKey:
-  - TRIP_CODE
-  - SAMPLEDEPTH_M
-  - REPLICATE
+  primaryKey: SAMPLE_CODE
 licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
