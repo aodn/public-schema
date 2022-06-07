@@ -10,6 +10,10 @@ layout:
   skipFields: [ FID ]
 schema:
   fields:
+  - name: PROJECT
+    title: "Project Identifier"
+    type: string
+    required: true    
   - name: TRIP_CODE
     title: "Identifier for trip"
     type: string
@@ -56,6 +60,7 @@ schema:
     type: integer                               
     required: false    
   primaryKey:
+  - PROJECT
   - TRIP_CODE
   - SAMPLEDEPTH_M
 licenses:
