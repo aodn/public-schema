@@ -13,6 +13,8 @@ CREATE MATERIALIZED VIEW bgc_picoplankton_data AS
       prt.picoeukaryotes_flag AS "Picoeukaryotes_flag",
       prt.bacteria_cellsml AS "Bacteria_cellsmL",
       prt.bacteria_flag AS "Bacteria_flag",
+      prt.virus_cellsml AS "Virus_cellsmL",
+      prt.virus_flag AS "Virus_flag",
       prt.pico_comments AS "PicoplankComments",
       prt.analysis_location AS "AnalysisLocation",
       prt.analysis_date AS "AnalysisDate",
