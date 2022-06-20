@@ -1,7 +1,13 @@
 --create materialized view for picoplankton, including metadata
 CREATE MATERIALIZED VIEW bgc_picoplankton_data AS
    SELECT
-      bm.*,
+      bm."Project",
+      bm."StationName",
+      bm."TripCode",
+      prt.sampledatelocal AS "SampleTime_Local",
+      bm."Latitude",
+      bm."Longitude",
+      bm."SecchiDepth_m",
       CONCAT(prt.trip_code,'_',prt.sampledepth_m) AS "SampleID",
       prt.sampledepth_m AS "SampleDepth_m",
       prt.replicate AS "Replicate",
@@ -28,7 +34,8 @@ CREATE MATERIALIZED VIEW bgc_picoplankton_data AS
       prt.analysis_volume_ul AS "AnalysisVolume_uL",
       prt.flow_rate_ul_per_min AS "Flowrate_uLmin",
       prt.analysis_time_minutes AS "AnalysisTime_min",
-      prt.batch_comments AS "BatchComments"
+      prt.batch_comments AS "BatchComments",
+      bm.geom
    FROM bgc_picoplankton_meta prt
       INNER JOIN combined_bgc_map bm USING (trip_code)
 ;
