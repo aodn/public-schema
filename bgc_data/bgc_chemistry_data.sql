@@ -25,7 +25,7 @@ CREATE MATERIALIZED VIEW bgc_chemistry_data AS
       che.nitrate_flag AS "Nitrate_flag",
       che.nitrite_umoll AS "Nitrite_umolL",
       che.nitrite_flag AS "Nitrite_flag",
-      che.phosphate_umoll AS "Phosphate_umoL",
+      che.phosphate_umoll AS "Phosphate_umolL",
       che.phosphate_flag AS "Phosphate_flag",
       che.silicate_umoll AS "Silicate_umolL",
       che.silicate_flag AS "Silicate_flag",

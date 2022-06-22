@@ -82,7 +82,7 @@ UNION
       che."Nitrate_flag",
       che."Nitrite_umolL",
       che."Nitrite_flag",
-      che."Phosphate_umoL",
+      che."Phosphate_umolL",
       che."Phosphate_flag",
       che."Silicate_umolL",
       che."Silicate_flag",
