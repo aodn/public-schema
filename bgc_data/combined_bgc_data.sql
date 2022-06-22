@@ -12,7 +12,8 @@ picoplankton_avg AS (
       prt.synecochoccus_cellsml AS "Synechococcus_cellsmL",
       prt.synecochoccus_flag AS "Synechococcus_flag",
       prt.picoeukaryotes_cellsml AS "Picoeukaryotes_cellsmL",
-      prt.picoeukaryotes_flag AS "Picoeukaryotes_flag"
+      prt.picoeukaryotes_flag AS "Picoeukaryotes_flag",
+      prt.sampledatelocal AS "SampleTime_Local"
    FROM bgc_picoplankton prt
 ),
 --then create temporary table with averaged tss data from bgc_tss
@@ -24,7 +25,8 @@ tss_avg AS (
       tt.organicfraction_mgl AS "TSSorganic_mgL", 
       tt.inorganicfraction_mgl AS "TSSinorganic_mgL", 
       tt.tss_mgl AS "TSS_mgL", 
-      tt.tss_flag AS "TSSall_flag"
+      tt.tss_flag AS "TSSall_flag",
+      tt.sampledatelocal AS "SampleTime_Local"
    FROM bgc_tss tt
 ),
 --create temporary table with any depths associated with trip codes
@@ -54,7 +56,16 @@ UNION
    FROM bgc_chemistry_data che
 )
    SELECT
-      bm.*,
+      bm."Project",
+      bm."StationName",
+      bm."TripCode",
+      CASE WHEN che."SampleTime_Local" IS NOT NULL THEN che."SampleTime_Local"
+           WHEN (che."SampleTime_Local" IS NULL) AND (pig."SampleTime_Local" IS NULL) AND (tss."SampleTime_Local" IS NULL) THEN ppl."SampleTime_Local"
+           WHEN (che."SampleTime_Local" IS NULL AND pig."SampleTime_Local" IS NULL) THEN tss."SampleTime_Local"
+           WHEN che."SampleTime_Local" IS NULL THEN pig."SampleTime_Local" END AS "SampleTime_Local",
+      bm."Latitude",
+      bm."Longitude",
+      bm."SecchiDepth_m",
       td."SampleDepth_m",
       td."SampleID",
       che."Salinity",
