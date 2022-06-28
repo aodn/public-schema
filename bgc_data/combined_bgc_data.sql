@@ -59,10 +59,7 @@ UNION
       bm."Project",
       bm."StationName",
       bm."TripCode",
-      CASE WHEN che."SampleTime_Local" IS NOT NULL THEN che."SampleTime_Local"
-           WHEN (che."SampleTime_Local" IS NULL) AND (pig."SampleTime_Local" IS NULL) AND (tss."SampleTime_Local" IS NULL) THEN ppl."SampleTime_Local"
-           WHEN (che."SampleTime_Local" IS NULL AND pig."SampleTime_Local" IS NULL) THEN tss."SampleTime_Local"
-           WHEN che."SampleTime_Local" IS NULL THEN pig."SampleTime_Local" END AS "SampleTime_Local",
+    COALESCE(che."SampleTime_Local", pig."SampleTime_Local", tss."SampleTime_Local", ppl."SampleTime_Local") AS "SampleTime_Local",
       bm."Latitude",
       bm."Longitude",
       bm."SecchiDepth_m",
