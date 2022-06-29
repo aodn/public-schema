@@ -5,7 +5,7 @@ CREATE MATERIALIZED VIEW bgc_chemistry_data AS
       bm."Project",
       bm."StationName",
       bm."TripCode",
-      che.sampledatelocal AS "SampleTime_Local",
+      to_char(che.sampledatelocal, 'YYYY-MM-DD HH24:MI:SS') AS "SampleTime_Local",
       bm."Latitude",
       bm."Longitude",
       bm."SecchiDepth_m",

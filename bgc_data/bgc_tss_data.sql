@@ -4,7 +4,7 @@ CREATE MATERIALIZED VIEW bgc_tss_data AS
       bm."Project",
       bm."StationName",
       bm."TripCode",
-      tt.sampledatelocal AS "SampleTime_Local",
+      to_char(tt.sampledatelocal, 'YYYY-MM-DD HH24:MI:SS') AS "SampleTime_Local",
       bm."Latitude",
       bm."Longitude",
       bm."SecchiDepth_m",

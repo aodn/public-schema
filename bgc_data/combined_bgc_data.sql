@@ -13,7 +13,7 @@ picoplankton_avg AS (
       prt.synecochoccus_flag AS "Synechococcus_flag",
       prt.picoeukaryotes_cellsml AS "Picoeukaryotes_cellsmL",
       prt.picoeukaryotes_flag AS "Picoeukaryotes_flag",
-      prt.sampledatelocal AS "SampleTime_Local"
+      to_char(prt.sampledatelocal, 'YYYY-MM-DD HH24:MI:SS') AS "SampleTime_Local"
    FROM bgc_picoplankton prt
 ),
 --then create temporary table with averaged tss data from bgc_tss
@@ -26,7 +26,7 @@ tss_avg AS (
       tt.inorganicfraction_mgl AS "TSSinorganic_mgL", 
       tt.tss_mgl AS "TSS_mgL", 
       tt.tss_flag AS "TSSall_flag",
-      tt.sampledatelocal AS "SampleTime_Local"
+      to_char(tt.sampledatelocal, 'YYYY-MM-DD HH24:MI:SS') AS "SampleTime_Local"
    FROM bgc_tss tt
 ),
 --create temporary table with any depths associated with trip codes
@@ -59,7 +59,7 @@ UNION
       bm."Project",
       bm."StationName",
       bm."TripCode",
-    COALESCE(che."SampleTime_Local", pig."SampleTime_Local", tss."SampleTime_Local", ppl."SampleTime_Local") AS "SampleTime_Local",
+      COALESCE(che."SampleTime_Local", pig."SampleTime_Local", tss."SampleTime_Local", ppl."SampleTime_Local") AS "SampleTime_Local",
       bm."Latitude",
       bm."Longitude",
       bm."SecchiDepth_m",
