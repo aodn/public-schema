@@ -41,6 +41,12 @@ schema:
   - name: PICOEUKARYOTES_CELLSML
     type: number                               
     required: false  
+  - name: BACTERIA_CELLSML
+    type: number                               
+    required: false
+  - name: VIRUS_CELLSML
+    type: number                               
+    required: false       
   - name: PROCHLOROCOCCUS_FLAG
     type: integer                               
     required: true  
@@ -50,6 +56,12 @@ schema:
   - name: PICOEUKARYOTES_FLAG
     type: integer                               
     required: true  
+  - name: BACTERIA_FLAG
+    type: integer                               
+    required: false
+  - name: VIRUS_FLAG
+    type: integer                               
+    required: false      
   - name: PICO_COMMENTS
     title: "Comments"
     type: string                               
@@ -101,10 +113,7 @@ schema:
     title: "Optional comments on batch process"
     type: string                               
     required: false
-  primaryKey:
-  - TRIP_CODE
-  - SAMPLEDEPTH_M
-  - REPLICATE
+  primaryKey: SAMPLE_CODE
 licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0

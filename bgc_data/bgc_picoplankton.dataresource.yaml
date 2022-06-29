@@ -34,6 +34,12 @@ schema:
   - name: PICOEUKARYOTES_CELLSML
     type: number                               
     required: false  
+  - name: BACTERIA_CELLSML
+    type: number                               
+    required: false   
+  - name: VIRUS_CELLSML
+    type: number                               
+    required: false     
   - name: PROCHLOROCOCCUS_FLAG
     type: integer                               
     required: true  
@@ -43,6 +49,12 @@ schema:
   - name: PICOEUKARYOTES_FLAG
     type: integer                               
     required: true  
+  - name: BACTERIA_FLAG
+    type: integer                               
+    required: false
+  - name: VIRUS_FLAG
+    type: integer                               
+    required: false    
   primaryKey:
   - TRIP_CODE
   - SAMPLEDEPTH_M

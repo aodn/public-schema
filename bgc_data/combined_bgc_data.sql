@@ -135,4 +135,6 @@ UNION
       LEFT JOIN bgc_pigments_data pig USING ("TripCode", "SampleDepth_m")
       LEFT JOIN bgc_chemistry_data che ON td."TripCode" = che."TripCode"
          AND td."SampleDepth_m" = che."SampleDepth_m"::text
+   WHERE bm."Project" = 'NRS'
 ;
+
