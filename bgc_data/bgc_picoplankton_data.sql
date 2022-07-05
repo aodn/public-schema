@@ -4,6 +4,7 @@ CREATE MATERIALIZED VIEW bgc_picoplankton_data AS
       bm."Project",
       bm."StationName",
       bm."TripCode",
+      bm."TripDate_UTC",
       to_char(prt.sampledatelocal, 'YYYY-MM-DD HH24:MI:SS')  AS "SampleTime_Local",
       bm."Latitude",
       bm."Longitude",

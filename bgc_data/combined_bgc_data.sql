@@ -59,6 +59,7 @@ UNION
       bm."Project",
       bm."StationName",
       bm."TripCode",
+      bm."TripDate_UTC",
       COALESCE(che."SampleTime_Local", pig."SampleTime_Local", tss."SampleTime_Local", ppl."SampleTime_Local") AS "SampleTime_Local",
       bm."Latitude",
       bm."Longitude",
