@@ -12,7 +12,8 @@ picoplankton_avg AS (
       prt.synecochoccus_cellsml AS "Synechococcus_cellsmL",
       prt.synecochoccus_flag AS "Synechococcus_flag",
       prt.picoeukaryotes_cellsml AS "Picoeukaryotes_cellsmL",
-      prt.picoeukaryotes_flag AS "Picoeukaryotes_flag"
+      prt.picoeukaryotes_flag AS "Picoeukaryotes_flag",
+      to_char(prt.sampledatelocal, 'YYYY-MM-DD HH24:MI:SS') AS "SampleTime_Local"
    FROM bgc_picoplankton prt
 ),
 --then create temporary table with averaged tss data from bgc_tss
@@ -24,7 +25,8 @@ tss_avg AS (
       tt.organicfraction_mgl AS "TSSorganic_mgL", 
       tt.inorganicfraction_mgl AS "TSSinorganic_mgL", 
       tt.tss_mgl AS "TSS_mgL", 
-      tt.tss_flag AS "TSSall_flag"
+      tt.tss_flag AS "TSSall_flag",
+      to_char(tt.sampledatelocal, 'YYYY-MM-DD HH24:MI:SS') AS "SampleTime_Local"
    FROM bgc_tss tt
 ),
 --create temporary table with any depths associated with trip codes
@@ -54,7 +56,14 @@ UNION
    FROM bgc_chemistry_data che
 )
    SELECT
-      bm.*,
+      bm."Project",
+      bm."StationName",
+      bm."TripCode",
+      bm."TripDate_UTC",
+      COALESCE(che."SampleTime_Local", pig."SampleTime_Local", tss."SampleTime_Local", ppl."SampleTime_Local") AS "SampleTime_Local",
+      bm."Latitude",
+      bm."Longitude",
+      bm."SecchiDepth_m",
       td."SampleDepth_m",
       td."SampleID",
       che."Salinity",
@@ -71,7 +80,7 @@ UNION
       che."Nitrate_flag",
       che."Nitrite_umolL",
       che."Nitrite_flag",
-      che."Phosphate_umoL",
+      che."Phosphate_umolL",
       che."Phosphate_flag",
       che."Silicate_umolL",
       che."Silicate_flag",
@@ -127,7 +136,8 @@ UNION
       pig."Viola_mgm3",
       pig."Zea_mgm3",
       pig."Pigments_flag",
-      che."AustralianMicrobiomeId"
+      che."AustralianMicrobiomeId",
+      bm.geom
    FROM trip_depths td
       INNER JOIN combined_bgc_map bm USING ("TripCode")
       LEFT JOIN tss_avg tss USING ("TripCode", "SampleDepth_m")
