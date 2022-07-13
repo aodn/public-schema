@@ -15,7 +15,6 @@ CREATE VIEW bgc_trip_metadata AS
     to_char(sampledatelocal, 'HH24:MI') AS "Time_Local24hr",
     phytosampledepth_m,
     zoopsampledepth_m,
-    methods AS "Method",
     biomass_mgm3 AS "Biomass_mgm3",
     ashfreebiomass_mgm3 AS "AshFreeBiomass_mgm3",
     secchi_m,
