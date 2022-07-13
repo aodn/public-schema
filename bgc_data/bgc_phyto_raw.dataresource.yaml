@@ -50,6 +50,10 @@ schema:
     title: "Volume of sample analysed"
     type: number
     required: true
+  - name: METHODS
+    title: Method code
+    type: string
+    required: false
   - name: COMMENTS
     title: "Comments"
     type: string                               
