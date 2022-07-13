@@ -113,9 +113,9 @@ phyto_species_by_trip_species AS (
 ),
 phyto_species_by_trip AS (
     SELECT trip_code,
-           -1 * sum(species_relative_abundance * ln(species_relative_abundance)) AS "ShannonPhytoDiversity",
-           -1 * sum(diatom_relative_abundance * ln(diatom_relative_abundance)) AS "ShannonDiatomDiversity",
-           -1 * sum(dino_relative_abundance * ln(dino_relative_abundance)) AS "ShannonDinoDiversity"
+           -1 * sum(species_relative_abundance * ln(nullif(species_relative_abundance, 0))) AS "ShannonPhytoDiversity",
+           -1 * sum(diatom_relative_abundance * ln(nullif(diatom_relative_abundance, 0))) AS "ShannonDiatomDiversity",
+           -1 * sum(dino_relative_abundance * ln(nullif(dino_relative_abundance, 0))) AS "ShannonDinoDiversity"
     FROM phyto_species_by_trip_species
     GROUP BY trip_code
 ),
