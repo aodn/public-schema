@@ -76,10 +76,6 @@ schema:
     title: Code for which analysis is available for that segment
     type: string
     required: false
-  - name: METHODS
-    title: Method code
-    type: string
-    required: false    
   primaryKey: TRIP_CODE
 licenses:
 - name: CC-BY-4.0
