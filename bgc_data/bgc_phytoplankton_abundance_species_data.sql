@@ -17,7 +17,7 @@ WITH bgc_phyto_raw_species AS (
           species NOT LIKE '%/%' AND
           species NOT LIKE '%complex%' AND
           species NOT LIKE '%type%' AND
-          species NOT LIKE '%cyst%'
+          species NOT LIKE '%cyst%' 
 ), grouped AS (
     -- join changelog on to raw data, group by trip, species and changelog details
     SELECT r.trip_code,
