@@ -5,12 +5,14 @@ CREATE MATERIALIZED VIEW bgc_phytoplankton_abundance_raw_data AS
 WITH pivoted AS (
     -- aggregate all taxa per trip into a single row
     SELECT trip_code,
+           methods,
            jsonb_object_agg(taxon_name, cell_l) AS abundances
     FROM bgc_phyto_raw
-    GROUP BY trip_code
+    GROUP BY trip_code, methods
 )
 -- join on to metadata columns, include a row for every trip with phytoplankton samples taken
 SELECT m.*,
+       p.methods AS "Method",
        p.abundances
 FROM bgc_phytoplankton_map m LEFT JOIN pivoted p USING (trip_code)
 ;
