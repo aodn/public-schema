@@ -124,6 +124,7 @@ phyto_species_by_samp AS (
 SELECT 
        -- metadata
        m.trip_code AS "TripCode",
+       m.sample AS "Sample_ID",
        m.latitude AS "Latitude",
        m.longitude AS "Longitude",
        m.sampledateutc AS "SampleTime_UTC",
