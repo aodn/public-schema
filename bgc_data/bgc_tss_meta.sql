@@ -1,3 +1,3 @@
-ALTER TABLE bgc_phyto_raw
+ALTER TABLE bgc_tss_meta
     ADD FOREIGN KEY (trip_code) REFERENCES bgc_trip
 ;
