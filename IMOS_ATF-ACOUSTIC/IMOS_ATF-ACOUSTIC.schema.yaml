@@ -1,13 +1,7 @@
 # --------
-# metadata: IMOS_ATF-ACOUSTIC_TAGID_A69-1602-11653_139644515_139644714_20190609T094546Z_20190609T094849Z.csv
+# Schema definition for IMOS ATF Acousitc QC'd detections files
 # --------
-path: IMOS_ATF-ACOUSTIC_TAGID_A69-1602-11653_139644515_139644714_20190609T094546Z_20190609T094849Z.csv
-name: imos_atf-acoustic_tagid_a69-1602-11653_139644515_139644714_20190609t094546z_20190609t094849z
-profile: tabular-data-resource
-scheme: file
-format: csv
-hashing: md5
-encoding: utf-8
+name: IMOS_ATF_ACOUSTIC_TAGID_*.csv
 "missingValues": [""," ","NA"]
 fields:
   - type: string
@@ -39,7 +33,7 @@ fields:
     name: animal_sex
     constraints: {'required': True}
   - type: datetime
-    format: "%Y-%m-%dT%H:%M:%SZ"
+    format: "%Y-%m-%d %H:%M:%SZ"
     name: detection_datetime
     constraints: {'required': True}
   - type: number
@@ -68,10 +62,8 @@ fields:
     constraints: {'required': True}
   - type: string
     name: receiver_depth
-    constraints: {'required': False}
   - type: string
     name: purchasing_organisation
-    constraints: {'required': False}
   - type: string
     name: receiver_status
     constraints: {'required': True}
@@ -94,16 +86,12 @@ fields:
     constraints: {'required': True}
   - type: string
     name: transmitter_sensor_raw_value
-    constraints: {'required': False}
   - type: string
     name: transmitter_sensor_unit
-    constraints: {'required': False}
   - type: string
     name: transmitter_sensor_slope
-    constraints: {'required': False}
   - type: string
     name: transmitter_sensor_intercept
-    constraints: {'required': False}
   - type: string
     name: transmitter_type
     constraints: {'required': True}
@@ -112,10 +100,8 @@ fields:
     constraints: {'required': True}
   - type: integer
     name: transmitter_estimated_battery_life
-    constraints: {'required': False}
   - type: string
     name: transmitter_status
-    constraints: {'required': False}
   - type: number
     name: transmitter_deployment_longitude
     constraints: {'required': True}
@@ -134,26 +120,19 @@ fields:
     constraints: {'required': True}
   - type: string
     name: placement
-    constraints: {'required': True}
   - type: string
     name: transmitter_deployment_locality
-    constraints: {'required': True}
   - type: string
     name: transmitter_deployment_comments
-    constraints: {'required': False}
   - type: datetime
     format: "%Y-%m-%d %H:%M:%S"
     name: transmitter_recovery_datetime
-    constraints: {'required': False}
   - type: number
     name: transmitter_recovery_latitude
-    constraints: {'required': False}
   - type: number
     name: transmitter_recovery_longitude
-    constraints: {'required': False}
   - type: string
     name: measurement
-    constraints: {'required': False}
   - type: integer
     name: FDA_QC
     constraints: {'required': True}
