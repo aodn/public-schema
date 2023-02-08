@@ -1,0 +1,164 @@
+# --------
+# Schema definition for IMOS ATF Acousitc QC'd detections files
+# --------
+name: IMOS_ATF_ACOUSTIC_TAGID_*.csv
+"missingValues": [""," ","NA"]
+fields:
+  - type: string
+    name: transmitter_id
+    constraints: 
+        required: True
+  - type: integer
+    name: tag_id
+    constraints: {'required': True}
+  - type: integer
+    name: transmitter_deployment_id
+    constraints: {'required': True}
+  - type: string
+    name: tagging_project_name
+    constraints: {'required': True}
+  - type: string
+    name: species_common_name
+    constraints: {'required': True}
+  - type: string
+    name: species_scientific_name
+    constraints: {'required': True}
+  - type: integer
+    name: CAAB_species_id
+    constraints: {'required': True}
+  - type: integer
+    name: WORMS_species_aphia_id
+    constraints: {'required': True}
+  - type: string
+    name: animal_sex
+    constraints: {'required': True}
+  - type: datetime
+    format: "%Y-%m-%d %H:%M:%SZ"
+    name: detection_datetime
+    constraints: {'required': True}
+  - type: number
+    name: receiver_deployment_longitude
+    constraints: {'required': True}
+  - type: number
+    name: receiver_deployment_latitude
+    constraints: {'required': True}
+  - type: string
+    name: receiver_project_name
+    constraints: {'required': True}
+  - type: string
+    name: installation_name
+    constraints: {'required': True}
+  - type: string
+    name: station_name
+    constraints: {'required': True}
+  - type: string
+    name: receiver_name
+    constraints: {'required': True}
+  - type: integer
+    name: receiver_id
+    constraints: {'required': True}
+  - type: integer
+    name: receiver_deployment_id
+    constraints: {'required': True}
+  - type: string
+    name: receiver_depth
+  - type: string
+    name: purchasing_organisation
+  - type: string
+    name: receiver_status
+    constraints: {'required': True}
+  - type: datetime
+    format: "%Y-%m-%d %H:%M:%S"
+    name: receiver_deployment_datetime
+    constraints: {'required': True}
+  - type: datetime
+    format: "%Y-%m-%d %H:%M:%S"
+    name: receiver_recovery_datetime
+    constraints: {'required': True}
+  - type: number
+    name: receiver_recovery_longitude
+    constraints: {'required': True}
+  - type: number
+    name: receiver_recovery_latitude
+    constraints: {'required': True}
+  - type: string
+    name: transmitter_sensor_type
+    constraints: {'required': True}
+  - type: string
+    name: transmitter_sensor_raw_value
+  - type: string
+    name: transmitter_sensor_unit
+  - type: string
+    name: transmitter_sensor_slope
+  - type: string
+    name: transmitter_sensor_intercept
+  - type: string
+    name: transmitter_type
+    constraints: {'required': True}
+  - type: integer
+    name: transmitter_serial_number
+    constraints: {'required': True}
+  - type: integer
+    name: transmitter_estimated_battery_life
+  - type: string
+    name: transmitter_status
+  - type: number
+    name: transmitter_deployment_longitude
+    constraints: {'required': True}
+  - type: number
+    name: transmitter_deployment_latitude
+    constraints: {'required': True}
+  - type: datetime
+    format: "%Y-%m-%d %H:%M:%S"
+    name: transmitter_deployment_datetime
+    constraints: {'required': True}
+  - type: boolean
+    name: transmitter_dual_sensor
+    constraints: {'required': True}
+  - type: string
+    name: active
+    constraints: {'required': True}
+  - type: string
+    name: placement
+  - type: string
+    name: transmitter_deployment_locality
+  - type: string
+    name: transmitter_deployment_comments
+  - type: datetime
+    format: "%Y-%m-%d %H:%M:%S"
+    name: transmitter_recovery_datetime
+  - type: number
+    name: transmitter_recovery_latitude
+  - type: number
+    name: transmitter_recovery_longitude
+  - type: string
+    name: measurement
+  - type: integer
+    name: FDA_QC
+    constraints: {'required': True}
+  - type: integer
+    name: Velocity_QC
+    constraints: {'required': True}
+  - type: integer
+    name: Distance_QC
+    constraints: {'required': True}
+  - type: integer
+    name: DetectionDistribution_QC
+    constraints: {'required': True}
+  - type: integer
+    name: DistanceRelease_QC
+    constraints: {'required': True}
+  - type: integer
+    name: ReleaseDate_QC
+    constraints: {'required': True}
+  - type: integer
+    name: ReleaseLocation_QC
+    constraints: {'required': True}
+  - type: integer
+    name: Detection_QC
+    constraints: {'required': True}
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
+

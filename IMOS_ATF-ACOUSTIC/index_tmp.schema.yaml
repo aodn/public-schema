@@ -1,0 +1,47 @@
+name: index_tmp
+description: "temporary table overwritten with last updated file metadata"
+schema:
+  fields:
+  - name: tag_deployment_id
+    title: "unique combination of tag and animal deployment id"
+    type: string
+    constraints: {'required': True}
+  - name: transmitter_id
+    title: "Transmitter ID"
+    type: string
+    constraints: {'required': True}
+  - name: species
+    title: "Species common name"
+    type: string
+    constraints: {'required': True}
+  - name: tag_project
+    title: "Project name of the deployed transmitter"
+    type: string
+    constraints: {'required': True}
+  - name: time_coverage_start
+    title: "First tag detections datetime"
+    type: datetime
+    format: "%Y-%m-%dT%H:%M:%S"
+    constraints: {'required': True}
+  - name: time_coverage_end
+    title: "Last detection datetime"
+    type: datetime
+    format: "%Y-%m-%dT%H:%M:%S"
+    constraints: {'required': True}
+  - name: geom_df 
+    title: "Linestring geometry"
+    type: string
+    constraints: {'required': True}
+  - name: url
+    title: "URL of the related file on S3"
+    type: string
+    constraints: {'required': True}
+  - name: size
+    title: "Size of the file"
+    type: integer
+    constraints: {'required': True}
+  primaryKey: tag_deployment_id 
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
