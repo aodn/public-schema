@@ -14,7 +14,7 @@ schema:
     title: "Species common name"
     type: string
     constraints: {'required': True}
-  - name: tag_project
+  - name: tagging_project
     title: "Project name of the deployed transmitter"
     type: string
     constraints: {'required': True}
