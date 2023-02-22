@@ -7,7 +7,7 @@ CREATE VIEW animal_tracking_acoustic_qc_detection_map AS
         dfi.size,
         dfi.transmitter_id,
         dfi.species,
-        dfi.tag_project,
+        dfi.tagging_project,
         dfi.time_coverage_start,
         dfi.time_coverage_end,
         dfi.geom

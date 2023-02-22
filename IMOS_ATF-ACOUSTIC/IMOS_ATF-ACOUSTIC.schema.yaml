@@ -135,28 +135,20 @@ fields:
     name: measurement
   - type: integer
     name: FDA_QC
-    constraints: {'required': True}
   - type: integer
     name: Velocity_QC
-    constraints: {'required': True}
   - type: integer
     name: Distance_QC
-    constraints: {'required': True}
   - type: integer
     name: DetectionDistribution_QC
-    constraints: {'required': True}
   - type: integer
     name: DistanceRelease_QC
-    constraints: {'required': True}
   - type: integer
     name: ReleaseDate_QC
-    constraints: {'required': True}
   - type: integer
     name: ReleaseLocation_QC
-    constraints: {'required': True}
   - type: integer
     name: Detection_QC
-    constraints: {'required': True}
 licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
