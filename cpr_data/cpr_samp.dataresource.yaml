@@ -60,6 +60,14 @@ schema:
     title: "sample type code"
     type: string
     required: true
+  - name: GHRSST_6D_DEGC
+    title: "ghrsst_6d_degc"
+    type: number
+    required: false
+  - name: CHLOC3_MGM3
+    title: "chloc3_mgm3"
+    type: number
+    required: false    
   primaryKey: SAMPLE
 licenses:
 - name: CC-BY-4.0
