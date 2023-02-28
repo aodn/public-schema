@@ -5,26 +5,31 @@ on:
   pull_request:
     branches: [ master ]
 jobs:
-  Validate:
+  Validate-BGC-CPR:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        product:
-          - bgc_plankton
-          - bgc_combined
-          - bgc_lfish
-          - derived_indices
-          - cpr
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.6
+          python-version: 3.8
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r code/requirements.txt
-      - name: Validate data against schemas
-        run: code/validate.py $(grep ${{ matrix.product }} product_index.csv | cut -d, -f2)
+
+      - name: Get changed resource files
+        id: changed-files
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            bgc_data/*.dataresource.yaml
+            cpr_data/*.dataresource.yaml
+
+      - name: Validate data against changed schemas
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: code/validate.py ${{ steps.changed-files.outputs.all_changed_files }}
