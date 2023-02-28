@@ -13,8 +13,8 @@ CREATE MATERIALIZED VIEW cpr_phytoplankton_map AS
     extract(month from s.sampledatelocal)::int AS "Month_Local",
     extract(day from s.sampledatelocal)::int AS "Day_Local",
     to_char(sampledatelocal, 'HH24:MI') AS "Time_Local24hr",
-    NULL AS "SatSST_degC", --to be updated
-    NULL AS "SatChlaSurf_mgm3", --to be updated
+    ghrsst_6d_degc AS "SatSST_degC", 
+    chloc3_mgm3 AS "SatChlaSurf_mgm3",
     s.pci AS "PCI",
     v.sampvol_m3 AS "SampleVolume_m3",
     trip_code,
