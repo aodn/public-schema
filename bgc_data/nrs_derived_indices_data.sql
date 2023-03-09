@@ -199,7 +199,8 @@ chemistry_avg AS (
            avg(nitrite_umoll) FILTER ( WHERE nitrite_flag < 3 ) AS "Nitrite_umolL",
            avg(oxygen_umoll) FILTER ( WHERE oxygen_flag < 3 ) AS "Oxygen_umolL",
            avg(dic_umolkg) FILTER ( WHERE carbon_flag < 3 ) AS "DIC_umolkg",
-           avg(talkalinity_umolkg) FILTER ( WHERE alkalinity_flag < 3 ) AS "Alkalinity_umolkg"
+           avg(talkalinity_umolkg) FILTER ( WHERE alkalinity_flag < 3 ) AS "Alkalinity_umolkg",
+           avg(salinity_psu) FILTER ( WHERE salinity_flag < 3 ) AS "Salinity"
     FROM bgc_chemistry
     GROUP BY trip_code
 ),
@@ -267,6 +268,7 @@ SELECT m."Project",
        ch."Oxygen_umolL",
        ch."DIC_umolkg",
        ch."Alkalinity_umolkg",
+       ch."Salinity",
        pig."PigmentChla_mgm3",
 
        m.geom
