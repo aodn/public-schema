@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS detection_file_index
     tag_deployment_id TEXT PRIMARY KEY,
     transmitter_id TEXT,
     species TEXT,
+    species_scientific_name TEXT,
     tagging_project TEXT,
     time_coverage_start timestamp with time zone,
     time_coverage_end timestamp with time zone,
@@ -26,10 +27,11 @@ UPDATE index_tmp
 -- insert newly harvested record from index_tmp to the main table
 -- 1. if tag_deployment_id does not exist --> new entry, insert everything
 -- 2. if tag_deployment_id exists --> update record where needed
-insert into detection_file_index (tag_deployment_id, transmitter_id, species, tagging_project,
+insert into detection_file_index (tag_deployment_id, transmitter_id, species,
+	                          species_scientific_name, tagging_project,
                                   time_coverage_start, time_coverage_end, url, size, geom)
-SELECT tag_deployment_id, transmitter_id, species, tagging_project, time_coverage_start, time_coverage_end,
-       url, size, geom
+SELECT tag_deployment_id, transmitter_id, species, species_scientific_name, tagging_project, 
+       time_coverage_start, time_coverage_end, url, size, geom
 FROM index_tmp
 ON CONFLICT (tag_deployment_id)
 DO
