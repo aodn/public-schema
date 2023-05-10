@@ -28,7 +28,7 @@ fields:
     constraints: {'required': True}
   - type: integer
     name: WORMS_species_aphia_id
-    constraints: {'required': True}
+    constraints: {'required': False}
   - type: string
     name: animal_sex
     constraints: {'required': True}
