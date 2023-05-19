@@ -66,7 +66,6 @@ fields:
     name: purchasing_organisation
   - type: string
     name: receiver_status
-    constraints: {'required': True}
   - type: date
     format: any
     name: receiver_deployment_datetime
@@ -77,10 +76,8 @@ fields:
     constraints: {'required': True}
   - type: number
     name: receiver_recovery_longitude
-    constraints: {'required': True}
   - type: number
     name: receiver_recovery_latitude
-    constraints: {'required': True}
   - type: string
     name: transmitter_sensor_type
     constraints: {'required': True}
@@ -117,7 +114,6 @@ fields:
     constraints: {'required': True}
   - type: string
     name: active
-    constraints: {'required': True}
   - type: string
     name: placement
   - type: string
