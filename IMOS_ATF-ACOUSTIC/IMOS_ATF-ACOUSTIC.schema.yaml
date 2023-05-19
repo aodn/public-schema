@@ -67,12 +67,12 @@ fields:
   - type: string
     name: receiver_status
     constraints: {'required': True}
-  - type: datetime
-    format: "%Y-%m-%d %H:%M:%S"
+  - type: date
+    format: any
     name: receiver_deployment_datetime
     constraints: {'required': True}
-  - type: datetime
-    format: "%Y-%m-%d %H:%M:%S"
+  - type: date
+    format: any
     name: receiver_recovery_datetime
     constraints: {'required': True}
   - type: number
@@ -108,8 +108,8 @@ fields:
   - type: number
     name: transmitter_deployment_latitude
     constraints: {'required': True}
-  - type: datetime
-    format: "%Y-%m-%d %H:%M:%S"
+  - type: date
+    format: any
     name: transmitter_deployment_datetime
     constraints: {'required': True}
   - type: boolean
@@ -124,8 +124,8 @@ fields:
     name: transmitter_deployment_locality
   - type: string
     name: transmitter_deployment_comments
-  - type: datetime
-    format: "%Y-%m-%d %H:%M:%S"
+  - type: date
+    format: any 
     name: transmitter_recovery_datetime
   - type: number
     name: transmitter_recovery_latitude
