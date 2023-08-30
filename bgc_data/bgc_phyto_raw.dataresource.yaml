@@ -61,6 +61,7 @@ schema:
   primaryKey:
   - TRIP_CODE
   - TAXON_NAME
+  - METHODS
 licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
