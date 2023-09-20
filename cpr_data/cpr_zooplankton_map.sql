@@ -16,7 +16,7 @@ SELECT DISTINCT
     ghrsst_6d_degc AS "SatSST_degC",
     chloc3_mgm3 AS "SatChlaSurf_mgm3",
     s.pci AS "PCI",
-    s.biomass_mgm3 AS "BiomassIndex_mgm3 ",
+    s.biomass_mgm3 AS "BiomassIndex_mgm3",
     v.sampvol_m3 AS "SampleVolume_m3",
     trip_code,
     sample,
