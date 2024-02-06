@@ -13,25 +13,30 @@ schema:
   - name: TRIP_CODE
     title: "Identifier for trip"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: SAMPLE_CODE
     title: "Unique identifier for sample"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: SAMPLEDEPTH_M
     title: "Depth (m) that sample was obtained, or 'WC' if combined water-column sample"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: SAMPLEDATELOCAL
     title: "Date & time of sample in local time (formatted string)"
     type: datetime
     # format string *must* be specified using standard Python/C strptime specification
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
-    required: true
+    constraints:
+      required: true
   - name: REPLICATE
     type: integer
-    required: true
+    constraints:
+      required: true
   - name: PROCHLOROCOCCUS_CELLSML
     type: number
     required: false  
@@ -49,13 +54,16 @@ schema:
     required: false       
   - name: PROCHLOROCOCCUS_FLAG
     type: integer                               
-    required: true  
+    constraints:
+      required: true  
   - name: SYNECOCHOCCUS_FLAG
     type: integer                               
-    required: true  
+    constraints:
+      required: true  
   - name: PICOEUKARYOTES_FLAG
     type: integer                               
-    required: true  
+    constraints:
+      required: true  
   - name: BACTERIA_FLAG
     type: integer                               
     required: false

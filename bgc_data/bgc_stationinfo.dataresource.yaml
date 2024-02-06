@@ -13,24 +13,29 @@ schema:
   - name: PROJECTNAME
     title: "Source project name"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: STATIONCODE
     title: "Station code used to build trip code"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: STATIONNAME
     title: "Long station name"
     type: string
-    required: true
-    unique: true
+    constraints:
+      required: true
+      unique: true
   - name: NODE
     title: "Name of relevant IMOS node"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: STATECODE
     title: "State code for station location"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: LONGITUDE
     title: "Longitude of station in decimal degrees East"
     type: number
@@ -49,7 +54,8 @@ schema:
     # format string *must* be specified using standard Python/C strptime specification
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d"
-    required: true
+    constraints:
+      required: true
   - name: STATIONDEPTH_M
     title: "Depth of station location in metres"
     type: number
@@ -57,7 +63,8 @@ schema:
   - name: SAMPLINGEFFORT
     title: "Frequency of sampling at station"
     type: string
-    required: true     
+    constraints:
+      required: true     
   - name: IMCRA
     title: "The IMCRA bioregion"
     type: string

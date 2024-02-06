@@ -13,15 +13,18 @@ schema:
   - name: TRIP_CODE
     title: "Unique identifier for sample"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: TAXON_NAME
     title: "Scientific name of taxa"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: TAXON_GROUP
     title: "Functional group assigned to taxa"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: GENUS
     title: "Genus name of taxa"
     type: string
@@ -37,7 +40,8 @@ schema:
   - name: CELL_L
     title: "Abundance of the taxa in cells per litre of water"
     type: number
-    required: true
+    constraints:
+      required: true
   - name: BIOVOLUME_UM3L
     title: "Biovolume of the taxa in um3 per litre of water"
     type: number
@@ -45,11 +49,13 @@ schema:
   - name: CELL_COUNT
     title: "Number of the taxa counted in sample"
     type: number
-    required: true
+    constraints:
+      required: true
   - name: SAMPVOL_L
     title: "Volume of sample analysed"
     type: number
-    required: true
+    constraints:
+      required: true
   - name: METHODS
     title: Method code
     type: string
@@ -57,7 +63,8 @@ schema:
   - name: COMMENTS
     title: "Comments"
     type: string                               
-    required: true    
+    constraints:
+      required: true    
   primaryKey:
   - TRIP_CODE
   - TAXON_NAME

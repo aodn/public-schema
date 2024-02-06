@@ -13,19 +13,23 @@ schema:
   - name: TRIP_CODE
     title: "Unique identifier for sample"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: TAXON_NAME
     title: "Scientific name of taxa"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: COPEPOD
     title: "Taxonomic category assigned to taxa (e.g. COPEPOD, NON-COPEPOD, NOCTILUCA)"
     type: string
-    required: true     
+    constraints:
+      required: true     
   - name: TAXON_GROUP
     title: "Functional group assigned to taxa"
     type: string
-    required: true   
+    constraints:
+      required: true   
   - name: GENUS
     title: "Genus name of taxa"
     type: string
@@ -41,15 +45,18 @@ schema:
   - name: ZOOP_ABUNDANCE_M3
     title: "Abundance of the taxa in individuals per m3 of water"
     type: number                               
-    required: true
+    constraints:
+      required: true
   - name: TAXON_COUNT
     title: "Number of individuals counted in sample"
     type: number                               
-    required: true
+    constraints:
+      required: true
   - name: SAMPVOL_M3
     title: "Volume of sample analysed"
     type: number                               
-    required: true    
+    constraints:
+      required: true    
   primaryKey:
   - TRIP_CODE
   - TAXON_NAME

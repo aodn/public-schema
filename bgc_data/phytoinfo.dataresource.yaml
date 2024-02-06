@@ -14,12 +14,12 @@ schema:
     title: "Species code for taxa AphiaID Worms"
     type: integer
     required: false
-    unique: false
   - name: TAXON_NAME
     title: "Name of taxa"
     type: string
-    required: true
-    unique: true
+    constraints:
+      required: true
+      unique: true
   - name: BV_CELL
     type: number
     required: false

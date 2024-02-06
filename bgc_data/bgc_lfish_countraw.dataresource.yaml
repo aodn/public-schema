@@ -13,26 +13,28 @@ schema:
   - name: I_SAMPLE_ID
     title: "Sample identifier"
     type: integer
-    required: true
-    unique: false
+    constraints:
+      required: true
   - name: TRIP_CODE
     title: "Identifier for trip"
     type: string
-    required: true
-    unique: false
+    constraints:
+      required: true
   - name: SCIENTIFICNAME
     title: "Scientific name of taxa"
     type: string
-    required: true
-    unique: false
+    constraints:
+      required: true
   - name: SPCODE
     title: "Species code for taxa"
     type: integer
-    required: true   
+    constraints:
+      required: true   
   - name: TAXON_COUNT
     title: "Number of individuals"
     type: integer
-    required: true
+    constraints:
+      required: true
   - name: COMMENTS
     title: "Optional comments"
     type: string

@@ -13,23 +13,27 @@ schema:
   - name: I_SAMPLE_ID
     title: "Sample identifier"
     type: integer
-    required: true
-    unique: true
+    constraints:
+      required: true
+      unique: true
   - name: PROJECTNAME
     title: "Source project name"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: TRIP_CODE
     title: "Identifier for trip"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: SAMPLEDATELOCAL
     title: "Date & time of sample in local time (formatted string)"
     type: datetime
     # format string *must* be specified using standard Python/C strptime specification
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
-    required: true
+    constraints:
+      required: true
   - name: SAMPLEDATEUTC
     title: "Date & time of sample in local time (formatted string)"
     type: datetime
@@ -42,13 +46,15 @@ schema:
     type: number
     minimum: -90
     maximum: 90
-    required: true
+    constraints:
+      required: true
   - name: LONGITUDE
     title: "Longitude of station in decimal degrees East"
     type: number
     minimum: -180
     maximum: 180
-    required: true
+    constraints:
+      required: true
   - name: STATIONNAME
     title: "Station name"
     type: string
@@ -56,15 +62,18 @@ schema:
   - name: SAMPVOL_M3
     title: "Volume of sample analysed (cubic metres)"
     type: number
-    required: true
+    constraints:
+      required: true
   - name: VESSEL
     title: "Name of sampling vessel"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: TOWTYPE
     title: "Type of tow (e.g. 'Surface', 'Oblong')"
     type: string
-    required: true    
+    constraints:
+      required: true    
   - name: GEARDEPTH_M
     title: "Depth of gear (metres) - may be a depth range"
     type: string
@@ -72,7 +81,8 @@ schema:
   - name: GEARMESH_UM
     title: "Gear mesh descriptor"
     type: string
-    required: true    
+    constraints:
+      required: true    
   - name: DEPTH_M
     type: number
     required: false    
@@ -91,7 +101,8 @@ schema:
   - name: QC_FLAG
     title: "Quality control flag value"
     type: integer
-    required: true
+    constraints:
+      required: true
   - name: FLAG_COMMENT
     title: "Optional comments on QC_FLAG"
     type: string
