@@ -33,15 +33,12 @@ schema:
   - name: GENUS
     title: "Genus name of taxa"
     type: string
-    required: false  
   - name: SPECIES
     title: "Species name of taxa"
     type: string
-    required: false
   - name: SPCODE
     title: "Species code for taxa AphiaID Worms"
     type: integer
-    required: false
   - name: TAXON_COUNT
     title: "Number of the taxa counted"
     type: number

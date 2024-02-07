@@ -53,15 +53,12 @@ schema:
     # format string *must* be specified using standard Python/C strptime specification
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
-    required: false    
   - name: PCI
     title: "pci"
     type: number
-    required: false
   - name: BIOMASS_MGM3
     title: "biomass (mg/mg3)"
     type: number
-    required: false    
   - name: SAMPLETYPE
     title: "sample type code"
     type: string
@@ -70,11 +67,9 @@ schema:
   - name: GHRSST_6D_DEGC
     title: "IMOS L3S Day and Night gridded multiple-sensor multiple-swath Australian region HRPT AVHRR foundation SST"
     type: number
-    required: false
   - name: CHLOC3_MGM3
     title: "Chlorophyll concentration mgm3 OC3 algorithm available at: https://thredds.aodn.org.au/thredds/catalog/IMOS/SRS/OC/gridded/aqua/P1D/catalog.html"
     type: number
-    required: false    
   primaryKey: SAMPLE
 licenses:
 - name: CC-BY-4.0

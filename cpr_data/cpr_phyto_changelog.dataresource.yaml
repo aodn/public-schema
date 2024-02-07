@@ -24,15 +24,12 @@ schema:
   - name: PARENT_NAME
     title: "Taxon name which the species was known by before the start date"
     type: string
-    required: false
   - name: TRAINING
     title: "Training from which the taxon_name was first consistently used"
     type: string
-    required: false  
   - name: COMMENTS
     title: "Comments"
     type: string                               
-    required: false
   primaryKey:
   - TAXON_NAME
 licenses:
