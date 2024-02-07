@@ -30,137 +30,94 @@ schema:
       required: true
   - name: CPHL_C3
     type: number
-    required: false
   - name: MG_DVP
     type: number
-    required: false
   - name: CPHL_C2
     type: number
-    required: false
   - name: CPHL_C1
     type: number
-    required: false
   - name: CPHL_C1C2
     type: number
-    required: false
   - name: CPHLIDE_A
     type: number
-    required: false
   - name: PHIDE_A
     type: number
-    required: false
   - name: PERID
     type: number
-    required: false
   - name: PYROPHIDE_A
     type: number
-    required: false
   - name: BUT_FUCO
     type: number
-    required: false    
   - name: FUCO
     type: number
-    required: false
   - name: NEO
     type: number
-    required: false
   - name: KETO_HEX_FUCO
     type: number
-    required: false
   - name: PRAS
     type: number
-    required: false
   - name: VIOLA
     type: number
-    required: false    
   - name: HEX_FUCO
     type: number
-    required: false
   - name: ASTA
     type: number
-    required: false
   - name: DIADCHR
     type: number
-    required: false
   - name: DIADINO
     type: number
-    required: false
   - name: DINO
     type: number
-    required: false    
   - name: ANTH
     type: number
-    required: false
   - name: ALLO
     type: number
-    required: false
   - name: MYXO
     type: number
-    required: false
   - name: DIATO
     type: number
-    required: false
   - name: ZEA
     type: number
-    required: false     
   - name: LUT
     type: number
-    required: false
   - name: CANTHA
     type: number
-    required: false
   - name: GYRO
     type: number
-    required: false
   - name: DV_CPHL_B
     type: number
-    required: false
   - name: CPHL_B
     type: number
-    required: false   
   - name: DV_CPHL_B_AND_CPHL_B
     type: number
-    required: false
   - name: DV_CPHL_A
     type: number
-    required: false
   - name: CPHL_A
     type: number
-    required: false
   - name: DV_CPHL_A_AND_CPHL_A
     type: number
-    required: false
   - name: ECHIN
     type: number
-    required: false  
   - name: PHYTIN_B
     type: number
-    required: false
   - name: PHYTIN_A
     type: number
-    required: false
   - name: LYCO
     type: number
-    required: false
   - name: BETA_EPI_CAR
     type: number
-    required: false
   - name: BETA_BETA_CAR
     type: number
-    required: false    
   - name: ALPHA_BETA_CAR
     type: number
-    required: false
   - name: PYROPHYTIN_A
     type: number
-    required: false
   - name: PIGMENTS_FLAG
     type: integer
     constraints:
       required: true
   - name: PIGMENTS_COMMENTS
     type: string
-    required: false    
   primaryKey:
   - TRIP_CODE
   - SAMPLEDEPTH_M

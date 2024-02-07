@@ -60,7 +60,6 @@ schema:
     # format string *must* be specified using standard Python/C strptime specification
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
-    required: false
   - name: SAMPLEDATEUTC
     title: "Date & time of sample in UTC time (formatted string)"
     type: datetime
@@ -72,19 +71,15 @@ schema:
   - name: BIOMASS_MGM3
     title: Biomass in mg per m3 for Trip
     type: number
-    required: false
   - name: ASHFREEBIOMASS_MGM3
     title: Ash Free Biomass in mg per m3 for Trip
     type: number
-    required: false    
   - name: SECCHI_M
     title: Secchi depth in m for Trip
     type: number
-    required: false    
   - name: SAMPLETYPE
     title: Code for which analysis is available for that segment
     type: string
-    required: false
   primaryKey: TRIP_CODE
 licenses:
 - name: CC-BY-4.0

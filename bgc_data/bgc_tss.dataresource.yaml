@@ -30,13 +30,10 @@ schema:
       required: true
   - name: TSS_MGL
     type: number
-    required: false  
   - name: INORGANICFRACTION_MGL
     type: number                               
-    required: false  
   - name: ORGANICFRACTION_MGL
     type: number                               
-    required: false 
   - name: TSS_FLAG
     type: integer                               
     constraints:

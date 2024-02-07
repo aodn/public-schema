@@ -33,15 +33,12 @@ schema:
   - name: GENUS
     title: "Genus name of taxa"
     type: string
-    required: false
   - name: SPECIES
     title: "Species name of taxa"
     type: string
-    required: false 
   - name: SPCODE
     title: "Species code for taxa AphiaID Worms"
     type: string
-    required: false     
   - name: ZOOP_ABUNDANCE_M3
     title: "Abundance of the taxa in individuals per m3 of water"
     type: number                               

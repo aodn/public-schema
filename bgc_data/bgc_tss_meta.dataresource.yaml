@@ -35,23 +35,18 @@ schema:
       required: true
   - name: TSS_MGL
     type: number
-    required: false  
   - name: INORGANICFRACTION_MGL
     type: number                               
-    required: false  
   - name: ORGANICFRACTION_MGL
     type: number                               
-    required: false 
   - name: TSS_FLAG
     type: integer                               
     constraints:
       required: true
   - name: TSS_COMMENTS
     type: string                               
-    required: false
   - name: BLANKADJUSTAVAILABLE
     type: string                               
-    required: false      
   primaryKey:
   - TRIP_CODE
   - SAMPLEDEPTH_M

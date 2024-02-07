@@ -40,7 +40,6 @@ schema:
     # format string *must* be specified using standard Python/C strptime specification
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
-    required: false    
   - name: LATITUDE
     title: "Latitude of station in decimal degrees North"
     type: number
@@ -58,7 +57,6 @@ schema:
   - name: STATIONNAME
     title: "Station name"
     type: string
-    required: false
   - name: SAMPVOL_M3
     title: "Volume of sample analysed (cubic metres)"
     type: number
@@ -77,7 +75,6 @@ schema:
   - name: GEARDEPTH_M
     title: "Depth of gear (metres) - may be a depth range"
     type: string
-    required: false    
   - name: GEARMESH_UM
     title: "Gear mesh descriptor"
     type: string
@@ -85,19 +82,15 @@ schema:
       required: true    
   - name: DEPTH_M
     type: number
-    required: false    
   - name: TEMPERATURE_C
     title: "Temperature (deg C)"
     type: number
-    required: false    
   - name: SALINITY_PSU
     title: "Salinity"
     type: number
-    required: false    
   - name: COMMENTS
     title: "Comments (optional)"
     type: string
-    required: false
   - name: QC_FLAG
     title: "Quality control flag value"
     type: integer
@@ -106,7 +99,6 @@ schema:
   - name: FLAG_COMMENT
     title: "Optional comments on QC_FLAG"
     type: string
-    required: false  
   primaryKey: I_SAMPLE_ID
 licenses:
 - name: CC-BY-4.0

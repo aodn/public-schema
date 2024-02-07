@@ -31,7 +31,6 @@ schema:
   - name: SALINITY_PSU
     title: "Salinity PSU value"
     type: number
-    required: false
   - name: SALINITY_FLAG
     title: "FLAG value"
     type: integer
@@ -40,7 +39,6 @@ schema:
   - name: SILICATE_UMOLL
     title: "Silicate umoll"
     type: number
-    required: false
   - name: SILICATE_FLAG
     title: "FLAG value"
     type: integer
@@ -48,7 +46,6 @@ schema:
       required: true
   - name: NITRATE_UMOLL
     type: number
-    required: false
   - name: NITRATE_FLAG
     title: "FLAG value"
     type: integer
@@ -56,7 +53,6 @@ schema:
       required: true
   - name: PHOSPHATE_UMOLL
     type: number
-    required: false
   - name: PHOSPHATE_FLAG
     title: "FLAG value"
     type: integer
@@ -64,7 +60,6 @@ schema:
       required: true
   - name: AMMONIUM_UMOLL
     type: number
-    required: false
   - name: AMMONIUM_FLAG
     title: "FLAG value"
     type: integer
@@ -72,7 +67,6 @@ schema:
       required: true
   - name: NITRITE_UMOLL
     type: number
-    required: false
   - name: NITRITE_FLAG
     title: "FLAG value"
     type: integer
@@ -80,7 +74,6 @@ schema:
       required: true
   - name: DIC_UMOLKG
     type: number
-    required: false
   - name: CARBON_FLAG
     title: "FLAG value"
     type: integer
@@ -88,7 +81,6 @@ schema:
       required: true
   - name: TALKALINITY_UMOLKG
     type: number
-    required: false
   - name: ALKALINITY_FLAG
     title: "FLAG value"
     type: integer
@@ -96,7 +88,6 @@ schema:
       required: true    
   - name: OXYGEN_UMOLL
     type: number
-    required: false
   - name: OXYGEN_FLAG
     title: "FLAG value"
     type: integer
@@ -105,7 +96,6 @@ schema:
   - name: MICROBIOMESAMPLE_ID
     title: "Microbiomesample_id"
     type: string
-    required: false
   primaryKey:
   - TRIP_CODE
   - SAMPLEDEPTH_M

@@ -41,11 +41,9 @@ schema:
     type: number
     minimum: -180
     maximum: 180
-    required: false
   - name: LATITUDE
     title: "Latitude of station in decimal degrees North"
     type: number
-    required: false
     minimum: -90
     maximum: 90
   - name: STATIONSTARTDATE
@@ -59,7 +57,6 @@ schema:
   - name: STATIONDEPTH_M
     title: "Depth of station location in metres"
     type: number
-    required: false
   - name: SAMPLINGEFFORT
     title: "Frequency of sampling at station"
     type: string
@@ -68,15 +65,12 @@ schema:
   - name: IMCRA
     title: "The IMCRA bioregion"
     type: string
-    required: false
   - name: IMCRA_PB
     title: "The larger IMCRA bioregion"
     type: string
-    required: false
   - name: MANAGEMENTREGION
     title: "The bioregion as defined by Dept of Environment"
     type: string
-    required: false
   primaryKey: STATIONCODE
 licenses:
 - name: CC-BY-4.0

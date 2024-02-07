@@ -38,7 +38,6 @@ schema:
   - name: COMMENTS
     title: "Optional comments"
     type: string
-    required: false
   primaryKey:
   - I_SAMPLE_ID
   - SCIENTIFICNAME
