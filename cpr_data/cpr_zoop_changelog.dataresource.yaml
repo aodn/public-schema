@@ -13,12 +13,14 @@ schema:
   - name: TAXON_NAME
     title: "Taxonomic name that the species is currently identified as (post startdate)"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: STARTDATE
     title: "Date from which the taxon_name was first consistently used (formatted string: YYYY-MM-DD)"
     type: date
     format: "%Y-%m-%d"
-    required: true    
+    constraints:
+      required: true    
   - name: PARENT_NAME
     title: "Taxon name which the species was known by before the start date"
     type: string
