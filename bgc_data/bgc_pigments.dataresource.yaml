@@ -15,7 +15,6 @@ schema:
     type: string
     constraints:
       required: true
-      unique: true
   - name: SAMPLEDATELOCAL
     title: "Date & time of sample in local time (formatted string)"
     type: datetime
