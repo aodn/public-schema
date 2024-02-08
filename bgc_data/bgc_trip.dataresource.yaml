@@ -47,13 +47,9 @@ schema:
   - name: ZOOPSAMPLEDEPTH_M
     title: "Depth (m) that zooplankton sample was obtained"
     type: number
-    constraints:
-      required: true
   - name: PHYTOSAMPLEDEPTH_M
     title: "Depth (m) that phytoplankton sample was obtained"
     type: number
-    constraints:
-      required: true    
   - name: SAMPLEDATELOCAL
     title: "Date & time of sample in local time (formatted string)"
     type: datetime

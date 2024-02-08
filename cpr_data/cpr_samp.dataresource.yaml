@@ -62,8 +62,6 @@ schema:
   - name: SAMPLETYPE
     title: "sample type code"
     type: string
-    constraints:
-      required: true
   - name: GHRSST_6D_DEGC
     title: "IMOS L3S Day and Night gridded multiple-sensor multiple-swath Australian region HRPT AVHRR foundation SST"
     type: number

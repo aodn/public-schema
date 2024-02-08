@@ -40,16 +40,10 @@ schema:
     type: number                               
   - name: PROCHLOROCOCCUS_FLAG
     type: integer                               
-    constraints:
-      required: true  
   - name: SYNECOCHOCCUS_FLAG
     type: integer                               
-    constraints:
-      required: true  
   - name: PICOEUKARYOTES_FLAG
     type: integer                               
-    constraints:
-      required: true  
   - name: BACTERIA_FLAG
     type: integer                               
   - name: VIRUS_FLAG
