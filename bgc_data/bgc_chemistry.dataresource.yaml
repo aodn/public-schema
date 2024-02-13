@@ -13,87 +13,89 @@ schema:
   - name: TRIP_CODE
     title: "Identifier for trip"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: SAMPLEDEPTH_M
     title: "Depth (m) that sample was obtained"
     type: number
-    required: true
+    constraints:
+      required: true
   - name: SAMPLEDATELOCAL
     title: "Date & time of sample in local time (formatted string)"
     type: datetime
     # format string *must* be specified using standard Python/C strptime specification
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
-    required: true
+    constraints:
+      required: true
   - name: SALINITY_PSU
     title: "Salinity PSU value"
     type: number
-    required: false
   - name: SALINITY_FLAG
     title: "FLAG value"
     type: integer
-    required: true
+    constraints:
+      required: true
   - name: SILICATE_UMOLL
     title: "Silicate umoll"
     type: number
-    required: false
   - name: SILICATE_FLAG
     title: "FLAG value"
     type: integer
-    required: true
+    constraints:
+      required: true
   - name: NITRATE_UMOLL
     type: number
-    required: false
   - name: NITRATE_FLAG
     title: "FLAG value"
     type: integer
-    required: true
+    constraints:
+      required: true
   - name: PHOSPHATE_UMOLL
     type: number
-    required: false
   - name: PHOSPHATE_FLAG
     title: "FLAG value"
     type: integer
-    required: true
+    constraints:
+      required: true
   - name: AMMONIUM_UMOLL
     type: number
-    required: false
   - name: AMMONIUM_FLAG
     title: "FLAG value"
     type: integer
-    required: true
+    constraints:
+      required: true
   - name: NITRITE_UMOLL
     type: number
-    required: false
   - name: NITRITE_FLAG
     title: "FLAG value"
     type: integer
-    required: true
+    constraints:
+      required: true
   - name: DIC_UMOLKG
     type: number
-    required: false
   - name: CARBON_FLAG
     title: "FLAG value"
     type: integer
-    required: true
+    constraints:
+      required: true
   - name: TALKALINITY_UMOLKG
     type: number
-    required: false
   - name: ALKALINITY_FLAG
     title: "FLAG value"
     type: integer
-    required: true    
+    constraints:
+      required: true    
   - name: OXYGEN_UMOLL
     type: number
-    required: false
   - name: OXYGEN_FLAG
     title: "FLAG value"
     type: integer
-    required: true
+    constraints:
+      required: true
   - name: MICROBIOMESAMPLE_ID
     title: "Microbiomesample_id"
     type: string
-    required: false
   primaryKey:
   - TRIP_CODE
   - SAMPLEDEPTH_M

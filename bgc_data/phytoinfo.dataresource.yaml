@@ -13,28 +13,22 @@ schema:
   - name: SPCODE
     title: "Species code for taxa AphiaID Worms"
     type: integer
-    required: false
-    unique: false
   - name: TAXON_NAME
     title: "Name of taxa"
     type: string
-    required: true
-    unique: true
+    constraints:
+      required: true
+      unique: true
   - name: BV_CELL
     type: number
-    required: false
   - name: FUNCTIONALGROUP
     type: string
-    required: false    
   - name: MONT2001PGN_CELL
     type: number
-    required: false
   - name: PGC_CELL
     type: number
-    required: false
   - name: TROPHY
     type: string
-    required: false    
   primaryKey: TAXON_NAME
 licenses:
 - name: CC-BY-4.0

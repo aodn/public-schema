@@ -13,43 +13,45 @@ schema:
   - name: SAMPLE
     title: "Unique identifier for sample"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: TAXON_NAME
     title: "Scientific name of taxa"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: TAXON_GROUP
     title: "Functional group assigned to taxa"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: GENUS
     title: "Genus name of taxa"
     type: string
-    required: false  
   - name: SPECIES
     title: "Species name of taxa"
     type: string
-    required: false
   - name: SPCODE
     title: "Species code for taxa AphiaID Worms"
     type: integer
-    required: false
   - name: PHYTO_ABUNDANCE_M3
     title: "Abundance of the taxa in cells per litre of water"
     type: number
-    required: true
+    constraints:
+      required: true
   - name: BIOVOL_UM3M3
     title: "Biovolume of the taxa in um3 per cubic metre of water"
     type: number
-    required: false
   - name: FOV_COUNT
     title: "Number of the taxa counted"
     type: number
-    required: true
+    constraints:
+      required: true
   - name: SAMPVOL_M3
     title: "Volume of sample analysed (cubic metres)"
     type: number
-    required: true   
+    constraints:
+      required: true   
   primaryKey:
   - SAMPLE
   - TAXON_NAME

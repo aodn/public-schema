@@ -13,34 +13,26 @@ schema:
   - name: TAXON_NAME
     title: "Name of taxa"
     type: string
-    required: true
-    unique: true
+    constraints:
+      required: true
+      unique: true
   - name: SUBGENERA
     type: string
-    required: false     
   - name: FUNCTIONALGROUP
     type: string
-    required: false   
   - name: GENUS
     type: string
-    required: false 
   - name: SPECIES
     type: string
-    required: false     
   - name: SPCODE
     title: "Species code for taxa AphiaID Worms"
     type: integer
-    required: false
-    unique: false
   - name: LENGTH_MM
     type: number
-    required: false 
   - name: SIZEREFERENCE
     type: string
-    required: false     
   - name: DIET
     type: string
-    required: false    
   primaryKey: TAXON_NAME
 licenses:
 - name: CC-BY-4.0

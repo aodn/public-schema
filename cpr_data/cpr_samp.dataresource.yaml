@@ -13,19 +13,23 @@ schema:
   - name: TRIP_CODE
     title: "Unique identifier for trip"
     type: string
-    required: true
+    constraints:
+      required: true
   - name: SAMPLE
     title: "Unique sample identifier"
     type: string
-    required: true  
+    constraints:
+      required: true  
   - name: REGION
     title: "Region identifier"
     type: string
-    required: true      
+    constraints:
+      required: true      
   - name: LATITUDE
     title: "Latitude of sampling in decimal degrees North"
     type: number
-    required: true
+    constraints:
+      required: true
     minimum: -90
     maximum: 90    
   - name: LONGITUDE
@@ -33,41 +37,37 @@ schema:
     type: number
     minimum: -180
     maximum: 180
-    required: true     
+    constraints:
+      required: true     
   - name: SAMPLEDATEUTC
     title: "Date & time of sample in UTC time (formatted string)"
     type: datetime
     # format string *must* be specified using standard Python/C strptime specification
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
-    required: true
+    constraints:
+      required: true
   - name: SAMPLEDATELOCAL
     title: "Date & time of sample in local time (formatted string)"
     type: datetime
     # format string *must* be specified using standard Python/C strptime specification
     # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format: "%Y-%m-%d %H:%M:%S"
-    required: false    
   - name: PCI
     title: "pci"
     type: number
-    required: false
   - name: BIOMASS_MGM3
     title: "biomass (mg/mg3)"
     type: number
-    required: false    
   - name: SAMPLETYPE
     title: "sample type code"
     type: string
-    required: true
   - name: GHRSST_6D_DEGC
     title: "IMOS L3S Day and Night gridded multiple-sensor multiple-swath Australian region HRPT AVHRR foundation SST"
     type: number
-    required: false
   - name: CHLOC3_MGM3
     title: "Chlorophyll concentration mgm3 OC3 algorithm available at: https://thredds.aodn.org.au/thredds/catalog/IMOS/SRS/OC/gridded/aqua/P1D/catalog.html"
     type: number
-    required: false    
   primaryKey: SAMPLE
 licenses:
 - name: CC-BY-4.0
