@@ -45,21 +45,15 @@ schema:
   - name: CELL_COUNT
     title: "Number of the taxa counted in sample"
     type: number
-    constraints:
-      required: true
   - name: SAMPVOL_L
     title: "Volume of sample analysed"
     type: number
-    constraints:
-      required: true
   - name: METHODS
     title: Method code
     type: string
   - name: COMMENTS
     title: "Comments"
     type: string                               
-    constraints:
-      required: true    
   primaryKey:
   - TRIP_CODE
   - TAXON_NAME
