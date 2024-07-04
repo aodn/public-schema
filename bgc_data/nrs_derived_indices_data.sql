@@ -103,9 +103,9 @@ phyto_by_trip AS (
 phyto_species_by_trip_species AS (
     SELECT trip_code,
            pf.genus_species,
-           sum(pf.cell_l / pt.total_species_abundance) AS species_relative_abundance,
-           sum(pf.cell_l / pt.total_diatom_abundance) FILTER ( WHERE is_diatom ) AS diatom_relative_abundance,
-           sum(pf.cell_l / pt.total_dino_abundance) FILTER ( WHERE taxon_group = 'Dinoflagellate' )
+           sum(pf.cell_l / nullif(pt.total_species_abundance, 0)) AS species_relative_abundance,
+           sum(pf.cell_l / nullif(pt.total_diatom_abundance, 0)) FILTER ( WHERE is_diatom ) AS diatom_relative_abundance,
+           sum(pf.cell_l / nullif(pt.total_dino_abundance, 0)) FILTER ( WHERE taxon_group = 'Dinoflagellate' )
                AS dino_relative_abundance
     FROM phyto_filtered pf LEFT JOIN phyto_by_trip pt USING (trip_code)
     WHERE genus_species IS NOT NULL
@@ -229,17 +229,17 @@ SELECT m."Project",
        -- zooplankton indices
        zt."ZoopAbundance_m3",
        ct."CopeAbundance_m3",
-       ct."CopeSumAbundanceLength" / ct."CopeAbundance_m3" AS "AvgTotalLengthCopepod_mm",
-       ct."CO" / (ct."CO" + ct."CC") AS "OmnivoreCarnivoreCopepodRatio",
+       ct."CopeSumAbundanceLength" / nullif(ct."CopeAbundance_m3", 0) AS "AvgTotalLengthCopepod_mm",
+       ct."CO" / nullif((ct."CO" + ct."CC"),0) AS "OmnivoreCarnivoreCopepodRatio",
        cst."NoCopepodSpecies_Sample",
-       ln(cst.total_taxon_count) - (cst.total_n_logn/cst.total_taxon_count) AS "ShannonCopepodDiversity",
-       (ln(cst.total_taxon_count) - (cst.total_n_logn/cst.total_taxon_count)) /
+       ln(cst.total_taxon_count) - (cst.total_n_logn/nullif(cst.total_taxon_count, 0)) AS "ShannonCopepodDiversity",
+       (ln(cst.total_taxon_count) - (cst.total_n_logn/nullif(cst.total_taxon_count, 0))) /
            nullif(ln(nullif(cst."NoCopepodSpecies_Sample", 0)), 0) AS "CopepodEvenness",
 
        -- phytoplankton indices
        pt."PhytoBiomassCarbon_pgL",
-       pt."PhytoAbundance_CellsL", 
-       pt.diatom_l / (pt.diatom_l + pt.dino_l) AS "DiatomDinoflagellateRatio",
+       pt."PhytoAbundance_CellsL",
+       pt.diatom_l / nullif((pt.diatom_l + pt.dino_l), 0) AS "DiatomDinoflagellateRatio",
        pt."AvgCellVol_um3",
        pt."NoPhytoSpecies_Sample",
        pst."ShannonPhytoDiversity",
@@ -286,3 +286,4 @@ FROM bgc_trip_metadata m LEFT JOIN zoop_by_trip zt USING (trip_code)
                          LEFT JOIN pigments_avg pig USING (trip_code)
 WHERE m."Project" = 'NRS'
 ;
+
