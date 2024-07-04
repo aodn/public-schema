@@ -103,9 +103,9 @@ phyto_by_trip AS (
 phyto_species_by_trip_species AS (
     SELECT trip_code,
            pf.genus_species,
-           sum(pf.cell_l / pt.total_species_abundance) AS species_relative_abundance,
-           sum(pf.cell_l / pt.total_diatom_abundance) FILTER ( WHERE is_diatom ) AS diatom_relative_abundance,
-           sum(pf.cell_l / pt.total_dino_abundance) FILTER ( WHERE taxon_group = 'Dinoflagellate' )
+           sum(pf.cell_l / nullif(pt.total_species_abundance, 0)) AS species_relative_abundance,
+           sum(pf.cell_l / nullif(pt.total_diatom_abundance, 0)) FILTER ( WHERE is_diatom ) AS diatom_relative_abundance,
+           sum(pf.cell_l / nullif(pt.total_dino_abundance, 0)) FILTER ( WHERE taxon_group = 'Dinoflagellate' )
                AS dino_relative_abundance
     FROM phyto_filtered pf LEFT JOIN phyto_by_trip pt USING (trip_code)
     WHERE genus_species IS NOT NULL
