@@ -15,7 +15,7 @@ fields:
     name: transmitter_deployment_id
     constraints: {'required': True}
   - type: string
-    name: tagging_project_name
+    name: tag_deployment_project_name
     constraints: {'required': True}
   - type: string
     name: species_common_name
@@ -78,6 +78,9 @@ fields:
     name: receiver_recovery_longitude
   - type: number
     name: receiver_recovery_latitude
+  - type: string
+    name: tag_device_project_name
+    constraints: {'required': True}
   - type: string
     name: transmitter_sensor_type
     constraints: {'required': True}
