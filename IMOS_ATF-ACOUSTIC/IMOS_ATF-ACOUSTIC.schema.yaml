@@ -97,7 +97,6 @@ fields:
     constraints: {'required': True}
   - type: string
     name: transmitter_serial_number
-    constraints: {'required': True}
   - type: integer
     name: transmitter_estimated_battery_life
   - type: string
