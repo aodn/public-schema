@@ -11,7 +11,19 @@ WITH nrs_trips AS (
       FROM bgc_trip
       WHERE projectname = 'NRS'
 ),
---calculate the absolute time difference 
+--transform manually site code for VBM station
+dp_transformed AS (
+      SELECT
+          file_id,
+          time_coverage_start,
+          site_code,
+          CASE
+              WHEN site_code LIKE 'VB%' THEN 'NRSVBM'
+              ELSE site_code
+          END AS adjusted_site_code
+      FROM anmn_nrs_ctd_profiles.deployments
+),
+--calculate the absolute time difference
 --match the site code and time
 ctd_profiles AS (
       SELECT
@@ -21,10 +33,10 @@ ctd_profiles AS (
          GREATEST((nt.sampledateutc - dp.time_coverage_start AT TIME ZONE 'UTC'),
                   -(nt.sampledateutc - dp.time_coverage_start AT TIME ZONE 'UTC'))
              AS absolute_time_difference
-      FROM nrs_trips nt INNER JOIN anmn_nrs_ctd_profiles.deployments dp
-         ON dp.time_coverage_start AT TIME ZONE 'UTC' BETWEEN (nt.sampledateutc - INTERVAL '1' DAY) AND
-                                                              (nt.sampledateutc + INTERVAL '1' DAY)
-         AND dp.site_code = nt.site_code
+      FROM nrs_trips nt INNER JOIN dp_transformed dp
+         ON dp.adjusted_site_code = nt.site_code
+         AND dp.time_coverage_start AT TIME ZONE 'UTC' BETWEEN (nt.sampledateutc - INTERVAL '1' DAY) AND
+                                                               (nt.sampledateutc + INTERVAL '1' DAY)
 ),
 --for each trip, pick the cast that is closest in time
 matched_profiles AS (
@@ -50,3 +62,4 @@ matched_profiles AS (
       FROM bgc_trip_metadata bt
          INNER JOIN matched_profiles mp USING (trip_code)
 ;
+
