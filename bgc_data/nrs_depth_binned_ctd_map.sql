@@ -18,7 +18,7 @@ dp_transformed AS (
           time_coverage_start,
           site_code,
           CASE
-              WHEN site_code LIKE 'VB%' THEN 'NRSVBM'
+              WHEN site_code = 'VB1M00' THEN 'NRSVBM'
               ELSE site_code
           END AS adjusted_site_code
       FROM anmn_nrs_ctd_profiles.deployments
