@@ -7,8 +7,12 @@ WITH nrs_trips AS (
       SELECT
          trip_code,
          sampledateutc,
-         CONCAT(projectname, stationcode) AS site_code
-      FROM bgc_trip
+         -- Manually adjust site code for VBM station
+         CASE
+             WHEN stationcode = 'VBM' THEN 'VBM100'
+             ELSE CONCAT(projectname, stationcode)
+         END AS site_code
+      FROM imos_bgc_db.bgc_trip
       WHERE projectname = 'NRS'
 ),
 --calculate the absolute time difference 
