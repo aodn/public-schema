@@ -53,8 +53,8 @@ schema:
       type: number
       constraints: {'required': true}
     - name: transmitter_deployment_datetime
-      type: datetime
-      format: "%Y-%m-%d %H:%M:%SZ"
+      type: datetime 
+      format: "%Y-%m-%d %H:%M:%S"
       constraints: {'required': true}
     - name: transmitter_sensor_type
       type: string
@@ -87,11 +87,11 @@ schema:
       constraints: {'required': true}
     - name: receiver_deployment_datetime_UTC
       type: datetime
-      format: "%Y-%m-%d %H:%M:%SZ"
+      format: "%Y-%m-%d %H:%M:%S"
       constraints: {'required': true}
     - name: receiver_recovery_datetime_UTC
       type: datetime
-      format: "%Y-%m-%d %H:%M:%SZ"
+      format: "%Y-%m-%d %H:%M:%S"
       constraints: {'required': true}
     - name: receiver_deployment_longitude
       type: number
