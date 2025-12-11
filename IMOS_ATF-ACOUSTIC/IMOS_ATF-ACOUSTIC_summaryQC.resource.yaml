@@ -52,9 +52,11 @@ schema:
     - name: transmitter_deployment_latitude
       type: number
       constraints: {'required': true}
-    - name: transmitter_deployment_datetime
-      type: datetime 
-      format: "%Y-%m-%d %H:%M:%S"
+    - name: transmitter_deployment_datetime_UTC
+      type: string
+      constraints:
+        required: true
+        pattern: "^(\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?)$"
       constraints: {'required': true}
     - name: transmitter_sensor_type
       type: string
@@ -86,13 +88,15 @@ schema:
       type: integer
       constraints: {'required': true}
     - name: receiver_deployment_datetime_UTC
-      type: datetime
-      format: "%Y-%m-%d %H:%M:%S"
-      constraints: {'required': true}
+      type: string
+      constraints:
+        required: true
+        pattern: "^(\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?)$"
     - name: receiver_recovery_datetime_UTC
-      type: datetime
-      format: "%Y-%m-%d %H:%M:%S"
-      constraints: {'required': true}
+      type: string
+      constraints:
+        required: true
+        pattern: "^(\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?)$"
     - name: receiver_deployment_longitude
       type: number
       constraints: {'required': true}
