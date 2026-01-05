@@ -1,4 +1,4 @@
-name: imos_atf-acoustic_schema
+name: imos_atf-acoustic_summary_schema
 type: table
 path: __REPLACE_ME__ 
 scheme: file
