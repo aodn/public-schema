@@ -1,0 +1,190 @@
+name: imos_atf-acoustic_tagid_schema
+type: table
+path: __REPLACE_ME__
+scheme: file
+format: csv
+mediatype: text/csv
+encoding: utf-8
+dialect:
+  header: true
+  delimiter: ","
+  quoteChar: '"'
+  skipInitialSpace: false
+  lineTerminator: "\n"
+  caseSensitiveHeader: false
+schema:
+  missingValues:
+    - ''
+    - ' '
+    - 'NA'
+  fields:
+    - name: transmitter_id
+      type: string
+      constraints:
+        required: true
+        pattern: '^(?:A(?:69|180)-\d{4}-\d{1,5})' 
+    - name: tag_id
+      type: integer
+      constraints:
+        required: true
+    - name: transmitter_deployment_id
+      type: integer
+      constraints:
+        required: true
+    - name: tag_deployment_project_name
+      type: string
+      constraints:
+        required: true
+    - name: species_common_name
+      type: string
+      constraints:
+        required: true
+    - name: species_scientific_name
+      type: string
+      constraints:
+        required: true
+    - name: CAAB_species_id
+      type: integer
+      constraints:
+        required: true
+    - name: WORMS_species_aphia_id
+      type: integer 
+    - name: animal_sex
+      type: string
+      constraints:
+        required: true
+    - name: detection_datetime
+      type: datetime
+      format: "%Y-%m-%d %H:%M:%SZ"
+      constraints:
+        required: true
+    - name: receiver_deployment_longitude
+      type: number
+      constraints:
+        required: true
+    - name: receiver_deployment_latitude
+      type: number
+      constraints:
+        required: true
+    - name: receiver_project_name
+      type: string
+      constraints:
+        required: true
+    - name: installation_name
+      type: string
+      constraints:
+        required: true
+    - name: station_name
+      type: string
+      constraints:
+        required: true
+    - name: receiver_name
+      type: string
+      constraints:
+        required: true
+    - name: receiver_id
+      type: integer
+      constraints:
+        required: true
+    - name: receiver_deployment_id
+      type: integer
+      constraints:
+        required: true
+    - name: receiver_depth
+      type: number
+    - name: purchasing_organisation
+      type: string
+    - name: receiver_status
+      type: string
+    - name: receiver_deployment_datetime
+      type: string
+      constraints:
+        required: true
+        pattern: "^(\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?)$"
+    - name: receiver_recovery_datetime
+      type: string
+      constraints:
+        required: true
+        pattern: "^(\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?)$"
+    - name: receiver_recovery_longitude
+      type: number
+    - name: receiver_recovery_latitude
+      type: number
+    - name: tag_device_project_name
+      type: string
+      constraints:
+        required: true
+    - name: transmitter_sensor_type
+      type: string
+      constraints:
+        required: true
+    - name: transmitter_sensor_raw_value
+      type: number
+    - name: transmitter_sensor_unit
+      type: string
+    - name: transmitter_sensor_slope
+      type: number
+    - name: transmitter_sensor_intercept
+      type: number
+    - name: transmitter_type
+      type: string
+      constraints:
+        required: true
+    - name: transmitter_serial_number
+      type: string
+    - name: transmitter_estimated_battery_life
+      type: integer
+    - name: transmitter_status
+      type: string
+    - name: transmitter_deployment_longitude
+      type: number
+      constraints:
+        required: true
+    - name: transmitter_deployment_latitude
+      type: number
+      constraints:
+        required: true
+    - name: transmitter_deployment_datetime
+      type: string
+      constraints:
+        required: true
+        pattern: "^(\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?)$"
+    - name: transmitter_dual_sensor
+      type: boolean
+      constraints:
+        required: true
+    - name: active
+      type: string
+    - name: placement
+      type: string
+    - name: transmitter_deployment_locality
+      type: string
+    - name: transmitter_deployment_comments
+      type: string
+    - name: transmitter_recovery_datetime
+      type: string
+      constraints:
+        required: false
+        pattern: "^(\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?)$"
+    - name: transmitter_recovery_latitude
+      type: number
+    - name: transmitter_recovery_longitude
+      type: number
+    - name: measurement
+      type: string
+    - name: FDA_QC
+      type: integer
+    - name: Velocity_QC
+      type: integer
+    - name: Distance_QC
+      type: integer
+    - name: DetectionDistribution_QC
+      type: integer
+    - name: DistanceRelease_QC
+      type: integer
+    - name: ReleaseDate_QC
+      type: integer
+    - name: ReleaseLocation_QC
+      type: integer
+    - name: Detection_QC
+      type: integer
