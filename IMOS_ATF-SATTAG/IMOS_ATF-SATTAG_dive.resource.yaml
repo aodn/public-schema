@@ -1,0 +1,312 @@
+name: imos_atf-sattag_dive_schema
+type: table
+path: dive_tu123_nrt.csv
+scheme: file
+format: csv
+mediatype: text/csv
+encoding: utf-8
+dialect:
+  header: true
+  delimiter: ","
+  quoteChar: '"'
+  skipInitialSpace: false
+  lineTerminator: "\n"
+  caseSensitiveHeader: false
+schema:
+  missingValues:
+    - ''
+    - ' '
+    - 'NA'
+  fields:
+    - name: ref
+      type: string
+      constraints:
+        required: true
+    - name: ptt
+      type: integer
+      constraints:
+        required: true
+    - name: cnt
+      type: integer
+      constraints:
+        required: true
+    - name: de_date
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: true
+    - name: surf_dur
+      type: integer
+      constraints:
+        required: true
+    - name: dive_dur
+      type: integer
+      constraints:
+        required: true
+    - name: max_dep
+      type: number
+      constraints:
+        required: true
+        minimum: 0
+    - name: d1
+      type: integer
+    - name: d2
+      type: integer
+    - name: d3
+      type: integer
+    - name: d4
+      type: integer
+    - name: v1
+      type: integer
+    - name: v2
+      type: integer
+    - name: v3
+      type: integer
+    - name: v4
+      type: integer
+    - name: v5
+      type: integer
+    - name: travel_r
+      type: number
+    - name: homedist
+      type: number
+    - name: bottom
+      type: number
+    - name: t1
+      type: number
+    - name: t2
+      type: number
+    - name: t3
+      type: number
+    - name: t4
+      type: number
+    - name: d_speed
+      type: number
+      constraints:
+        minimum: 0
+    - name: n_depths
+      type: integer
+      constraints:
+        minimum: 0
+    - name: n_speeds
+      type: integer
+      constraints:
+        minimum: 0
+    - name: depth_str
+      type: string
+      constraints:
+        pattern: '^\s*-?\d+(?:\.\d+)?(,\s*-?\d+(?:\.\d+)?)*$' # allows a list of float + allow spaces in front of the float
+    - name: speed_str
+      type: string
+      constraints:
+        pattern: '^\s*-?\d+(?:\.\d+)?(,\s*-?\d+(?:\.\d+)?)*$'
+    - name: propn_str
+      type: string
+      constraints:
+        pattern: '^\s*-?\d+(?:\.\d+)?(,\s*-?\d+(?:\.\d+)?)*$'
+    - name: percent_area
+      type: number
+    - name: residual
+      type: number
+    - name: grp_number
+      type: integer
+      constraints:
+        required: true
+    - name: d5
+      type: integer
+    - name: t5
+      type: number
+    - name: degc_str
+      type: string
+      constraints:
+        pattern: '^\s*-?\d+(?:\.\d+)?(,\s*-?\d+(?:\.\d+)?)*$'
+    - name: illum_str
+      type: string
+      constraints:
+        pattern: '^\s*-?\d+(?:\.\d+)?(,\s*-?\d+(?:\.\d+)?)*$'
+    - name: pca_desc
+      type: number
+    - name: pca_btm
+      type: number
+    - name: pca_asc
+      type: number
+    - name: pca_max_desc
+      type: number
+    - name: pca_max_btm
+      type: number
+    - name: pca_max_asc
+      type: number
+    - name: pca_mean_desc
+      type: number
+    - name: pca_mean_btm
+      type: number
+    - name: pca_mean_asc
+      type: number
+    - name: swim_eff_desc
+      type: number
+    - name: swim_eff_btm
+      type: number
+    - name: swim_eff_asc
+      type: number
+    - name: swim_eff_whole
+      type: number
+    - name: secs_desc
+      type: number
+    - name: secs_btm
+      type: number
+    - name: secs_asc
+      type: number
+    - name: pitch_desc
+      type: number
+    - name: pitch_btm
+      type: number
+    - name: pitch_asc
+      type: number
+    - name: pitch_str
+      type: string
+      constraints:
+        pattern: '^\s*-?\d+(?:\.\d+)?(,\s*-?\d+(?:\.\d+)?)*$'
+    - name: tagging_id
+      type: string
+    - name: de_date_tag
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: false 
+    - name: qc
+      type: integer
+      constraints:
+        minimum: 0
+    - name: d6
+      type: number
+    - name: d7
+      type: number
+    - name: d8
+      type: number
+    - name: d9
+      type: number
+    - name: d10
+      type: number
+    - name: d11
+      type: number
+    - name: d12
+      type: number
+    - name: d13
+      type: number
+    - name: d14
+      type: number
+    - name: d15
+      type: number
+    - name: d16
+      type: number
+    - name: d17
+      type: number
+    - name: d18
+      type: number
+    - name: d19
+      type: number
+    - name: d20
+      type: number
+    - name: d21
+      type: number
+    - name: d22
+      type: number
+    - name: d23
+      type: number
+    - name: d24
+      type: number
+    - name: d25
+      type: number
+    - name: t6
+      type: number
+    - name: t7
+      type: number
+    - name: t8
+      type: number
+    - name: t9
+      type: number
+    - name: t10
+      type: number
+    - name: t11
+      type: number
+    - name: t12
+      type: number
+    - name: t13
+      type: number
+    - name: t14
+      type: number
+    - name: t15
+      type: number
+    - name: t16
+      type: number
+    - name: t17
+      type: number
+    - name: t18
+      type: number
+    - name: t19
+      type: number
+    - name: t20
+      type: number
+    - name: t21
+      type: number
+    - name: t22
+      type: number
+    - name: t23
+      type: number
+    - name: t24
+      type: number
+    - name: t25
+      type: number
+    - name: ds_date
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: true
+    - name: start_lat
+      type: number
+      constraints:
+        required: false 
+        minimum: -90
+        maximum: 90
+    - name: start_lon
+      type: number
+      constraints:
+        required: false
+        minimum: -180
+        maximum: 180
+    - name: lat
+      type: number
+      constraints:
+        required: false
+        minimum: -90
+        maximum: 90
+    - name: lon
+      type: number
+      constraints:
+        required: false
+        minimum: -180
+        maximum: 180
+    - name: ssm_lon
+      type: number
+      constraints:
+        required: false
+        minimum: -180
+        maximum: 180
+    - name: ssm_lat
+      type: number
+      constraints:
+        required: false
+        minimum: -90
+        maximum: 90
+    - name: ssm_x
+      type: number
+    - name: ssm_y
+      type: number
+    - name: ssm_x_se
+      type: number
+    - name: ssm_y_se
+      type: number
+    - name: cid
+      type: string
+      constraints:
+        required: true

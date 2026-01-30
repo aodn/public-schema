@@ -1,0 +1,65 @@
+name: imos_atf-sattag_ssmoutputs_schema
+type: table
+path: ssmoutputs_tu123_nrt.csv
+scheme: file
+format: csv
+mediatype: text/csv
+encoding: utf-8
+dialect:
+  header: true
+  delimiter: ","
+  quoteChar: '"'
+  skipInitialSpace: false
+  lineTerminator: "\n"
+  caseSensitiveHeader: false
+schema:
+  missingValues:
+    - ''
+    - ' '
+    - 'NA'
+  fields:
+    - name: ref
+      type: string
+      constraints:
+        required: true
+    - name: date
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: true
+    - name: lon
+      type: number
+      constraints:
+        required: true
+        minimum: -180
+        maximum: 180
+    - name: lat
+      type: number
+      constraints:
+        required: true
+        minimum: -90
+        maximum: 90
+    - name: x
+      type: number
+    - name: y
+      type: number
+    - name: x_se
+      type: number
+    - name: y_se
+      type: number
+    - name: u
+      type: number
+    - name: v
+      type: number
+    - name: u_se
+      type: number
+    - name: v_se
+      type: number
+    - name: s
+      type: number
+    - name: s_se
+      type: number
+    - name: cid
+      type: string
+      constraints:
+        required: true

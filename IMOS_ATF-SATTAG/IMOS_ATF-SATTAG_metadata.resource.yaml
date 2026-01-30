@@ -1,0 +1,104 @@
+name: imos_atf-sattag_metadata_schema
+type: table
+path: metadata_tu123_nrt.csv
+scheme: file
+format: csv
+mediatype: text/csv
+encoding: utf-8
+dialect:
+  header: true
+  delimiter: ","
+  quoteChar: '"'
+  skipInitialSpace: false
+  lineTerminator: "\n"
+  caseSensitiveHeader: false
+schema:
+  missingValues:
+    - ''
+    - ' '
+    - 'NA'
+  fields:
+    - name: sattag_program
+      type: string
+      constraints:
+        required: true
+    - name: device_id
+      type: string
+      constraints:
+        required: true
+    - name: ptt
+      type: integer
+      constraints:
+        required: true
+    - name: body
+      type: integer
+      constraints:
+        required: true
+    - name: device_wmo_ref
+      type: string
+      constraints:
+        required: true
+    - name: tag_type
+      type: string
+      constraints:
+        required: true
+    - name: common_name
+      type: string
+      constraints:
+        required: true
+    - name: species
+      type: string
+      constraints:
+        required: true
+    - name: release_longitude
+      type: number
+      constraints:
+        required: true
+        minimum: -180
+        maximum: 180
+    - name: release_latitude
+      type: number
+      constraints:
+        required: true
+        minimum: -90
+        maximum: 90
+    - name: release_site
+      type: string
+      constraints:
+        required: true
+    - name: release_date
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: true
+    - name: recovery_date
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+    - name: age_class
+      type: string
+    - name: sex
+      type: string
+    - name: length
+      type: number
+      constraints:
+        minimum: 0
+    - name: estimated_mass
+      type: number
+      constraints:
+        minimum: 0
+    - name: actual_mass
+      type: number
+      constraints:
+        minimum: 0
+    - name: state_country
+      type: string
+      constraints:
+        required: true
+    - name: qc_start_date
+      type: datetime
+      constraints:
+        required: false
+    - name: qc_end_date
+      type: datetime
+      constraints:
+        required: false

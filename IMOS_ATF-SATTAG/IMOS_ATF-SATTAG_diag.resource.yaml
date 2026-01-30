@@ -1,0 +1,139 @@
+name: imos_atf-sattag_diag_schema
+type: table
+path: diag_tu123_nrt.csv
+scheme: file
+format: csv
+mediatype: text/csv
+encoding: utf-8
+dialect:
+  header: true
+  delimiter: ","
+  quoteChar: '"'
+  skipInitialSpace: false
+  lineTerminator: "\n"
+  caseSensitiveHeader: false
+schema:
+  missingValues:
+    - ''
+    - ' '
+    - 'NA'
+  fields:
+    - name: ref
+      type: string
+      constraints:
+        required: true
+    - name: ptt
+      type: integer
+      constraints:
+        required: true
+    - name: d_date
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: true
+    - name: lq
+      type: integer
+      constraints:
+        required: true
+    - name: lat
+      type: number
+      constraints:
+        required: true
+        minimum: -90
+        maximum: 90
+    - name: lon
+      type: number
+      constraints:
+        required: true
+        minimum: -180
+        maximum: 180
+    - name: alt_lat
+      type: number
+      constraints:
+        required: true
+        minimum: -90
+        maximum: 90
+    - name: alt_lon
+      type: number
+      constraints:
+        required: true
+        minimum: -180
+        maximum: 180
+    - name: n_mess
+      type: integer
+      constraints:
+        required: true
+    - name: n_mess_120
+      type: integer
+      constraints:
+        required: true
+    - name: best_level
+      type: integer
+      constraints:
+        required: true
+    - name: pass_dur
+      type: integer
+      constraints:
+        required: true
+    - name: freq
+      type: number
+      constraints:
+        required: true
+    - name: v_mask
+      type: integer
+      constraints:
+        required: true
+    - name: alt
+      type: number
+    - name: est_speed
+      type: number
+    - name: km_from_home
+      type: number
+    - name: iq
+      type: integer
+    - name: nops
+      type: integer
+    - name: deleted
+      type: string
+    - name: actual_ptt
+      type: integer
+    - name: error_radius
+      type: integer
+    - name: semi_major_axis
+      type: integer
+    - name: semi_minor_axis
+      type: integer
+    - name: ellipse_orientation
+      type: integer
+    - name: hdop
+      type: integer
+    - name: satellite
+      type: string
+    - name: diag_id
+      type: integer
+      constraints:
+        required: true
+    - name: ssm_lon
+      type: number
+      constraints:
+        required: false
+        minimum: -180
+        maximum: 180
+    - name: ssm_lat
+      type: number
+      constraints:
+        required: false
+        minimum: -90
+        maximum: 90
+    - name: ssm_x
+      type: number
+    - name: ssm_y
+      type: number
+    - name: ssm_x_se
+      type: number
+    - name: ssm_y_se
+      type: number
+    - name: cid
+      type: string
+      constraints:
+        required: true

@@ -1,0 +1,143 @@
+name: imos_atf-sattag_gps_schema
+type: table
+path: gps_tu123_nrt.csv
+scheme: file
+format: csv
+mediatype: text/csv
+encoding: utf-8
+dialect:
+  header: true
+  delimiter: ","
+  quoteChar: '"'
+  skipInitialSpace: false
+  lineTerminator: "\n"
+  caseSensitiveHeader: false
+schema:
+  missingValues:
+    - ''
+    - ' '
+    - 'NA'
+  fields:
+    - name: ref
+      type: string
+      constraints:
+        required: true
+    - name: ptt
+      type: integer
+      constraints:
+        required: true
+    - name: d_date
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: true
+    - name: nsats_detected
+      type: integer
+      constraints:
+        required: true
+        minimum: 0
+    - name: nsats_transmitted
+      type: integer
+      constraints:
+        required: true
+        minimum: 0
+    - name: gps_mode
+      type: integer
+      constraints:
+        required: true
+    - name: pseudoranges
+      type: string
+      constraints:
+        required: true
+    - name: max_csn
+      type: number
+    - name: cnt
+      type: integer
+      constraints:
+        required: true
+        minimum: 0
+    - name: lat
+      type: number
+      constraints:
+        required: true
+        minimum: -90
+        maximum: 90
+    - name: lon
+      type: number
+      constraints:
+        required: true
+        minimum: -180
+        maximum: 180
+    - name: residual
+      type: number
+    - name: timeshift
+      type: number
+      constraints:
+        required: true
+    - name: submitted
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: true
+    - name: nsats_healthy
+      type: integer
+      constraints:
+        required: true
+        minimun: 0
+    - name: nbits
+      type: integer
+      constraints:
+        required: true
+        minimum: 0
+    - name: deleted
+      type: string
+      constraints:
+        required: true
+    - name: v_mask
+      type: integer
+      constraints:
+        required: true
+    - name: km_from_home
+      type: number
+    - name: est_speed
+      type: number
+    - name: gps_number
+      type: number
+      constraints:
+        required: false
+    - name: tx_date
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: false
+    - name: uplink_number
+      type: number
+    - name: tagging_id
+      type: string
+    - name: d_date_tag
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+    - name: ssm_lon
+      type: number
+      constraints:
+        required: false
+        minimum: -180
+        maximum: 180
+    - name: ssm_lat
+      type: number
+      constraints:
+        required: false
+        minimum: -90
+        maximum: 90
+    - name: ssm_x
+      type: number
+    - name: ssm_y
+      type: number
+    - name: ssm_x_se
+      type: number
+    - name: ssm_y_se
+      type: number
+    - name: cid
+      type: string
+      constraints:
+        required: true
