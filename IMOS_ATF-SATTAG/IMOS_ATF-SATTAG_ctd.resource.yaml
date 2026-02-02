@@ -1,0 +1,161 @@
+name: imos_atf-sattag_ctd_schema
+type: table
+path: ctd_tu123_nrt.csv 
+scheme: file
+format: csv
+mediatype: text/csv
+encoding: utf-8
+dialect:
+  header: true
+  delimiter: ","
+  quoteChar: '"'
+  skipInitialSpace: false
+  lineTerminator: "\n"
+  caseSensitiveHeader: false
+schema:
+  missingValues:
+    - ' '
+    - ''
+    - 'NA'
+  fields:
+    - name: ref
+      type: string
+      constraints:
+        required: true
+    - name: ptt
+      type: integer
+      constraints:
+        required: true
+    - name: end_date
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: true
+    - name: max_dbar
+      type: number
+      constraints:
+        required: true
+    - name: num
+      type: integer
+      constraints:
+        required: true
+    - name: n_temp
+      type: integer
+    - name: n_cond
+      type: integer
+    - name: n_sal
+      type: integer
+    - name: temp_dbar
+      type:  string
+      constraints:
+        pattern: '^-?\d+(?:\.\d+)?(,-?\d+(?:\.\d+)?)*$'
+    - name: temp_vals
+      type: string
+      constraints:
+        pattern: '^-?\d+(?:\.\d+)?(,-?\d+(?:\.\d+)?)*$'
+    - name: cond_dbar
+      type: string
+      constraints:
+        pattern: '^-?\d+(?:\.\d+)?(,-?\d+(?:\.\d+)?)*$'
+    - name: cond_vals
+      type: string
+      constraints:
+        pattern: '^-?\d+(?:\.\d+)?(,-?\d+(?:\.\d+)?)*$'
+    - name: sal_dbar
+      type: string
+      constraints:
+        pattern: '^-?\d+(?:\.\d+)?(,-?\d+(?:\.\d+)?)*$'
+    - name: sal_vals
+      type: string
+      constraints:
+        pattern: '^-?\d+(?:\.\d+)?(,-?\d+(?:\.\d+)?)*$'
+    - name: n_fluoro
+      type: number
+    - name: fluoro_dbar
+      type: string
+      constraints:
+        pattern: '^-?\d+(?:\.\d+)?(,-?\d+(?:\.\d+)?)*$'
+    - name: fluoro_vals
+      type: string
+      constraints:
+        pattern: '^-?\d+(?:\.\d+)?(,-?\d+(?:\.\d+)?)*$'
+    - name: n_oxy
+      type: integer
+    - name: oxy_dbar
+      type: string
+      constraints:
+        pattern: '^-?\d+(?:\.\d+)?(,-?\d+(?:\.\d+)?)*$'
+    - name: oxy_vals
+      type: string
+      constraints:
+        pattern: '^-?\d+(?:\.\d+)?(,-?\d+(?:\.\d+)?)*$'
+    - name: qc_profile
+      type: integer
+    - name: qc_temp
+      type: string
+      constraints:
+        pattern: '^-?\d+(?:\.\d+)?(,-?\d+(?:\.\d+)?)*$'
+    - name: qc_sal
+      type: string
+      constraints:
+        pattern: '^-?\d+(?:\.\d+)?(,-?\d+(?:\.\d+)?)*$'
+    - name: sal_corrected_vals
+      type: string
+      constraints:
+        pattern: '^-?\d+(?:\.\d+)?(,-?\d+(?:\.\d+)?)*$'
+    - name: created
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: true
+    - name: modified
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: true
+    - name: n_photo
+      type: integer
+    - name: photo_dbar
+      type: string
+      constraints:
+        pattern: '^-?\d+(?:\.\d+)?(,-?\d+(?:\.\d+)?)*$'
+    - name: photo_vals
+      type: string
+      constraints:
+        pattern: '^-?\d+(?:\.\d+)?(,-?\d+(?:\.\d+)?)*$'
+    - name: lat
+      type: number
+      constraints:
+        required: false
+        minimum: -90
+        maximum: 90
+    - name: lon
+      type: number
+      constraints:
+        required: false
+        minimum: -180
+        maximum: 180
+    - name: ssm_lon
+      type: number
+      constraints:
+        required: false
+        minimum: -180
+        maximum: 180
+    - name: ssm_lat
+      type: number
+      constraints:
+        required: false
+        minimum: -90
+        maximum: 90
+    - name: ssm_x
+      type: number
+    - name: ssm_y
+      type: number
+    - name: ssm_x_se
+      type: number
+    - name: ssm_y_se
+      type: number
+    - name: cid
+      type: string
+      constraints:
+        required: true

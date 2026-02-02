@@ -1,0 +1,105 @@
+name: imos_atf-sattag_haulout_schema
+type: table
+path: haulout_tu123_nrt.csv 
+scheme: file
+format: csv
+mediatype: text/csv
+encoding: utf-8
+dialect:
+  header: true
+  delimiter: ","
+  skipInitialSpace: false
+  lineTerminator: "\n"
+  caseSensitiveHeader: true
+schema:
+  missingValues:
+    - ' '
+    - ''
+    - 'NA'  
+  fields:
+    - name: ref
+      type: string
+      constraints:
+        required: true
+    - name: ptt
+      type: integer
+      constraints:
+        required: true
+    - name: s_date
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: true
+    - name: e_date
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: true
+    - name: haulout_number
+      type: integer
+      constraints:
+        required: true
+    - name: cnt
+      type: integer
+      constraints:
+        required: true
+        minimum: 0
+    - name: phosi_secs
+      type: number
+    - name: wet_n
+      type: number
+    - name: wet_min
+      type: number
+    - name: wet_max
+      type: number
+    - name: wet_mean
+      type: number
+    - name: wet_sd
+      type: number
+    - name: tagging_id
+      type: string
+    - name: s_date_tag
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+    - name: e_date_tag
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+    - name: end_number
+      type: integer
+    - name: lat
+      type: number
+      constraints:
+        required: false
+        minimum: -90
+        maximum: 90
+    - name: lon
+      type: number
+      constraints:
+        required: false
+        minimum: -180
+        maximum: 180
+    - name: ssm_lon
+      type: number
+      constraints:
+        required: false
+        minimum: -180
+        maximum: 180
+    - name: ssm_lat
+      type: number
+      constraints:
+        required: false
+        minimum: -90
+        maximum: 90
+    - name: ssm_x
+      type: number
+    - name: ssm_y
+      type: number
+    - name: ssm_x_se
+      type: number
+    - name: ssm_y_se
+      type: number
+    - name: cid
+      type: string
+      constraints:
+        required: true
+

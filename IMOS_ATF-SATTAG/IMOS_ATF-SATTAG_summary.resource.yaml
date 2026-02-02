@@ -1,0 +1,182 @@
+name: imos_atf-sattag_summary_schema
+type: table
+path: summary_tu123_nrt.csv
+scheme: file
+format: csv
+mediatype: text/csv
+encoding: utf-8
+dialect:
+  header: true
+  delimiter: ","
+  quoteChar: '"'
+  skipInitialSpace: false
+  lineTerminator: "\n"
+  caseSensitiveHeader: false
+schema:
+  missingValues:
+    - ''
+    - ' '
+    - 'NA'
+  fields:
+    - name: ref
+      type: string
+      constraints:
+        required: true
+    - name: ptt
+      type: integer
+      constraints:
+        required: true
+    - name: cnt
+      type: integer
+      constraints:
+        required: true
+        minimum: 0
+    - name: s_date
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: true
+    - name: e_date
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+      constraints:
+        required: true
+    - name: div_dist
+      type: number
+    - name: surf_tm
+      type: number
+      constraints:
+        minimum: 0
+    - name: dive_tm
+      type: number
+      constraints:
+        minimum: 0
+    - name: haul_tm
+      type: number
+      constraints:
+        minimum: 0
+    - name: n_cycles
+      type: integer
+      constraints:
+        required: true
+        minimum: 0
+    - name: av_depth
+      type: number
+      constraints:
+        required: true
+        minimum: 0
+    - name: max_depth
+      type: number
+      constraints:
+        required: true
+        minimum: 0
+    - name: cruise_tm
+      type: number
+    - name: avg_sst
+      type: number
+    - name: avg_speed
+      type: number
+    - name: sd_depth
+      type: number
+      constraints:
+        required: true
+        minimum: 0
+    - name: av_dur
+      type: integer
+      constraints:
+        required: true
+        minimum: 0
+    - name: sd_dur
+      type: number
+    - name: max_dur
+      type: number
+    - name: dp_n_cycles
+      type: number
+    - name: dp_av_depth
+      type: number
+    - name: dp_max_depth
+      type: number
+    - name: dp_avg_speed
+      type: number
+    - name: dp_sd_depth
+      type: number
+    - name: dp_av_dur
+      type: number
+    - name: dp_sd_dur
+      type: number
+    - name: dp_max_dur
+      type: number
+    - name: dp_dive_tm
+      type: number
+    - name: av_surf_dur
+      type: number
+    - name: sd_surf_dur
+      type: number
+    - name: max_surf_dur
+      type: number
+    - name: dp_av_surf_dur
+      type: number
+    - name: dp_sd_surf_dur
+      type: number
+    - name: dp_max_surf_dur
+      type: number
+    - name: pca
+      type: number
+    - name: swim_eff_desc
+      type: number
+    - name: swim_eff_asc
+      type: number
+    - name: swim_eff_whole
+      type: number
+    - name: secs_desc
+      type: number
+    - name: secs_asc
+      type: number
+    - name: pitch_desc
+      type: number
+    - name: pitch_asc
+      type: number
+    - name: av_haulout_dur
+      type: number
+    - name: sd_haulout_dur
+      type: number
+    - name: max_haulout_dur
+      type: number
+    - name: av_phosi_dur
+      type: number
+    - name: sd_phosi_dur
+      type: number
+    - name: max_phosi_dur
+      type: number
+    - name: tagging_id
+      type: string
+    - name: s_date_tag
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+    - name: e_date_tag
+      type: datetime
+      format: "%Y-%m-%dT%H:%M:%SZ"
+    - name: ssm_lon
+      type: number
+      constraints:
+        required: false
+        minimum: -180
+        maximum: 180
+    - name: ssm_lat
+      type: number
+      constraints:
+        required: false
+        minimum: -90
+        maximum: 90
+    - name: ssm_x
+      type: number
+    - name: ssm_y
+      type: number
+    - name: ssm_x_se
+      type: number
+    - name: ssm_y_se
+      type: number
+    - name: cid
+      type: string
+      constraints:
+        required: true
