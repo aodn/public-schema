@@ -49,23 +49,23 @@ schema:
         required: true
         minimum: 0
     - name: d1
-      type: integer
+      type: number
     - name: d2
-      type: integer
+      type: number
     - name: d3
-      type: integer
+      type: number
     - name: d4
-      type: integer
+      type: number
     - name: v1
-      type: integer
+      type: number
     - name: v2
-      type: integer
+      type: number
     - name: v3
-      type: integer
+      type: number
     - name: v4
-      type: integer
+      type: number
     - name: v5
-      type: integer
+      type: number
     - name: travel_r
       type: number
     - name: homedist
@@ -113,7 +113,7 @@ schema:
       constraints:
         required: true
     - name: d5
-      type: integer
+      type: number
     - name: t5
       type: number
     - name: degc_str
