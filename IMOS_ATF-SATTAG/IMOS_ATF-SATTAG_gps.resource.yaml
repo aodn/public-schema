@@ -83,7 +83,7 @@ schema:
       type: integer
       constraints:
         required: true
-        minimun: 0
+        minimum: 0
     - name: nbits
       type: integer
       constraints:
