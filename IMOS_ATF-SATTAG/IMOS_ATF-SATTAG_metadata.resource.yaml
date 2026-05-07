@@ -97,8 +97,24 @@ schema:
     - name: qc_start_date
       type: datetime
       constraints:
-        required: false
+        required: true
     - name: qc_end_date
       type: datetime
       constraints:
-        required: false
+        required: true
+    - name: qc_method
+      type: string
+      constraints:
+        required: true
+    - name: qc_method_version
+      type: string
+      constraints:
+        required: true
+    - name: qc_proj4string
+      type: string
+      constraints:
+        required: true
+    - name: qc_run_date
+      type: datetime
+      constraints:
+        required: true
