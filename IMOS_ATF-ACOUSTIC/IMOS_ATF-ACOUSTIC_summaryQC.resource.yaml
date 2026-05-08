@@ -96,7 +96,7 @@ schema:
       type: string
       constraints:
         required: true
-        pattern: "^(\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?)$"
+        pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$'
     - name: receiver_deployment_longitude
       type: number
       constraints: {'required': true}
