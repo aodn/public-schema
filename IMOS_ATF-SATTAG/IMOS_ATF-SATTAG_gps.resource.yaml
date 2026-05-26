@@ -34,38 +34,38 @@ schema:
     - name: nsats_detected
       type: integer
       constraints:
-        required: true
+        required: false
         minimum: 0
     - name: nsats_transmitted
       type: integer
       constraints:
-        required: true
+        required: false
         minimum: 0
     - name: gps_mode
       type: integer
       constraints:
-        required: true
+        required: false
     - name: pseudoranges
       type: string
       constraints:
-        required: true
+        required: false
     - name: max_csn
       type: number
     - name: cnt
       type: integer
       constraints:
-        required: true
+        required: false
         minimum: 0
     - name: lat
       type: number
       constraints:
-        required: true
+        required: false
         minimum: -90
         maximum: 90
     - name: lon
       type: number
       constraints:
-        required: true
+        required: false
         minimum: -180
         maximum: 180
     - name: residual
@@ -73,30 +73,30 @@ schema:
     - name: timeshift
       type: number
       constraints:
-        required: true
+        required: false
     - name: submitted
       type: datetime
       format: "%Y-%m-%dT%H:%M:%SZ"
       constraints:
-        required: true
+        required: false
     - name: nsats_healthy
       type: integer
       constraints:
-        required: true
+        required: false
         minimum: 0
     - name: nbits
       type: integer
       constraints:
-        required: true
+        required: false
         minimum: 0
     - name: deleted
       type: string
       constraints:
-        required: true
+        required: false
     - name: v_mask
       type: integer
       constraints:
-        required: true
+        required: false
     - name: km_from_home
       type: number
     - name: est_speed
