@@ -62,13 +62,13 @@ schema:
       type: string
       constraints: {'required': true}
     - name: transmitter_sensor_mean_value
-      type: string
+      type: number
     - name: transmitter_sensor_unit
       type: string
     - name: transmitter_sensor_intercept
-      type: string
+      type: number
     - name: transmitter_sensor_slope
-      type: string
+      type: number
     - name: tag_deployment_project_name
       type: string
       constraints: {'required': true}
