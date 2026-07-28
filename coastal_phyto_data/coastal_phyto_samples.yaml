@@ -1,0 +1,42 @@
+profile: tabular-data-resource
+name: coastal_phyto_samples
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Acoastal_phyto_samples
+title: coastal_phyto_samples
+description: "A table of Coastal Phytoplankton Samples"
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: SAMPLE_CODE
+    title: "Unique identifier for sample"
+    type: string
+    required: true    
+  - name: SITE_CODE
+    title: "Identifier for site"
+    type: string
+    required: true   
+  - name: SAMPLE_DATE
+    title: "Date & time of sample in UTC?? time (formatted string)"
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d %H:%M:%S"
+    required: true    
+  - name: SAMPLE_DEPTH_M
+    title: "Sample depth in metres"
+    type: number
+    required: true  
+  - name: COUNT_METHOD
+    title: "Standard counting method used in analysis"
+    type: string
+    required: true    
+  - name: COMMENTS
+    title: "Optional comments field"
+    type: string
+    required: false  
+  primaryKey: SAMPLE_CODE
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
