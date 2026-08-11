@@ -1,9 +1,9 @@
 name: Test Resources
 on:
   push:
-    branches: [ master ]
+    branches: [ master, v2 ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, v2 ]
 jobs:
   Validate-BGC-CPR:
     runs-on: ubuntu-latest
