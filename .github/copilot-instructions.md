@@ -23,7 +23,7 @@ Validate a local CSV against a standalone schema:
 frictionless validate --schema IMOS_ATF-ACOUSTIC/IMOS_ATF-ACOUSTIC.schema.yaml <path/to/file.csv>
 ```
 
-The CI workflow (`test_resources.yaml`) automatically runs `code/validate.py` against any changed `.dataresource.yaml` files on PRs to `master`. Note: `code/requirements.txt` pins `frictionless >= 4.0, <5.0` (used by CI), while `pyproject.toml` targets `frictionless >= 5`.
+The CI workflow (`test_resources.yaml`) automatically runs `code/validate.py` against any changed `.dataresource.yaml` files on PRs to `master`.
 
 ## Repository structure
 

@@ -7,11 +7,13 @@ Helper functions for validating schemas and resources using the Frictionless fra
 
 import sys
 
+from typing import Union
+
 from frictionless import Resource, validate, FrictionlessException
-from frictionless.plugins.remote import RemoteControl
+from frictionless.schemes.remote import RemoteControl
 
 
-def resource_valid(resouce:[str, Resource], http_timeout=100):
+def resource_valid(resouce: Union[str, Resource], http_timeout: int = 100):
     """
     Validate the given resource (including data accessed from the specified path)
 
