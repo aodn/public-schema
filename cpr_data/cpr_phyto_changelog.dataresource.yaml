@@ -6,8 +6,6 @@ description: "A table of all CPR phytoplankton change log data"
 format: csv
 mediatype: text/csv
 encoding: utf-8
-layout:
-  skipFields: [ FID ]
 schema:
   fields:
   - name: TAXON_NAME

@@ -43,8 +43,6 @@ Full [Frictionless Tabular Data Resource](https://specs.frictionlessdata.io/tabu
 profile: tabular-data-resource
 name: bgc_chemistry
 path: https://www.cmar.csiro.au/geoserver/imos/wfs?...
-layout:
-  skipFields: [ FID ]   # WFS adds a FID column; always skip it
 schema:
   fields:
     - name: COLUMN_NAME
@@ -72,7 +70,7 @@ SQL queries for generating AODN Portal products from harvested raw data. Live al
 - **Column names are ALL_CAPS** in BGC/CPR schemas; mixed case in ATF schemas.
 - **Datetime format strings** must use Python/C `strptime` syntax (e.g., `"%Y-%m-%d %H:%M:%S"`), with a comment referencing the Python docs.
 - **Measurement fields** (e.g., `SALINITY_PSU`) are paired with a required `*_FLAG` integer field. The measurement field itself is typically not `required`.
-- **WFS resources** always include `layout.skipFields: [ FID ]` to drop the Geoserver-added FID column.
+- **WFS resources** serve a `FID` column as the first column from GeoServer that is not part of the schema. `validate.py` handles this via `Detector(schema_sync=True)`, which tolerates extra CSV columns by treating them as type `any`. The `.dataresource.yaml` files do **not** need any special field-skip configuration.
 - **`missingValues`** is specified at the schema level for ATF files: `["", " ", "NA"]`.
 - All schemas use **CC-BY-4.0** license.
 - Changes to `master` require a PR reviewed by another party (CSIRO or AODN). CI validates schemas live against CSIRO Geoserver — a PR will fail if the schema doesn't match the actual WFS layer.
