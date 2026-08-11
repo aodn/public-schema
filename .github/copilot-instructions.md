@@ -2,7 +2,10 @@
 
 ## Purpose
 
-This repository stores schema specifications and SQL product-generation code for IMOS (Integrated Marine Observing System) data exchange between CSIRO and AODN. Schemas define the agreed structure of tabular data (CSV) served via CSIRO Geoserver WFS layers and consumed by AODN harvest pipelines and the AODN Portal.
+This repository stores schema specifications and SQL product-generation code for IMOS (Integrated Marine Observing System) data exchange between CSIRO and AODN. 
+Schemas (in `bgc_data/` and `cpr_data/`) define the agreed structure of tabular data (CSV) served via CSIRO Geoserver WFS layers and consumed by AODN harvest pipelines and the AODN Portal.
+
+Data resources described in other folders (`IMOS_*/`) are for AODN internal validation use only.
 
 ## Validation commands
 
@@ -37,7 +40,7 @@ The CI workflow (`test_resources.yaml`) automatically runs `code/validate.py` ag
 ## File format conventions
 
 ### `.dataresource.yaml` / `.resource.yaml` (BGC, CPR, SATTAG)
-Full [Frictionless Tabular Data Resource](https://specs.frictionlessdata.io/tabular-data-resource/) descriptors — include `path` (Geoserver WFS URL), `schema`, `layout`, and `licenses`.
+Full [Frictionless Tabular Data Resource](https://specs.frictionlessdata.io/tabular-data-resource/) descriptors — include `path` (Geoserver WFS URL), `schema`, `licenses`.
 
 ```yaml
 profile: tabular-data-resource
