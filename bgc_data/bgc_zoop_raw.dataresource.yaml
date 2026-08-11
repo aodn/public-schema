@@ -8,6 +8,9 @@ mediatype: text/csv
 encoding: utf-8
 schema:
   fields:
+  - name: FID
+    title: "Unique identifier for record, added by Geoserver WFS"
+    type: string
   - name: TRIP_CODE
     title: "Unique identifier for sample"
     type: string

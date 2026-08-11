@@ -45,6 +45,9 @@ name: bgc_chemistry
 path: https://www.cmar.csiro.au/geoserver/imos/wfs?...
 schema:
   fields:
+    - name: FID
+      title: "Unique identifier for record, added by Geoserver WFS"
+      type: string
     - name: COLUMN_NAME
       type: number        # string | number | integer | date | datetime | boolean
       title: "Human-readable description"
@@ -70,7 +73,7 @@ SQL queries for generating AODN Portal products from harvested raw data. Live al
 - **Column names are ALL_CAPS** in BGC/CPR schemas; mixed case in ATF schemas.
 - **Datetime format strings** must use Python/C `strptime` syntax (e.g., `"%Y-%m-%d %H:%M:%S"`), with a comment referencing the Python docs.
 - **Measurement fields** (e.g., `SALINITY_PSU`) are paired with a required `*_FLAG` integer field. The measurement field itself is typically not `required`.
-- **WFS resources** serve a `FID` column as the first column from GeoServer that is not part of the schema. `validate.py` handles this via `Detector(schema_sync=True)`, which tolerates extra CSV columns by treating them as type `any`. The `.dataresource.yaml` files do **not** need any special field-skip configuration.
+- **WFS resources** serve a `FID` column as the first column from GeoServer that is not part of the original schema. Resources exported via GeoServer must specify this as the first `field` in their schema.
 - **`missingValues`** is specified at the schema level for ATF files: `["", " ", "NA"]`.
 - All schemas use **CC-BY-4.0** license.
 - Changes to `master` require a PR reviewed by another party (CSIRO or AODN). CI validates schemas live against CSIRO Geoserver — a PR will fail if the schema doesn't match the actual WFS layer.

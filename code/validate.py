@@ -6,10 +6,9 @@ Helper functions for validating schemas and resources using the Frictionless fra
 
 
 import sys
-
 from typing import Union
 
-from frictionless import Detector, Resource, validate, FrictionlessException
+from frictionless import Resource, validate, FrictionlessException
 from frictionless.schemes.remote import RemoteControl
 
 
@@ -24,13 +23,7 @@ def resource_valid(resouce: Union[str, Resource], http_timeout: int = 100):
     try:
         # create (a copy of) Resource object
         # set longer timeout to allow for slow response
-        # schema_sync=True tolerates extra columns from the WFS source (e.g. FID)
-        # by mapping schema fields to matching CSV labels and treating unknowns as type 'any'
-        res = Resource(
-            resouce,
-            control=RemoteControl(http_timeout=http_timeout),
-            detector=Detector(schema_sync=True),
-        )
+        res = Resource(resouce, control=RemoteControl(http_timeout=http_timeout))
     except FrictionlessException as e:
         return False, [f"Not a valid resource description:\n{e}"]
 
