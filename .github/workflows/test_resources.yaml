@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [ master, v2 ]
 jobs:
-  Validate-BGC-CPR:
+  validate-resources:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,9 +24,7 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v46
         with:
-          files: |
-            bgc_data/*.dataresource.yaml
-            cpr_data/*.dataresource.yaml
+          files: src/public_schema/resources/**/*.dataresource.yaml
 
       - name: Validate data against changed schemas
         if: steps.changed-files.outputs.any_changed == 'true'
