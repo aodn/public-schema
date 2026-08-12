@@ -6,20 +6,26 @@ Helper functions for validating schemas and resources using the Frictionless fra
 
 
 import sys
+from pathlib import Path
 from typing import Union
 
 from frictionless import Resource, validate, FrictionlessException
 from frictionless.schemes.remote import RemoteControl
 
 
-def resource_valid(resouce: Union[str, Resource], http_timeout: int = 100):
+def validate_resource(resouce: Union[str, Path, Resource], http_timeout: int = 100):
     """
     Validate the given resource (including data accessed from the specified path)
 
-    :param resouce: frictionless.Resource object, path to a resource file
+    :param resouce: frictionless.Resource object, or path to a resource file
     :param http_timeout: http response timeout in seconds
     :return: tuple (valid:bool, errors:list)
     """
+    if not isinstance(resouce, Resource):
+        resouce = Path(resouce)
+        if not resouce.exists():
+            raise FileNotFoundError(f"Resource file {resouce.resolve()} does not exist")
+
     try:
         # create (a copy of) Resource object
         # set longer timeout to allow for slow response
@@ -42,7 +48,7 @@ if __name__ == '__main__':
     invalid = []
     for res in sys.argv[1:]:
         print('\n{} ... '.format(res), end='')
-        valid, errors = resource_valid(res)
+        valid, errors = validate_resource(res)
         if valid:
             print('ok')
         else:
