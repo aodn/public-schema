@@ -1,0 +1,64 @@
+profile: tabular-data-resource
+name: bgc_zoop_raw
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_zoop_raw
+title: bgc_zoop_raw
+description: "A table of all BGC zooplankton abundance data"
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: FID
+    title: "Unique identifier for record, added by Geoserver WFS"
+    type: string
+  - name: TRIP_CODE
+    title: "Unique identifier for sample"
+    type: string
+    constraints:
+      required: true
+  - name: TAXON_NAME
+    title: "Scientific name of taxa"
+    type: string
+    constraints:
+      required: true
+  - name: COPEPOD
+    title: "Taxonomic category assigned to taxa (e.g. COPEPOD, NON-COPEPOD, NOCTILUCA)"
+    type: string
+    constraints:
+      required: true     
+  - name: TAXON_GROUP
+    title: "Functional group assigned to taxa"
+    type: string
+    constraints:
+      required: true   
+  - name: GENUS
+    title: "Genus name of taxa"
+    type: string
+  - name: SPECIES
+    title: "Species name of taxa"
+    type: string
+  - name: SPCODE
+    title: "Species code for taxa AphiaID Worms"
+    type: string
+  - name: ZOOP_ABUNDANCE_M3
+    title: "Abundance of the taxa in individuals per m3 of water"
+    type: number                               
+    constraints:
+      required: true
+  - name: TAXON_COUNT
+    title: "Number of individuals counted in sample"
+    type: number                               
+    constraints:
+      required: true
+  - name: SAMPVOL_M3
+    title: "Volume of sample analysed"
+    type: number                               
+    constraints:
+      required: true    
+  primaryKey:
+  - TRIP_CODE
+  - TAXON_NAME
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/

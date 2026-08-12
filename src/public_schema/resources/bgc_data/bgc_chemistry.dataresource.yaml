@@ -1,0 +1,107 @@
+profile: tabular-data-resource
+name: bgc_chemistry
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_chemistry
+title: bgc_chemistry
+description: A table of fixed station information
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: FID
+    title: "Unique identifier for record, added by Geoserver WFS"
+    type: string
+  - name: TRIP_CODE
+    title: "Identifier for trip"
+    type: string
+    constraints:
+      required: true
+  - name: SAMPLEDEPTH_M
+    title: "Depth (m) that sample was obtained"
+    type: number
+    constraints:
+      required: true
+  - name: SAMPLEDATELOCAL
+    title: "Date & time of sample in local time (formatted string)"
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d %H:%M:%S"
+    constraints:
+      required: true
+  - name: SALINITY_PSU
+    title: "Salinity PSU value"
+    type: number
+  - name: SALINITY_FLAG
+    title: "FLAG value"
+    type: integer
+    constraints:
+      required: true
+  - name: SILICATE_UMOLL
+    title: "Silicate umoll"
+    type: number
+  - name: SILICATE_FLAG
+    title: "FLAG value"
+    type: integer
+    constraints:
+      required: true
+  - name: NITRATE_UMOLL
+    type: number
+  - name: NITRATE_FLAG
+    title: "FLAG value"
+    type: integer
+    constraints:
+      required: true
+  - name: PHOSPHATE_UMOLL
+    type: number
+  - name: PHOSPHATE_FLAG
+    title: "FLAG value"
+    type: integer
+    constraints:
+      required: true
+  - name: AMMONIUM_UMOLL
+    type: number
+  - name: AMMONIUM_FLAG
+    title: "FLAG value"
+    type: integer
+    constraints:
+      required: true
+  - name: NITRITE_UMOLL
+    type: number
+  - name: NITRITE_FLAG
+    title: "FLAG value"
+    type: integer
+    constraints:
+      required: true
+  - name: DIC_UMOLKG
+    type: number
+  - name: CARBON_FLAG
+    title: "FLAG value"
+    type: integer
+    constraints:
+      required: true
+  - name: TALKALINITY_UMOLKG
+    type: number
+  - name: ALKALINITY_FLAG
+    title: "FLAG value"
+    type: integer
+    constraints:
+      required: true    
+  - name: OXYGEN_UMOLL
+    type: number
+  - name: OXYGEN_FLAG
+    title: "FLAG value"
+    type: integer
+    constraints:
+      required: true
+  - name: MICROBIOMESAMPLE_ID
+    title: "Microbiomesample_id"
+    type: string
+  primaryKey:
+  - TRIP_CODE
+  - SAMPLEDEPTH_M
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
+

@@ -1,9 +1,24 @@
 [project]
 name = "public-schema"
 version = "0.1.0"
-description = "Add your description here"
+description = "IMOS public schema definitions and validation utilities"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "frictionless>=5",
 ]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/public_schema"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

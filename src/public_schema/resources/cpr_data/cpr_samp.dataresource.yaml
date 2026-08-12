@@ -1,0 +1,77 @@
+profile: tabular-data-resource
+name: cpr_samp
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Acpr_samp
+title: cpr_samp
+description: "A table of all CPR SAMP data"
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: FID
+    title: "Unique identifier for record, added by Geoserver WFS"
+    type: string
+  - name: TRIP_CODE
+    title: "Unique identifier for trip"
+    type: string
+    constraints:
+      required: true
+  - name: SAMPLE
+    title: "Unique sample identifier"
+    type: string
+    constraints:
+      required: true  
+  - name: REGION
+    title: "Region identifier"
+    type: string
+    constraints:
+      required: true      
+  - name: LATITUDE
+    title: "Latitude of sampling in decimal degrees North"
+    type: number
+    constraints:
+      required: true
+    minimum: -90
+    maximum: 90    
+  - name: LONGITUDE
+    title: "Longitude of sampling in decimal degrees East"
+    type: number
+    minimum: -180
+    maximum: 180
+    constraints:
+      required: true     
+  - name: SAMPLEDATEUTC
+    title: "Date & time of sample in UTC time (formatted string)"
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d %H:%M:%S"
+    constraints:
+      required: true
+  - name: SAMPLEDATELOCAL
+    title: "Date & time of sample in local time (formatted string)"
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d %H:%M:%S"
+  - name: PCI
+    title: "pci"
+    type: number
+  - name: BIOMASS_MGM3
+    title: "biomass (mg/mg3)"
+    type: number
+  - name: SAMPLETYPE
+    title: "sample type code"
+    type: string
+  - name: GHRSST_6D_DEGC
+    title: "IMOS L3S Day and Night gridded multiple-sensor multiple-swath Australian region HRPT AVHRR foundation SST"
+    type: number
+  - name: CHLOC3_MGM3
+    title: "Chlorophyll concentration mgm3 OC3 algorithm available at: https://thredds.aodn.org.au/thredds/catalog/IMOS/SRS/OC/gridded/aqua/P1D/catalog.html"
+    type: number
+  primaryKey: SAMPLE
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
+

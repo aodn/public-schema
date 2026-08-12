@@ -1,0 +1,58 @@
+profile: tabular-data-resource
+name: bgc_tss_meta
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_tss_meta
+title: bgc_tss_meta
+description: "A table of all BGC TSS metadata"
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: FID
+    title: "Unique identifier for record, added by Geoserver WFS"
+    type: string
+  - name: TRIP_CODE
+    title: "Identifier for trip"
+    type: string
+    constraints:
+      required: true
+  - name: SAMPLEDATELOCAL
+    title: "Date & time of sample in local time (formatted string)"
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d %H:%M:%S"
+    constraints:
+      required: true
+  - name: SAMPLEDEPTH_M
+    title: "Depth (m) that sample was obtained, or 'WC' if combined water-column sample"
+    type: string
+    constraints:
+      required: true
+  - name: REPLICATE
+    title: "Sample replicate"
+    type: integer
+    constraints:
+      required: true
+  - name: TSS_MGL
+    type: number
+  - name: INORGANICFRACTION_MGL
+    type: number                               
+  - name: ORGANICFRACTION_MGL
+    type: number                               
+  - name: TSS_FLAG
+    type: integer                               
+    constraints:
+      required: true
+  - name: TSS_COMMENTS
+    type: string                               
+  - name: BLANKADJUSTAVAILABLE
+    type: string                               
+  primaryKey:
+  - TRIP_CODE
+  - SAMPLEDEPTH_M
+  - REPLICATE
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/

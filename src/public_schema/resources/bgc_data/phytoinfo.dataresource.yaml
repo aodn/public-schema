@@ -1,0 +1,54 @@
+profile: tabular-data-resource
+name: phytoinfo
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Aphytoinfo
+title: phytoinfo
+description: "A table of Phytoinfo"
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: FID
+    title: "Unique identifier for record, added by Geoserver WFS"
+    type: string
+  - name: SPCODE
+    title: "Species code for taxa AphiaID Worms"
+    type: integer
+  - name: TAXON_NAME
+    title: "Name of taxa used for recording an observation"
+    type: string
+    constraints:
+      required: true
+      unique: true
+  - name: FUNCTIONALGROUP
+    title: "Functional group that the taxa is assigned to"
+    type: string  
+  - name: STATUS
+    title: "The status of the taxon_name according to WoRMS"
+    type: string 
+  - name: VALID_SCIENTIFIC_NAME
+    title: "If the status of the taxon_name is invalid, this is the corresponding valid scientific name according to WoRMS"
+    type: string
+  - name: VALID_APHIA_ID
+    title: "AphiaID of the valid scientific name"
+    type: integer
+  - name: HAB
+    title: "Is the taxon_name defined as a HAB according to IOC-UNESCO Taxonomic Reference List of Harmful Microalgae"
+    type: string
+  - name: BV_CELL
+    title: "Calculated biovolume of one cell of the taxon_name in cubic micrometers based on measurements from literature"
+    type: number
+  - name: MONT2001PGN_CELL
+    title: "Conversion to nitrogen value using Montagnes-Berges et al 1984 & Menden-Deuer and Lessard 2000"
+    type: number
+  - name: PGC_CELL
+    title: "Conversion to carbon value using Menden-Deuer and Lessard 2000"
+    type: number
+  - name: TROPHY
+    title: "Feeding mechanism based on literature sources"
+    type: string  
+  primaryKey: TAXON_NAME
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/

@@ -18,7 +18,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install 'frictionless>=5'
+        run: pip install '.'
 
       - name: Get changed resource files
         id: changed-files
@@ -30,4 +30,4 @@ jobs:
 
       - name: Validate data against changed schemas
         if: steps.changed-files.outputs.any_changed == 'true'
-        run: src/validate.py ${{ steps.changed-files.outputs.all_changed_files }}
+        run: python -m public_schema ${{ steps.changed-files.outputs.all_changed_files }}

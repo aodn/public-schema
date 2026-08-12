@@ -1,0 +1,84 @@
+profile: tabular-data-resource
+name: bgc_trip
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_trip
+title: bgc_trip
+description: A table of all BGC Trips where there are data listed
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: FID
+    title: "Unique identifier for record, added by Geoserver WFS"
+    type: string
+  - name: PROJECTNAME
+    title: "Source project name"
+    type: string
+    constraints:
+      required: true
+  - name: TRIP_CODE
+    title: "Unique identifier for trip"
+    type: string
+    constraints:
+      required: true
+  - name: STATIONNAME
+    title: "Station name sample was taken at"
+    type: string
+    constraints:
+      required: true
+  - name: STATIONCODE
+    title: "Station code (used to build trip code)"
+    type: string
+    constraints:
+      required: true    
+  - name: LONGITUDE
+    title: "Longitude of mid point of segment in decimal degrees East"
+    type: number
+    minimum: -180
+    maximum: 180
+    constraints:
+      required: true    
+  - name: LATITUDE
+    title: "Latitude of mid point of segment in decimal degrees North"
+    type: number
+    constraints:
+      required: true
+    minimum: -90
+    maximum: 90
+  - name: ZOOPSAMPLEDEPTH_M
+    title: "Depth (m) that zooplankton sample was obtained"
+    type: number
+  - name: PHYTOSAMPLEDEPTH_M
+    title: "Depth (m) that phytoplankton sample was obtained"
+    type: number
+  - name: SAMPLEDATELOCAL
+    title: "Date & time of sample in local time (formatted string)"
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d %H:%M:%S"
+  - name: SAMPLEDATEUTC
+    title: "Date & time of sample in UTC time (formatted string)"
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d %H:%M:%S"
+    constraints:
+      required: true    
+  - name: BIOMASS_MGM3
+    title: Biomass in mg per m3 for Trip
+    type: number
+  - name: ASHFREEBIOMASS_MGM3
+    title: Ash Free Biomass in mg per m3 for Trip
+    type: number
+  - name: SECCHI_M
+    title: Secchi depth in m for Trip
+    type: number
+  - name: SAMPLETYPE
+    title: Code for which analysis is available for that segment
+    type: string
+  primaryKey: TRIP_CODE
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/

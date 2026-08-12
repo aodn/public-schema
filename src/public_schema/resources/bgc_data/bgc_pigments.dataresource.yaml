@@ -1,0 +1,128 @@
+profile: tabular-data-resource
+name: bgc_pigments
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_pigments
+title: bgc_pigments
+description: "A table of BGC pigments"
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: FID
+    title: "Unique identifier for record, added by Geoserver WFS"
+    type: string
+  - name: TRIP_CODE
+    title: "Identifier for trip"
+    type: string
+    constraints:
+      required: true
+  - name: SAMPLEDATELOCAL
+    title: "Date & time of sample in local time (formatted string)"
+    type: datetime
+    # format string *must* be specified using standard Python/C strptime specification
+    # https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
+    format: "%Y-%m-%d %H:%M:%S"
+    constraints:
+      required: true
+  - name: SAMPLEDEPTH_M
+    title: "Depth (m) that sample was obtained, or 'WC' if combined water-column sample"
+    type: string
+    constraints:
+      required: true
+  - name: CPHL_C3
+    type: number
+  - name: MG_DVP
+    type: number
+  - name: CPHL_C2
+    type: number
+  - name: CPHL_C1
+    type: number
+  - name: CPHL_C1C2
+    type: number
+  - name: CPHLIDE_A
+    type: number
+  - name: PHIDE_A
+    type: number
+  - name: PERID
+    type: number
+  - name: PYROPHIDE_A
+    type: number
+  - name: BUT_FUCO
+    type: number
+  - name: FUCO
+    type: number
+  - name: NEO
+    type: number
+  - name: KETO_HEX_FUCO
+    type: number
+  - name: PRAS
+    type: number
+  - name: VIOLA
+    type: number
+  - name: HEX_FUCO
+    type: number
+  - name: ASTA
+    type: number
+  - name: DIADCHR
+    type: number
+  - name: DIADINO
+    type: number
+  - name: DINO
+    type: number
+  - name: ANTH
+    type: number
+  - name: ALLO
+    type: number
+  - name: MYXO
+    type: number
+  - name: DIATO
+    type: number
+  - name: ZEA
+    type: number
+  - name: LUT
+    type: number
+  - name: CANTHA
+    type: number
+  - name: GYRO
+    type: number
+  - name: DV_CPHL_B
+    type: number
+  - name: CPHL_B
+    type: number
+  - name: DV_CPHL_B_AND_CPHL_B
+    type: number
+  - name: DV_CPHL_A
+    type: number
+  - name: CPHL_A
+    type: number
+  - name: DV_CPHL_A_AND_CPHL_A
+    type: number
+  - name: ECHIN
+    type: number
+  - name: PHYTIN_B
+    type: number
+  - name: PHYTIN_A
+    type: number
+  - name: LYCO
+    type: number
+  - name: BETA_EPI_CAR
+    type: number
+  - name: BETA_BETA_CAR
+    type: number
+  - name: ALPHA_BETA_CAR
+    type: number
+  - name: PYROPHYTIN_A
+    type: number
+  - name: PIGMENTS_FLAG
+    type: integer
+    constraints:
+      required: true
+  - name: PIGMENTS_COMMENTS
+    type: string
+  primaryKey:
+  - TRIP_CODE
+  - SAMPLEDEPTH_M
+licenses:
+- name: CC-BY-4.0
+  title: Creative Commons Attribution 4.0
+  path: https://creativecommons.org/licenses/by/4.0/
