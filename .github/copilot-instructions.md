@@ -18,7 +18,7 @@ pip install frictionless
 
 Validate a single `.dataresource.yaml` file (fetches live data from CSIRO Geoserver):
 ```shell
-python code/validate.py bgc_data/bgc_chemistry.dataresource.yaml
+python src/validate.py bgc_data/bgc_chemistry.dataresource.yaml
 ```
 
 Validate a local CSV against a standalone schema:
@@ -26,7 +26,7 @@ Validate a local CSV against a standalone schema:
 frictionless validate --schema IMOS_ATF-ACOUSTIC/IMOS_ATF-ACOUSTIC.schema.yaml <path/to/file.csv>
 ```
 
-The CI workflow (`test_resources.yaml`) automatically runs `code/validate.py` against any changed `.dataresource.yaml` files on PRs to `master`.
+The CI workflow (`test_resources.yaml`) automatically runs `../src/validate.py` against any changed `.dataresource.yaml` files on PRs to `master`.
 
 ## Repository structure
 
@@ -34,7 +34,8 @@ The CI workflow (`test_resources.yaml`) automatically runs `code/validate.py` ag
 - **`cpr_data/`** — CPR (Continuous Plankton Recorder) data: same pattern as bgc_data
 - **`IMOS_ATF-ACOUSTIC/`** — Acoustic animal tracking: `.schema.yaml` (standalone schema) + `.resource.yaml` (resource descriptors)
 - **`IMOS_ATF-SATTAG/`** — Satellite tag data: `.resource.yaml` files per product type
-- **`code/`** — Python/shell utilities: `validate.py`, `download_resource.sh` (fetch CSVs from Geoserver)
+- **`src/`** — Python code to validate, download, and generate products from the data resources
+- **`scripts/`** — Shell scripts used by legacy pipelines (deprecated) 
 - **`public-schema.wiki/`** — Wiki docs including the BGC schema management process
 
 ## File format conventions

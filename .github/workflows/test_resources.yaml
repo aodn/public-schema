@@ -30,4 +30,4 @@ jobs:
 
       - name: Validate data against changed schemas
         if: steps.changed-files.outputs.any_changed == 'true'
-        run: code/validate.py ${{ steps.changed-files.outputs.all_changed_files }}
+        run: src/validate.py ${{ steps.changed-files.outputs.all_changed_files }}
