@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v2.*.*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to release (e.g. v1.2.3)"
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
+          fetch-depth: 0
+
+      - name: Read Project Name
+        id: pyproject_name
+        uses: sravinet/toml-select@v1.0.1
+        with:
+          file: "pyproject.toml"
+          field: "project.name"
+
+      - name: Resolve tag
+        id: vars
+        run: |
+          TAG="${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}"
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.11"
+          enable-cache: true
+
+#      - name: Lint
+#        run: |
+#          uv sync --group dev
+#          uv run ruff check --extend-select I
+#          uv run ruff format --check
+
+      - name: Build python wheel/sdist
+        run: uv build
+
+      - name: Create GitHub Release
+        run: |
+          gh release create "$TAG" \
+            dist/* \
+            --generate-notes \
+            --title "Release $TAG"
+        env:
+          GH_TOKEN: ${{ github.token }}
