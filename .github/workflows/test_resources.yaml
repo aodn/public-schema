@@ -1,9 +1,11 @@
 name: Test Resources
+
 on:
   push:
-    branches: [ master, v2 ]
+    branches: [ v2 ]
   pull_request:
-    branches: [ master, v2 ]
+    branches: [ v2 ]
+
 jobs:
   validate-resources:
     runs-on: ubuntu-latest
@@ -12,13 +14,12 @@ jobs:
         with:
           fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install '.'
+        run: uv sync --group dev
 
       - name: Get changed resource files
         id: changed-files
