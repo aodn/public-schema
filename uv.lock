@@ -469,6 +469,8 @@ name = "public-schema"
 source = { editable = "." }
 dependencies = [
     { name = "frictionless" },
+    { name = "pyyaml" },
+    { name = "requests" },
 ]
 
 [package.optional-dependencies]
@@ -488,6 +490,8 @@ requires-dist = [
     { name = "frictionless", specifier = ">=5" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=4.6.2" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7" },
+    { name = "pyyaml", specifier = ">=6" },
+    { name = "requests", specifier = ">=2" },
 ]
 provides-extras = ["dev"]
 

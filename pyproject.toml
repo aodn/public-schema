@@ -6,6 +6,8 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "frictionless>=5",
+    "pyyaml>=6",
+    "requests>=2",
 ]
 
 [build-system]
