@@ -124,23 +124,26 @@ def validate_local(
     return report.valid, report.flatten(["name", "message"])
 
 
-def validate_resource(resouce: str | Path | Resource, http_timeout: int = 100):
+def validate_resource(name_or_path: str | Path, http_timeout: int = 100):
     """
     Validate the given resource (including data accessed from the specified path)
 
-    :param resouce: frictionless.Resource object, or path to a resource file
+    :param name_or_path: resource name or path to a ``.dataresource.yaml`` file
     :param http_timeout: http response timeout in seconds
     :return: tuple (valid:bool, errors:list)
     """
-    if not isinstance(resouce, Resource):
-        resouce = Path(resouce)
-        if not resouce.exists():
-            raise FileNotFoundError(f"Resource file {resouce.resolve()} does not exist")
+    descriptor_path = resolve_resource(name_or_path)
+    if not descriptor_path.exists():
+        raise FileNotFoundError(
+            f"Resource file {descriptor_path.resolve()} does not exist"
+        )
 
     try:
         # create (a copy of) Resource object
         # set longer timeout to allow for slow response
-        res = Resource(resouce, control=RemoteControl(http_timeout=http_timeout))
+        res = Resource(
+            descriptor_path, control=RemoteControl(http_timeout=http_timeout)
+        )
     except FrictionlessException as e:
         return False, [f"Not a valid resource description:\n{e}"]
 

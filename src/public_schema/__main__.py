@@ -64,8 +64,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_validate.add_argument(
         "resources",
         nargs="+",
-        metavar="resource.yaml",
-        help="Path(s) to .dataresource.yaml file(s) to validate.",
+        metavar="resource[.yaml]",
+        help="Resource name(s) or path(s) to .yaml descriptor file(s).",
     )
     p_validate.set_defaults(func=_cmd_validate)
 
