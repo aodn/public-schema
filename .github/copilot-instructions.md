@@ -7,18 +7,33 @@ Schemas (in `bgc_data/` and `cpr_data/`) define the agreed structure of tabular 
 
 Data resources described in other folders (`IMOS_*/`) are for AODN internal validation use only.
 
-## Validation commands
+## Development commands
 
 Install dependencies (use `uv` — `uv.lock` is present):
 ```shell
-uv sync
-# or
-pip install frictionless
+uv sync --group dev
+```
+
+Set up pre-commit hooks (lint on commit, test on push):
+```shell
+make init
+```
+
+Run tests:
+```shell
+make test
+# or: uv run pytest tests/ -v
+```
+
+Lint (ruff check + format):
+```shell
+make lint
+# or: uvx ruff check --fix --target-version py311 && uvx ruff format --target-version py311
 ```
 
 Validate a single `.dataresource.yaml` file (fetches live data from CSIRO Geoserver):
 ```shell
-python src/validate.py bgc_data/bgc_chemistry.dataresource.yaml
+python -m public_schema src/public_schema/resources/bgc_data/bgc_chemistry.dataresource.yaml
 ```
 
 Validate a local CSV against a standalone schema:
@@ -26,17 +41,27 @@ Validate a local CSV against a standalone schema:
 frictionless validate --schema IMOS_ATF-ACOUSTIC/IMOS_ATF-ACOUSTIC.schema.yaml <path/to/file.csv>
 ```
 
-The CI workflow (`test_resources.yaml`) automatically runs `../src/validate.py` against any changed `.dataresource.yaml` files on PRs to `master`.
+The CI workflow (`ci.yaml`) runs on PRs to `v2` and automatically validates any changed `.dataresource.yaml` files in `src/public_schema/resources/` using `python -m public_schema`. Releases are triggered by pushing a `v2.*.*` tag and publish a GitHub Release with the built wheel and sdist.
 
 ## Repository structure
 
-- **`bgc_data/`** — BGC (Biogeochemical) data: paired `.dataresource.yaml` + `.sql` files per dataset
-- **`cpr_data/`** — CPR (Continuous Plankton Recorder) data: same pattern as bgc_data
+- **`src/public_schema/`** — Installable Python package (`import public_schema`)
+  - **`validate.py`** — `validate_resource()` function (importable)
+  - **`__main__.py`** — CLI entry point (`python -m public_schema`)
+  - **`resources/bgc_data/`** — BGC (Biogeochemical) data: paired `.dataresource.yaml` + `.sql` files
+  - **`resources/cpr_data/`** — CPR (Continuous Plankton Recorder) data: same pattern as bgc_data
+- **`bgc_data/`** and **`cpr_data/`** — Canonical source copies at repo root (kept for backward compatibility; the package bundles copies from `src/public_schema/resources/`)
+- **`tests/`** — pytest unit tests for the package
 - **`IMOS_ATF-ACOUSTIC/`** — Acoustic animal tracking: `.schema.yaml` (standalone schema) + `.resource.yaml` (resource descriptors)
 - **`IMOS_ATF-SATTAG/`** — Satellite tag data: `.resource.yaml` files per product type
-- **`src/`** — Python code to validate, download, and generate products from the data resources
-- **`scripts/`** — Shell scripts used by legacy pipelines (deprecated) 
+- **`scripts/`** — Shell scripts used by legacy pipelines (deprecated)
 - **`public-schema.wiki/`** — Wiki docs including the BGC schema management process
+
+Access bundled resource files from code:
+```python
+from importlib.resources import files
+path = files("public_schema.resources.bgc_data") / "bgc_chemistry.dataresource.yaml"
+```
 
 ## File format conventions
 
@@ -80,4 +105,4 @@ SQL queries for generating AODN Portal products from harvested raw data. Live al
 - **WFS resources** serve a `FID` column as the first column from GeoServer that is not part of the original schema. Resources exported via GeoServer must specify this as the first `field` in their schema.
 - **`missingValues`** is specified at the schema level for ATF files: `["", " ", "NA"]`.
 - All schemas use **CC-BY-4.0** license.
-- Changes to `master` require a PR reviewed by another party (CSIRO or AODN). CI validates schemas live against CSIRO Geoserver — a PR will fail if the schema doesn't match the actual WFS layer.
+- Changes to `master` require a PR reviewed by another party (CSIRO or AODN). CI validates schemas live against CSIRO Geoserver — a PR will fail if the schema doesn't match the actual WFS layer. The active CI branch is `v2`.
