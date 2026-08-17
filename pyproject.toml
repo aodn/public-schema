@@ -14,7 +14,14 @@ build-backend = "hatchling.build"
 
 [project.optional-dependencies]
 dev = [
+    "pre-commit>=4.6.2",
     "pytest>=7",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.6.2",
+    "pytest>7",
 ]
 
 [tool.hatch.build.targets.wheel]
@@ -26,7 +33,3 @@ source = "vcs"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
-[dependency-groups]
-dev = [
-    "pytest>7",
-]

@@ -3,13 +3,12 @@ Helper functions for validating schemas and resources using the Frictionless fra
 """
 
 from pathlib import Path
-from typing import Union
 
-from frictionless import Resource, validate, FrictionlessException
+from frictionless import FrictionlessException, Resource, validate
 from frictionless.schemes.remote import RemoteControl
 
 
-def validate_resource(resouce: Union[str, Path, Resource], http_timeout: int = 100):
+def validate_resource(resouce: str | Path | Resource, http_timeout: int = 100):
     """
     Validate the given resource (including data accessed from the specified path)
 
@@ -34,4 +33,4 @@ def validate_resource(resouce: Union[str, Path, Resource], http_timeout: int = 1
     except FrictionlessException as e:
         return False, [f"An exception occurred during validation:\n{e}"]
 
-    return report.valid, report.flatten(['name', 'message'])
+    return report.valid, report.flatten(["name", "message"])

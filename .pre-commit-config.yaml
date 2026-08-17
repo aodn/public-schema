@@ -1,0 +1,32 @@
+repos:
+  - repo: local
+    hooks:
+
+      - id: ruff
+        name: ruff
+        language: system
+        entry: uvx ruff check --fix --target-version py311
+        types: [python]
+
+      - id: ruff-format
+        name: ruff-format
+        language: system
+        entry: uvx ruff format --target-version py311
+        types: [python]
+
+      - id: uv-export
+        name: uv export requirements.txt
+        language: system
+        entry: uv export --no-dev --no-emit-project --format requirements.txt --output-file requirements.txt
+        files: ^(pyproject\.toml|uv\.lock)$
+        pass_filenames: false
+
+      - id: test
+        name: run tests
+        language: system
+        entry: make test
+        pass_filenames: false
+        verbose: true
+        files: ^(.*\.(py|toml|yaml|yml|json|md)|uv\.lock|Dockerfile|tests/.*)$
+        exclude: ^\.github/workflows/
+        stages: [pre-push]
