@@ -3,12 +3,19 @@
 import subprocess
 import sys
 from importlib.resources import files
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
 import yaml
 
-from public_schema import download_resource, resolve_resource, validate_local
+from public_schema import (
+    download_resource,
+    resolve_resource,
+    resource_descriptors_dict,
+    resource_descriptors_list,
+    validate_local,
+)
 
 
 def test_data_resource_accessible():
@@ -24,6 +31,89 @@ def test_data_resource_readable():
     )
     content = resource.read_text(encoding="utf-8")
     assert "name: bgc_chemistry" in content
+
+
+# --- resource_descriptors_dict ---
+
+
+def test_resource_descriptors_dict_returns_dict():
+    result = resource_descriptors_dict()
+    assert isinstance(result, dict)
+
+
+def test_resource_descriptors_dict_nonempty():
+    result = resource_descriptors_dict()
+    assert len(result) > 0
+
+
+def test_resource_descriptors_dict_keys_are_str():
+    result = resource_descriptors_dict()
+    assert all(isinstance(k, str) for k in result)
+
+
+def test_resource_descriptors_dict_values_are_paths():
+    result = resource_descriptors_dict()
+    assert all(isinstance(v, Path) for v in result.values())
+
+
+def test_resource_descriptors_dict_paths_exist():
+    result = resource_descriptors_dict()
+    assert all(v.exists() for v in result.values())
+
+
+def test_resource_descriptors_dict_contains_known_bgc():
+    result = resource_descriptors_dict()
+    assert "bgc_chemistry" in result
+
+
+def test_resource_descriptors_dict_contains_known_cpr():
+    result = resource_descriptors_dict()
+    assert "cpr_phyto_raw" in result
+
+
+def test_resource_descriptors_dict_key_matches_filename():
+    result = resource_descriptors_dict()
+    for name, path in result.items():
+        assert path.name == f"{name}.dataresource.yaml"
+
+
+# --- resource_descriptors_list ---
+
+
+def test_resource_descriptors_list_returns_list():
+    result = resource_descriptors_list()
+    assert isinstance(result, list)
+
+
+def test_resource_descriptors_list_nonempty():
+    result = resource_descriptors_list()
+    assert len(result) > 0
+
+
+def test_resource_descriptors_list_are_paths():
+    result = resource_descriptors_list()
+    assert all(isinstance(p, Path) for p in result)
+
+
+def test_resource_descriptors_list_paths_exist():
+    result = resource_descriptors_list()
+    assert all(p.exists() for p in result)
+
+
+def test_resource_descriptors_list_all_dataresource_yaml():
+    result = resource_descriptors_list()
+    assert all(p.name.endswith(".dataresource.yaml") for p in result)
+
+
+def test_resource_descriptors_list_is_sorted():
+    result = resource_descriptors_list()
+    assert result == sorted(result)
+
+
+def test_resource_descriptors_list_matches_dict_values():
+    d = resource_descriptors_dict()
+    lst = resource_descriptors_list()
+    assert sorted(d.values()) == lst
 
 
 # --- resolve_resource ---

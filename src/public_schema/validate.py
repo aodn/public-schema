@@ -13,6 +13,49 @@ from frictionless.schemes.remote import RemoteControl
 _RESOURCE_SUBDIRS = ["bgc_data", "cpr_data"]
 
 
+def resource_descriptors_dict() -> dict[str, Path]:
+    """
+    Return a (name: path) mapping for all bundled ``.dataresource.yaml`` files.
+
+    Resources are sourced from the ``bgc_data/`` and ``cpr_data/`` subdirectories
+    bundled inside the ``public_schema`` package.
+
+    :return: dict mapping resource names to absolute paths (:class:`str`, :class:`~pathlib.Path`)
+    """
+    resources = {}
+    for subdir in _RESOURCE_SUBDIRS:
+        pkg_dir = files(f"public_schema.resources.{subdir}")
+        for entry in pkg_dir.iterdir():
+            if entry.name.endswith(".dataresource.yaml"):
+                name = entry.stem.replace(".dataresource", "")
+                if name in resources:
+                    raise ValueError(
+                        f"Duplicate resource name {name!r} in {subdir} and {resources[name]}"
+                    )
+                with as_file(entry) as p:
+                    resources[name] = Path(p).resolve()
+    return resources
+
+
+def resource_descriptors_list() -> list[Path]:
+    """
+    Return the absolute paths of all bundled ``.dataresource.yaml`` files.
+
+    Resources are sourced from the ``bgc_data/`` and ``cpr_data/`` subdirectories
+    bundled inside the ``public_schema`` package.
+
+    :return: sorted list of :class:`~pathlib.Path` objects
+    """
+    paths = []
+    for subdir in _RESOURCE_SUBDIRS:
+        pkg_dir = files(f"public_schema.resources.{subdir}")
+        for entry in pkg_dir.iterdir():
+            if entry.name.endswith(".dataresource.yaml"):
+                with as_file(entry) as p:
+                    paths.append(Path(p).resolve())
+    return sorted(paths)
+
+
 def resolve_resource(name_or_path: str | Path) -> Path:
     """
     Resolve a resource name or path to the absolute path of its .dataresource.yaml file.
@@ -40,7 +83,6 @@ def resolve_resource(name_or_path: str | Path) -> Path:
     for subdir in _RESOURCE_SUBDIRS:
         pkg_path = files(f"public_schema.resources.{subdir}") / filename
         if pkg_path.is_file():
-            # Materialise to a real filesystem path
             with as_file(pkg_path) as p:
                 return Path(p).resolve()
 

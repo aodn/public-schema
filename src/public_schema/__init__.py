@@ -10,6 +10,8 @@ Data resources (YAML + SQL) are bundled under `public_schema.resources`:
 from public_schema.validate import (
     download_resource,
     resolve_resource,
+    resource_descriptors_dict,
+    resource_descriptors_list,
     validate_local,
     validate_resource,
 )
@@ -17,6 +19,8 @@ from public_schema.validate import (
 __all__ = [
     "download_resource",
     "resolve_resource",
+    "resource_descriptors_dict",
+    "resource_descriptors_list",
     "validate_local",
     "validate_resource",
 ]
