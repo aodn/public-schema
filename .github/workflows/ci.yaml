@@ -46,4 +46,4 @@ jobs:
 
       - name: Validate data against changed schemas
         if: steps.changed-files.outputs.any_changed == 'true'
-        run: python -m public_schema ${{ steps.changed-files.outputs.all_changed_files }}
+        run: python -m public_schema validate ${{ steps.changed-files.outputs.all_changed_files }}
