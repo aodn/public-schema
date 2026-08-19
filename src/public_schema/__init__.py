@@ -13,6 +13,10 @@ from public_schema.export import (
     resource_descriptors_dict,
     resource_descriptors_list,
 )
+from public_schema.transform import (
+    sql_files_dict,
+    sql_files_list,
+)
 from public_schema.validate import (
     validate_local,
     validate_resource,
@@ -23,6 +27,8 @@ __all__ = [
     "resolve_resource",
     "resource_descriptors_dict",
     "resource_descriptors_list",
+    "sql_files_dict",
+    "sql_files_list",
     "validate_local",
     "validate_resource",
 ]
