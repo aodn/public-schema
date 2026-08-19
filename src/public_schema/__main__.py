@@ -4,7 +4,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from public_schema.validate import download_resource, validate_local, validate_resource
+from public_schema import download_resource, validate_local, validate_resource
 
 
 def _cmd_validate(args: argparse.Namespace) -> int:

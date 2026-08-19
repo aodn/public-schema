@@ -33,7 +33,7 @@ make lint
 
 Validate a single `.dataresource.yaml` file (fetches live data from CSIRO Geoserver):
 ```shell
-python -m public_schema src/public_schema/resources/bgc_data/bgc_chemistry.dataresource.yaml
+frictionless validate src/public_schema/resources/bgc_data/bgc_chemistry.dataresource.yaml
 ```
 
 Validate a local CSV against a standalone schema:
@@ -46,7 +46,8 @@ The CI workflow (`ci.yaml`) runs on PRs to `v2` and automatically validates any 
 ## Repository structure
 
 - **`src/public_schema/`** — Installable Python package (`import public_schema`)
-  - **`validate.py`** — `validate_resource()` function (importable)
+  - **`export.py`** - Functions for accessing the data resource descriptors and downloading the data they describe
+  - **`validate.py`** — Functions for validating data resources against their schemas 
   - **`__main__.py`** — CLI entry point (`python -m public_schema`)
   - **`resources/bgc_data/`** — BGC (Biogeochemical) data: paired `.dataresource.yaml` + `.sql` files
   - **`resources/cpr_data/`** — CPR (Continuous Plankton Recorder) data: same pattern as bgc_data
