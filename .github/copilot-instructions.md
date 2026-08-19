@@ -3,7 +3,7 @@
 ## Purpose
 
 This repository stores schema specifications and SQL product-generation code for IMOS (Integrated Marine Observing System) data exchange between CSIRO and AODN. 
-Schemas (in `bgc_data/` and `cpr_data/`) define the agreed structure of tabular data (CSV) served via CSIRO Geoserver WFS layers and consumed by AODN harvest pipelines and the AODN Portal.
+Schemas (in `src/public_schema/resources/bgc_data/` and `src/public_schema/resources/cpr_data/`) define the agreed structure of tabular data (CSV) served via CSIRO Geoserver WFS layers and consumed by AODN harvest pipelines and the AODN Portal.
 
 Data resources described in other folders (`IMOS_*/`) are for AODN internal validation use only.
 
@@ -51,11 +51,11 @@ The CI workflow (`ci.yaml`) runs on PRs to `v2` and automatically validates any 
   - **`__main__.py`** — CLI entry point (`python -m public_schema`)
   - **`resources/bgc_data/`** — BGC (Biogeochemical) data: paired `.dataresource.yaml` + `.sql` files
   - **`resources/cpr_data/`** — CPR (Continuous Plankton Recorder) data: same pattern as bgc_data
-- **`bgc_data/`** and **`cpr_data/`** — Canonical source copies at repo root (kept for backward compatibility; the package bundles copies from `src/public_schema/resources/`)
 - **`tests/`** — pytest unit tests for the package
 - **`IMOS_ATF-ACOUSTIC/`** — Acoustic animal tracking: `.schema.yaml` (standalone schema) + `.resource.yaml` (resource descriptors)
 - **`IMOS_ATF-SATTAG/`** — Satellite tag data: `.resource.yaml` files per product type
-- **`scripts/`** — Shell scripts used by legacy pipelines (deprecated)
+- **`../legacy/bgc_data/`** and **`../legacy/cpr_data/`** — Original BGC and CPR data resource descriptors and SQL files (deprecated)
+- **`../legacy/scripts/`** — Shell scripts used by legacy pipelines (deprecated)
 - **`public-schema.wiki/`** — Wiki docs including the BGC schema management process
 
 Access bundled resource files from code:
