@@ -1,6 +1,4 @@
--- Materialized view for Phytoplankton CPR Higher Taxonomic Groups (HTG) abundance product
--- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
--- which will convert the jsonb `abundances` column into separate CSV columns on output.
+-- CPR Phytoplankton Higher Taxonomic Groups (HTG) abundance product
 CREATE OR REPLACE TABLE cpr_phytoplankton_abundance_htg_data AS
 WITH grouped AS (
     -- sum up abundances for each trip/group,

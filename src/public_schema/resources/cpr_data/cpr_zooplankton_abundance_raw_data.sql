@@ -1,6 +1,4 @@
--- Materialized view for CPR Zooplankton Raw products
--- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
--- which will convert the jsonb `abundances` column into separate CSV columns on output.
+-- CPR Zooplankton Raw products
 CREATE OR REPLACE TABLE cpr_zooplankton_abundance_raw_data AS
 WITH pivoted AS (
     -- aggregate all taxa per trip into a single row

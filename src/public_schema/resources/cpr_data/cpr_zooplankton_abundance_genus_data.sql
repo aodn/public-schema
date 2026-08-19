@@ -1,6 +1,4 @@
--- Materialized view for CPR Zooplankton Genus product
--- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
--- which will convert the jsonb `abundances` column into separate CSV columns on output.
+-- CPR Zooplankton Genus product
 CREATE OR REPLACE TABLE cpr_zooplankton_abundance_genus_data AS
 WITH grouped AS (
     -- join changelog on to raw data, pick only rows where genus identified

@@ -1,5 +1,4 @@
---create materialized view for pigments
---includes metadata
+-- Pigments product, includes metadata
 CREATE OR REPLACE TABLE bgc_pigments_data AS 
    SELECT
       bm."Project",

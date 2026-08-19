@@ -1,6 +1,4 @@
--- Materialized view for CPR Phytoplankton Species abundance product
--- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
--- which will convert the jsonb `abundances` column into separate CSV columns on output.
+-- CPR Phytoplankton Species abundance product
 CREATE OR REPLACE TABLE cpr_phytoplankton_abundance_species_data AS
 WITH cpr_phyto_raw_species AS (
     -- filter out rows where species hasn't been identified,

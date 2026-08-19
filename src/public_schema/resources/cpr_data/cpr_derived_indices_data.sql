@@ -1,5 +1,4 @@
--- Materialized view for the CPR Derived Indices product
--- To be served as a WFS layer by Geoserver
+-- CPR Derived Indices product
 
 CREATE OR REPLACE TABLE cpr_derived_indices_data AS
 WITH

@@ -1,6 +1,4 @@
--- Materialized view for Phytoplankton Species biovolume product
--- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
--- which will convert the jsonb `biovolumes` column into separate CSV columns on output.
+-- Phytoplankton Species biovolume product
 CREATE OR REPLACE TABLE bgc_phytoplankton_biovolume_species_data AS
 WITH bgc_phyto_raw_species AS (
     -- filter out rows where species hasn't been identified,

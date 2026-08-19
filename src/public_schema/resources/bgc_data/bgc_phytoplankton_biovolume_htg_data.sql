@@ -1,6 +1,4 @@
--- Materialized view for Phytoplankton Higher Taxonomic Groups (HTG) biovolume product
--- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
--- which will convert the jsonb `biovolumes` column into separate CSV columns on output.
+-- Phytoplankton Higher Taxonomic Groups (HTG) biovolume product
 CREATE OR REPLACE TABLE bgc_phytoplankton_biovolume_htg_data AS
 WITH grouped AS (
     -- sum up biovolumes for each trip/group,

@@ -1,5 +1,4 @@
---create materialized view for chemistry
---includes metadata
+--Chemistry data product - includes metadata
 CREATE OR REPLACE TABLE bgc_chemistry_data AS
    SELECT
       bm."Project",

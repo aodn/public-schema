@@ -1,4 +1,4 @@
---create materialized view for tss metadata that includes all replicates
+-- Tss metadata product that includes all replicates
 CREATE OR REPLACE TABLE bgc_tss_data AS
    SELECT 
       bm."Project",

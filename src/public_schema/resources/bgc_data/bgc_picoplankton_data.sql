@@ -1,4 +1,4 @@
---create materialized view for picoplankton, including metadata
+-- Picoplankton product, including metadata
 CREATE OR REPLACE TABLE bgc_picoplankton_data AS
    SELECT
       bm."Project",

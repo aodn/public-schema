@@ -1,5 +1,4 @@
--- Materialized view for the NRS Derived Indices product
--- To be served as a WFS layer by Geoserver
+-- NRS Derived Indices product
 CREATE OR REPLACE TABLE nrs_derived_indices_data AS
 WITH
 

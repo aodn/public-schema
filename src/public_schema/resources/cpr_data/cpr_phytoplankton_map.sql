@@ -1,5 +1,4 @@
--- This view is the basis for the WMS layer (seen on step 2 on AODN Portal).
--- It also provides the metadata columns for all the phytoplankton products.
+-- Metadata columns for all CPR phytoplankton products.
 CREATE OR REPLACE TABLE cpr_phytoplankton_map AS
   SELECT DISTINCT
     s.trip_code AS "TripCode",

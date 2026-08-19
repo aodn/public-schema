@@ -1,6 +1,4 @@
--- Materialized view for Phytoplankton Raw biovolume product
--- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
--- which will convert the jsonb `biovolumes` column into separate CSV columns on output.
+-- Phytoplankton Raw biovolume product
 CREATE OR REPLACE TABLE cpr_phytoplankton_biovolume_raw_data AS
 WITH pivoted AS (
     -- aggregate all taxa per sample into a single row

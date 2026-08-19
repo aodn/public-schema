@@ -1,5 +1,4 @@
--- This view is the basis for the WMS layer (seen on step 2 on AODN Portal).
--- It also provides the metadata columns for all the bgc products.
+-- Common metadata columns for all the bgc products.
 CREATE OR REPLACE TABLE combined_bgc_map AS
   SELECT
     "Project",

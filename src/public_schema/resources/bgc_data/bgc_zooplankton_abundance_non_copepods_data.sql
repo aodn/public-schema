@@ -1,6 +1,4 @@
--- Materialized view for Zooplankton Species (Non-copepods) abundance product
--- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
--- which will convert the jsonb `abundances` column into separate CSV columns on output.
+-- Zooplankton Species (Non-copepods) abundance product
 CREATE OR REPLACE TABLE bgc_zooplankton_abundance_non_copepods_data AS
 WITH bgc_zoop_raw_species AS (
     -- filter out rows where species hasn't been identified,

@@ -1,6 +1,4 @@
--- Materialized view for Phytoplankton Genus abundance product
--- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
--- which will convert the jsonb `abundances` column into separate CSV columns on output.
+-- Phytoplankton Genus abundance product
 CREATE OR REPLACE TABLE bgc_phytoplankton_abundance_genus_data AS
 WITH grouped AS (
     -- join changelog on to raw data, pick only rows where genus identified

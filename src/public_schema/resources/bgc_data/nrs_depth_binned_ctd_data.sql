@@ -1,4 +1,4 @@
--- Materialized view for nrs depth binned ctd product
+-- NRS depth binned ctd product
 CREATE OR REPLACE TABLE nrs_depth_binned_ctd_data AS
 
 --create the final list for the materialised view
