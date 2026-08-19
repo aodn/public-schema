@@ -1,7 +1,7 @@
 -- Materialized view for Zooplankton Higher Taxonomic Groups (HTG) product
 -- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
 -- which will convert the jsonb `abundances` column into separate CSV columns on output.
-CREATE MATERIALIZED VIEW bgc_zooplankton_abundance_htg_data AS
+CREATE OR REPLACE TABLE bgc_zooplankton_abundance_htg_data AS
 WITH grouped AS (
     -- sum up abundances for each trip/group,
     -- filtering out groups that are not zooplankton
@@ -39,13 +39,13 @@ WITH grouped AS (
     GROUP BY trip_code, taxon_group
 ), pivoted AS (
     -- aggregate all taxon groups per trip into a single row
-    SELECT trip_code,
-           jsonb_object_agg(taxon_group, zoop_abundance_m3) AS abundances
-    FROM regrouped
+    PIVOT regrouped
+    ON taxon_group
+    USING sum(zoop_abundance_m3)
     GROUP BY trip_code
 )
 -- join on to metadata columns, include a row for every trip with zooplankton samples taken
 SELECT m.*,
-       p.abundances
+       p.* EXCLUDE (trip_code)
 FROM bgc_zooplankton_map m LEFT JOIN pivoted p USING (trip_code)
 ;

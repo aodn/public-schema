@@ -1,7 +1,7 @@
 -- Materialized view for Phytoplankton Higher Taxonomic Groups (HTG) abundance product
 -- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
 -- which will convert the jsonb `abundances` column into separate CSV columns on output.
-CREATE MATERIALIZED VIEW bgc_phytoplankton_abundance_htg_data AS
+CREATE OR REPLACE TABLE bgc_phytoplankton_abundance_htg_data AS
 WITH grouped AS (
     -- sum up abundances for each trip/group,
     -- filtering out groups that are not phytoplankton
@@ -44,15 +44,14 @@ WITH grouped AS (
     GROUP BY dg.trip_code, dg.methods, dg.taxon_group
 ), pivoted AS (
     -- aggregate all taxon groups per trip into a single row
-    SELECT trip_code,
-           methods,
-           jsonb_object_agg(taxon_group, cell_l) AS abundances
-    FROM regrouped
+    PIVOT regrouped
+    ON taxon_group
+    USING sum(cell_l)
     GROUP BY trip_code, methods
 )
 -- join on to metadata columns, include a row for every trip with phytoplankton samples taken
 SELECT m.*,
        p.methods AS "Method",
-       p.abundances
+       p.* EXCLUDE (trip_code, methods)
 FROM bgc_phytoplankton_map m LEFT JOIN pivoted p USING (trip_code)
 ;

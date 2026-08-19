@@ -1,5 +1,5 @@
 --create combined bgc product
-CREATE MATERIALIZED VIEW combined_bgc_data AS 
+CREATE OR REPLACE TABLE combined_bgc_data AS 
 --first create temporary table with averaged picoplankton data from bgc_picoplankton
 WITH 
 picoplankton_avg AS (
@@ -13,7 +13,7 @@ picoplankton_avg AS (
       prt.synecochoccus_flag AS "Synechococcus_flag",
       prt.picoeukaryotes_cellsml AS "Picoeukaryotes_cellsmL",
       prt.picoeukaryotes_flag AS "Picoeukaryotes_flag",
-      to_char(prt.sampledatelocal, 'YYYY-MM-DD HH24:MI:SS') AS "SampleTime_Local"
+      strftime(prt.sampledatelocal, '%Y-%m-%d %H:%M:%S') AS "SampleTime_Local"
    FROM bgc_picoplankton prt
 ),
 --then create temporary table with averaged tss data from bgc_tss
@@ -26,7 +26,7 @@ tss_avg AS (
       tt.inorganicfraction_mgl AS "TSSinorganic_mgL", 
       tt.tss_mgl AS "TSS_mgL", 
       tt.tss_flag AS "TSSall_flag",
-      to_char(tt.sampledatelocal, 'YYYY-MM-DD HH24:MI:SS') AS "SampleTime_Local"
+      strftime(tt.sampledatelocal, '%Y-%m-%d %H:%M:%S') AS "SampleTime_Local"
    FROM bgc_tss tt
 ),
 --create temporary table with any depths associated with trip codes

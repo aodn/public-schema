@@ -1,11 +1,11 @@
 --create materialized view for tss metadata that includes all replicates
-CREATE MATERIALIZED VIEW bgc_tss_data AS
+CREATE OR REPLACE TABLE bgc_tss_data AS
    SELECT 
       bm."Project",
       bm."StationName",
       bm."TripCode",
       bm."TripDate_UTC",
-      to_char(tt.sampledatelocal, 'YYYY-MM-DD HH24:MI:SS') AS "SampleTime_Local",
+      strftime(tt.sampledatelocal, '%Y-%m-%d %H:%M:%S') AS "SampleTime_Local",
       bm."Latitude",
       bm."Longitude",
       bm."SecchiDepth_m",

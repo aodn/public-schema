@@ -1,7 +1,7 @@
 -- Materialized view for Phytoplankton Genus abundance product
 -- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
 -- which will convert the jsonb `abundances` column into separate CSV columns on output.
-CREATE MATERIALIZED VIEW bgc_phytoplankton_abundance_genus_data AS
+CREATE OR REPLACE TABLE bgc_phytoplankton_abundance_genus_data AS
 WITH grouped AS (
     -- join changelog on to raw data, pick only rows where genus identified
     -- group by trip, genus and changelog details
@@ -46,15 +46,14 @@ WITH grouped AS (
     GROUP BY trip_code, methods, genus
 ), pivoted AS (
     -- aggregate all genera per trip into a single row
-    SELECT trip_code,
-           methods,
-           jsonb_object_agg(genus, cell_l) AS abundances
-    FROM regrouped
+    PIVOT regrouped
+    ON genus
+    USING sum(cell_l)
     GROUP BY trip_code, methods
 )
 -- join on to metadata columns, include a row for every trip with phytoplankton samples taken
 SELECT m.*,
        p.methods AS "Method",
-       p.abundances
+       p.* EXCLUDE (trip_code, methods)
 FROM bgc_phytoplankton_map m LEFT JOIN pivoted p USING (trip_code)
 ;

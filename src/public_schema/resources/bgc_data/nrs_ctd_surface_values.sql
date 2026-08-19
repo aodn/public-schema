@@ -1,7 +1,7 @@
 -- Extract the near-surface measurements of temperature, salinity and chlorophyll
 -- from each CTD profile matched up with an NRS sampling trip in nrs_depth_binned_ctd_data
 -- The values extracted are those measured nearest to 10m depth (and at least between 5m and 15m).
-CREATE VIEW nrs_ctd_surface_values AS
+CREATE OR REPLACE VIEW nrs_ctd_surface_values AS
   SELECT DISTINCT ON (trip_code)
       trip_code,
       "SampleDepth_m",

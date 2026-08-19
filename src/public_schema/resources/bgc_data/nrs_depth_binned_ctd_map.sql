@@ -1,5 +1,5 @@
 -- View for nrs depth binned ctd product metadata (not actually used as a map layer)
-CREATE VIEW nrs_depth_binned_ctd_map AS
+CREATE OR REPLACE VIEW nrs_depth_binned_ctd_map AS
 
 --modify the site code to match with the deployments table
 --filter only for NRS stations

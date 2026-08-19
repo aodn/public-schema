@@ -1,7 +1,7 @@
 -- Materialized view for CPR Phytoplankton Species biovolume product
 -- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
 -- which will convert the jsonb `biovolumes` column into separate CSV columns on output.
-CREATE MATERIALIZED VIEW cpr_phytoplankton_biovolume_species_data AS
+CREATE OR REPLACE TABLE cpr_phytoplankton_biovolume_species_data AS
 WITH cpr_phyto_raw_species AS (
     -- filter out rows where species hasn't been identified,
     -- concatenate genus and species to create a simplified taxon name
@@ -55,13 +55,13 @@ defaults_and_grouped AS (
     GROUP BY sample, taxon_name
 ), pivoted AS (
     -- aggregate all species per trip into a single row
-    SELECT sample,
-           jsonb_object_agg(taxon_name, biovol_um3m3) AS biovolumes
-    FROM regrouped
+    PIVOT regrouped
+    ON taxon_name
+    USING sum(biovol_um3m3)
     GROUP BY sample
 )
 -- join on to metadata columns, include a row for every trip with phytoplankton samples taken
 SELECT m.*,
-       p.biovolumes
+       p.* EXCLUDE (sample)
 FROM cpr_phytoplankton_map m LEFT JOIN pivoted p USING (sample)
 ;

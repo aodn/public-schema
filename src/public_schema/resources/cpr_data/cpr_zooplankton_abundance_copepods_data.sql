@@ -1,7 +1,7 @@
 -- Materialized view for CPR Zooplankton Species (Copepods) abundance product
 -- To be served as a WFS layer by Geoserver using output format csv-with-metadata-header,
 -- which will convert the jsonb `abundances` column into separate CSV columns on output.
-CREATE MATERIALIZED VIEW cpr_zooplankton_abundance_copepods_data AS
+CREATE OR REPLACE TABLE cpr_zooplankton_abundance_copepods_data AS
 WITH cpr_zoop_raw_species AS (
     -- filter out rows where species hasn't been identified,
     -- concatenate genus and first word of species to create a simplified species name
@@ -55,13 +55,13 @@ WITH cpr_zoop_raw_species AS (
     GROUP BY sample, species
 ), pivoted AS (
     -- aggregate all species per trip into a single row
-    SELECT sample,
-           jsonb_object_agg(species, zoop_abundance_m3) AS abundances
-    FROM regrouped
+    PIVOT regrouped
+    ON species
+    USING sum(zoop_abundance_m3)
     GROUP BY sample
 )
 -- join on to metadata columns, include a row for every trip with zooplankton samples taken
 SELECT m.*,
-       p.abundances
+       p.* EXCLUDE (sample)
 FROM cpr_zooplankton_map m LEFT JOIN pivoted p USING (sample)
 ;

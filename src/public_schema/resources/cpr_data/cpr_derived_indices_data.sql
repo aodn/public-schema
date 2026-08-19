@@ -1,7 +1,7 @@
 -- Materialized view for the CPR Derived Indices product
 -- To be served as a WFS layer by Geoserver
 
-CREATE MATERIALIZED VIEW cpr_derived_indices_data AS
+CREATE OR REPLACE TABLE cpr_derived_indices_data AS
 WITH
 
 -- Zooplankton temp tables ------------------------------------------------------------------------
@@ -128,11 +128,11 @@ SELECT
        m.latitude AS "Latitude",
        m.longitude AS "Longitude",
        m.sampledateutc AS "SampleTime_UTC",
-       to_char(m.sampledatelocal, 'YYYY-MM-DD HH24:MI:SS') AS "SampleTime_Local",
+       strftime(m.sampledatelocal, '%Y-%m-%d %H:%M:%S') AS "SampleTime_Local",
        extract(year from m.sampledatelocal)::int AS "Year_Local",
        extract(month from m.sampledatelocal)::int AS "Month_Local",
        extract(day from m.sampledatelocal)::int AS "Day_Local",
-       to_char(m.sampledatelocal, 'HH24:MI') AS "Time_Local24hr",
+       strftime(m.sampledatelocal, '%H:%M') AS "Time_Local24hr",
        m.pci AS "PCI",
        m.biomass_mgm3 AS "BiomassIndex_mgm3",
        m.region AS "Region", ---check with Claire as in CPR products we call it Region
@@ -163,7 +163,7 @@ SELECT
        pss."ShannonDinoDiversity" / nullif(ln(nullif(ps."NoDinoSpecies_Sample", 0)), 0) AS "DinoflagellateEvenness",
 
        --geometry for geoserver layer
-       st_geomfromtext('POINT(' || m.longitude::text || ' ' || m.latitude::text || ')', 4326) AS geom
+       ST_AsWKB(ST_GeomFromText('POINT(' || m.longitude::text || ' ' || m.latitude::text || ')')) AS geom
 
 FROM cpr_samp m LEFT JOIN zoop_by_sample zt USING (sample)
                 LEFT JOIN copepods_by_sample ct USING (sample)

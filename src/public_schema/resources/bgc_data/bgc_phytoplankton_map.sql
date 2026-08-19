@@ -1,6 +1,6 @@
 -- This view is the basis for the WMS layer (seen on step 2 on AODN Portal).
 -- It also provides the metadata columns for all the phytoplankton products.
-CREATE MATERIALIZED VIEW bgc_phytoplankton_map AS
+CREATE OR REPLACE TABLE bgc_phytoplankton_map AS
   SELECT
     "Project",
     "StationName",

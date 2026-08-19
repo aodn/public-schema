@@ -1,6 +1,6 @@
 -- Materialized view for the NRS Derived Indices product
 -- To be served as a WFS layer by Geoserver
-CREATE MATERIALIZED VIEW nrs_derived_indices_data AS
+CREATE OR REPLACE TABLE nrs_derived_indices_data AS
 WITH
 
 -- Zooplankton temp tables ------------------------------------------------------------------------
