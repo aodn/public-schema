@@ -73,6 +73,12 @@ def test_resource_descriptors_dict_key_matches_filename():
         assert path.name == f"{name}.dataresource.yaml"
 
 
+def test_resource_descriptors_dict_with_pattern():
+    result = resource_descriptors_dict(pattern="bgc_data/*")
+    assert "bgc_chemistry" in result
+    assert "cpr_phyto_raw" not in result
+
+
 # --- resource_descriptors_list ---
 
 
@@ -110,6 +116,14 @@ def test_resource_descriptors_list_matches_dict_values():
     d = resource_descriptors_dict()
     lst = resource_descriptors_list()
     assert sorted(d.values()) == lst
+
+
+def test_resource_descriptors_list_with_pattern():
+    result = resource_descriptors_list(pattern="*/cpr_phyto*")
+    stems = {p.stem.removesuffix(".dataresource") for p in result}
+    assert "cpr_phyto_raw" in stems
+    assert "cpr_zoop_raw" not in stems
+    assert "bgc_chemistry" not in stems
 
 
 # --- resolve_resource ---

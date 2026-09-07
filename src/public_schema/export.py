@@ -9,50 +9,40 @@ from pathlib import Path
 import requests
 import yaml
 
+from public_schema.util import resource_files_dict
+
 _RESOURCE_SUBDIRS = ["bgc_data", "cpr_data"]
 
 
-def resource_descriptors_dict() -> dict[str, Path]:
+def resource_descriptors_dict(pattern: str = "*/*") -> dict[str, Path]:
     """
     Return a (name: path) mapping for all bundled ``.dataresource.yaml`` files.
 
-    Resources are sourced from the ``bgc_data/`` and ``cpr_data/`` subdirectories
-    bundled inside the ``public_schema`` package.
+    Resources are bundled inside subdirectories of the ``public_schema.resources`` sub-package.
+
+    :param pattern: optional glob pattern to filter resource paths (relative to public_schema/resources/). Note the
+                    '.dataresource.yaml' suffix is added automatically. For example, 'bgc_data/*' will match all
+                    resources in the bgc_data/ subdirectory. Defaults to all resources ('*/*').
 
     :return: dict mapping resource names to absolute paths (:class:`str`, :class:`~pathlib.Path`)
     """
-    resources = {}
-    for subdir in _RESOURCE_SUBDIRS:
-        pkg_dir = files(f"public_schema.resources.{subdir}")
-        for entry in pkg_dir.iterdir():
-            if entry.name.endswith(".dataresource.yaml"):
-                name = entry.stem.replace(".dataresource", "")
-                if name in resources:
-                    raise ValueError(
-                        f"Duplicate resource name {name!r} in {subdir} and {resources[name]}"
-                    )
-                with as_file(entry) as p:
-                    resources[name] = Path(p).resolve()
-    return resources
+    return resource_files_dict(pattern, suffix=".dataresource.yaml")
 
 
-def resource_descriptors_list() -> list[Path]:
+def resource_descriptors_list(pattern: str = "*/*") -> list[Path]:
     """
     Return the absolute paths of all bundled ``.dataresource.yaml`` files.
 
-    Resources are sourced from the ``bgc_data/`` and ``cpr_data/`` subdirectories
-    bundled inside the ``public_schema`` package.
+    Resources are bundled inside subdirectories of the ``public_schema.resources`` sub-package.
+
+    :param pattern: optional glob pattern to filter resource paths (relative to public_schema/resources/). Note the
+                    '.dataresource.yaml' suffix is added automatically. For example, 'bgc_data/*' will match all
+                    resources in the bgc_data/ subdirectory. Defaults to all resources ('*/*').
 
     :return: sorted list of :class:`~pathlib.Path` objects
     """
-    paths = []
-    for subdir in _RESOURCE_SUBDIRS:
-        pkg_dir = files(f"public_schema.resources.{subdir}")
-        for entry in pkg_dir.iterdir():
-            if entry.name.endswith(".dataresource.yaml"):
-                with as_file(entry) as p:
-                    paths.append(Path(p).resolve())
-    return sorted(paths)
+    resource_dict = resource_descriptors_dict(pattern)
+    return sorted(resource_dict.values())
 
 
 def resolve_resource(name_or_path: str | Path) -> Path:
