@@ -31,12 +31,9 @@ resource descriptors and SQL files it already versions.
 
 ## Decision
 
-`public_schema` will bundle a config file (format/location to be finalized in that repo — e.g.
-YAML) declaring, for each source table and transform, its explicit position/stage in the execution
-order. `dataflow-orchestration`'s wrapper flow reads this order via `public_schema`'s API and
-executes source-table loads and transforms strictly in that order, applying the same "failure
-blocks dependents" policy as before (ADR-0002/ADR-0003), but using the config's explicit
-dependency/order declarations to determine "dependents" instead of a derived graph.
+`public_schema` will bundle a config file (format/location to be finalized here — e.g. YAML)
+declaring, for each source table and transform, its explicit position/stage in the execution
+order. 
 
 ## Consequences
 

@@ -23,3 +23,33 @@ _Avoid_: export, extract, pull
 **Local validation**:
 Validating a local CSV file against the schema extracted from a resource's descriptor, without hitting the live WFS endpoint.
 _Avoid_: offline validation, schema check
+
+### Water Sampling Database ETL (see `docs/water_sampling_db.md`)
+
+**Source table**:
+A DuckDB table loaded from one Resource's downloaded CSV, with columns/types/`PRIMARY KEY` derived
+from its schema and any `FOREIGN KEY` clause spliced in from the matching `.sql` file.
+_Avoid_: raw table, staging table
+
+**Transform**:
+One bundled `.sql` file that creates a table/view from source tables and/or other transforms.
+_Avoid_: query, view definition
+
+**Product**:
+A transform whose output name ends in `_data` — exported as CSV for AODN Portal consumption.
+_Avoid_: output, deliverable
+
+**Intermediate table**:
+A transform whose output name does not end in `_data` (e.g. `_map`) — never exported.
+_Avoid_: staging view, helper table
+
+**Execution order config**:
+A config file bundled with `public_schema` declaring the explicit position of every source table
+and transform, so each item appears after everything it depends on. Replaces both the old
+`aodn/chef-private` data bags and any idea of inferring order from a parsed dependency graph.
+_Avoid_: dependency graph, DAG
+
+**Wrapper flow**:
+The thin Prefect flow in `aodn/dataflow-orchestration` (`projects/water_sampling_db/flow.py`) that
+calls this package's public API and wraps each step in a `@task`. It owns no pipeline logic itself.
+_Avoid_: orchestrator, pipeline (when meaning specifically the Prefect layer)

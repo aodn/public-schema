@@ -1,54 +1,63 @@
-# Water Sampling Database ETL Flow
-This flow does the following:
-* **Export** a list of source data tables from the CSIRO database, storing them as local CSV files.
-* **Validate** each CSV against a pre-defined schema.
-* **Transform** the source data using SQL into the products/views required.
-* **(Up)Load** (i.e. save) the source data and products to a public S3 bucket in CSV format.
+# Water Sampling Database ETL
 
-## Source data
-Source data are specified in Frictionless [Data Resource](https://specs.frictionlessdata.io/data-resource/) 
-descriptors (yaml files) in the `public-schema` package 
-  (currently versioned in [releases](https://github.com/aodn/public-schema/releases) off the `v2` branch of the 
-  [aodn/public-schema](https://github.com/aodn/public-schema) repository).
-Each descriptor defines:
-- the source data table name and URL (a GeoServer WFS `GetFeature` request);
-- the schema of the source data (column names, types, constraints, etc.).
+This package (`public_schema`) is the home of both the data "contract" (Resource descriptors +
+transform SQL) and, going forward, the ETL pipeline logic that turns them into published products.
+A thin Prefect wrapper flow in `aodn/dataflow-orchestration` calls this package's API; see
+[ADR-0004](./adr/0004-flow-logic-packaged-in-public-schema.md). Domain terms (Resource, Source
+table, Transform, Product, Intermediate table, Execution order config, Wrapper flow) are defined
+in [`CONTEXT.md`](../CONTEXT.md).
 
-Each table is extracted from by downloading the CSV from the WFS URL, and saved to a local file. The source data are then validated against the schema defined in the corresponding data resource descriptor.
+## Pipeline stages
 
-## Transformations
-The transformations are defined in SQL files that are also versioned in the `public-schema` package. The SQL files 
-are executed in a specific order to build a hierarchy of intermediate tables and output products.
+1. **Export** — download each Resource's CSV from its WFS `path` URL (done: `export.py`).
+2. **Validate** — check each CSV against its Frictionless schema (done: `validate.py`).
+3. **Load** — generate `CREATE TABLE` DDL per source table (types + `PRIMARY KEY` from the
+   schema, `FOREIGN KEY` spliced in from the matching `.sql` file) and load the validated CSV into
+   an ephemeral DuckDB database, in execution-order-config order. A constraint violation blocks
+   that table's dependent transforms but not the raw CSV upload (which stays the wrapper flow's
+   job). See [ADR-0002](./adr/0002-pk-fk-constraints-via-create-table-ddl.md) and
+   [ADR-0003](./adr/0003-ephemeral-duckdb-per-run.md).
+4. **Transform** — execute the ~44 bundled `.sql` files against the DuckDB database, strictly in
+   execution-order-config order (done: `transform.py` only *lists* these files today; executing
+   them is not yet implemented). See [ADR-0005](./adr/0005-execution-order-via-config-file.md).
+5. **Publish** — export every Product (name ends in `_data`) as CSV for the wrapper flow to upload;
+   Intermediate tables (e.g. `_map`) are never exported.
 
-Originally these SQL files were written for PostgreSQL, but they can be run in DuckDB with minor modifications. The 
-intermediate tables and output products are created in a (temporary) DuckDB database, and then exported to
-CSV files, which are then uploaded to the public S3 bucket.
+## What's not yet implemented (start here)
 
-## Design considerations
-- The source data descriptors and transform SQL form part of the "contract" between CSIRO and AODN for how we 
-  jointly these data products. Any changes are made via pull requests to the `aodn/public-schema` repo, which must 
-  therefore be public.
-- Most of the pipeline logic (dependency-ordered execution, DDL generation, transform execution, product
-  export) is packaged in `public_schema`, not this repo — this repo's `flow.py` is a thin Prefect wrapper
-  around `public_schema`'s API. See [ADR-0004](./docs/adr/0004-flow-logic-packaged-in-public-schema.md).
-- The existing SQL builds a hierarchy of tables & (materialised) views that depend on each other -- the order in
-  which they are constructed is declared explicitly in a config file bundled with `public_schema`, alongside the
-  resource descriptors and SQL files (this replaces the order previously kept in `aodn/chef-private` data bags
-  [IMOS_BGC_DB.json](https://github.com/aodn/chef-private/blob/master/data_bags/imos_po_watches/IMOS_BGC_DB.json)
-  and [IMOS_CPR_DB.json](https://github.com/aodn/chef-private/blob/master/data_bags/imos_po_watches/IMOS_CPR_DB.json)).
-  See [ADR-0005](./docs/adr/0005-execution-order-via-config-file.md).
-- Some views rely on the CTD profiles data extracted from NetCDF files. This will be available as a Parquet dataset in the `aodn-cloud-optimised` S3 bucket, so should be accessible from there.
+- **Execution order config** — a YAML file bundled alongside the resource descriptors and SQL
+  files, declaring each source table's and transform's position in the load/execute order. Add a
+  test that the declared order never places a dependency after its dependent.
+- **DDL generator** — build `CREATE TABLE` statements from a Resource's schema + its FK `.sql` file
+  (all 11 FK files follow one pattern: `ALTER TABLE <table>\n ADD FOREIGN KEY (<col>) REFERENCES
+  <ref_table>\n;` — trivial to parse and splice in). Keep column identifiers **unquoted** — schemas
+  use UPPERCASE columns, transform SQL uses lowercase, and DuckDB's case-insensitive unquoted
+  identifier folding is what makes them interoperate.
+- **Public API** for the wrapper flow to call, e.g. `load_source_tables(conn, order)` and
+  `run_transforms(conn, order)` — plain functions/classes, no Prefect dependency.
+- **CTD Parquet integration** — some transforms need CTD profile data from the
+  `aodn-cloud-optimised` S3 bucket, read via DuckDB's `httpfs` extension. Exact dataset path/table
+  name still unknown; AWS credential injection should be passed in by the caller, not loaded
+  directly by this package.
+- **Spatial extension** — load DuckDB's `spatial` extension; 8 of the 44 transform files use
+  `ST_GeomFromText`/`ST_AsWKB`.
+- Add `duckdb` (and spatial/httpfs setup) to `pyproject.toml` dependencies.
 
-## Questions/Challenges
-- How to deliver the products in the AODN Portal? In particular, products that are created via `PIVOT` operations 
- (e.g. all the plankton abundances) have a dynamic schema that is not known until the SQL is executed. Converting 
-  these to Parquet format is simple, but doing so using 
-  the [aodn_cloud_optimised](https://github.com/aodn/aodn_cloud_optimised) library could be painful every time the 
-  schema changes. For now, we are just exporting these products as CSV files to be linked directly from the 
-  collection metadata records, but this will not allow downloading a subset via the Portal.
-- Is there any value in publishing the legacy `_map` views as CSV (or Parquet)?
-- Is it worth saving a persistent DuckDB database between weekly updates?
-	- Could keep track of when each row was created/updated?
-- Can we just use `pyarrow` for schema validation (or DuckDB?), while retaining the  `frictionless` dataresource format to define the schemas?
-- We need to apply foreign key constraints in DuckDB to enforce references between the source tables. SQL files 
-  already exist in the `public-schema` package to create these constraints, but they are not currently applied in the ETL flow. We need to decide whether to apply them or not.
+## Verified facts (tested against DuckDB 1.5.5, save yourself re-testing)
+
+- `ALTER TABLE ... ADD FOREIGN KEY` → `NotImplementedException`. Inline `FOREIGN KEY (col)
+  REFERENCES table` in `CREATE TABLE` works and defaults to referencing the target's primary key.
+- Composite `PRIMARY KEY (col1, col2, ...)` inline works; most Resources declare composite keys
+  (e.g. `bgc_chemistry`: `[TRIP_CODE, SAMPLEDEPTH_M]`).
+- Transform SQL is already written in DuckDB dialect (not raw Postgres) — see
+  `resources/README.md`'s Postgres→DuckDB translation table.
+- Product vs Intermediate naming rule verified against all 44 transform files with zero
+  exceptions: name ends in `_data` → Product; anything else → Intermediate.
+
+## Open questions
+
+- How to deliver `PIVOT`-based products (e.g. plankton abundances) with dynamic schemas via the
+  AODN Portal — CSV export works today but doesn't support subsetting via the Portal.
+- Is there value in publishing legacy `_map` (Intermediate) tables as CSV/Parquet?
+- Is it worth persisting the DuckDB database between runs (e.g. to track row created/updated
+  times)? Current decision is no — see [ADR-0003](./adr/0003-ephemeral-duckdb-per-run.md).
