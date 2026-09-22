@@ -13,6 +13,12 @@ from public_schema.export import (
     resource_descriptors_dict,
     resource_descriptors_list,
 )
+from public_schema.results import (
+    LoadResult,
+    StageResult,
+    StoreResult,
+    TransformResult,
+)
 from public_schema.transform import (
     sql_files_dict,
     sql_files_list,
@@ -23,6 +29,10 @@ from public_schema.validate import (
 )
 
 __all__ = [
+    "LoadResult",
+    "StageResult",
+    "StoreResult",
+    "TransformResult",
     "download_resource",
     "resolve_resource",
     "resource_descriptors_dict",
