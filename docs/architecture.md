@@ -13,7 +13,7 @@ flowchart TD
     subgraph PublicSchema["public_schema package resources"]
       direction TB
       R[Source data descriptors<br/>+ transform SQL files]
-      CFG[Execution order config]
+      CFG[Runsheet]
       CFG --> ORDER[Ordered list of<br/>source tables + transforms]
       R --> ORDER
     end

@@ -4,44 +4,91 @@ This package (`public_schema`) is the home of both the data "contract" (Resource
 transform SQL) and, going forward, the ETL pipeline logic that turns them into published products.
 A thin Prefect wrapper flow in `aodn/dataflow-orchestration` calls this package's API; see
 [ADR-0004](./adr/0004-flow-logic-packaged-in-public-schema.md). Domain terms (Resource, Source
-table, Transform, Product, Intermediate table, Execution order config, Wrapper flow) are defined
+table, Transform, Product, Intermediate table, Runsheet, Wrapper flow) are defined
 in [`CONTEXT.md`](../CONTEXT.md).
 
 ## Pipeline stages
 
 1. **Export** — download each Resource's CSV from its WFS `path` URL (done: `export.py`).
 2. **Validate** — check each CSV against its Frictionless schema (done: `validate.py`).
-3. **Load** — generate `CREATE TABLE` DDL per source table (types + `PRIMARY KEY` from the
-   schema, `FOREIGN KEY` spliced in from the matching `.sql` file) and load the validated CSV into
-   an ephemeral DuckDB database, in execution-order-config order. A constraint violation blocks
-   that table's dependent transforms but not the raw CSV upload (which stays the wrapper flow's
-   job). See [ADR-0002](./adr/0002-pk-fk-constraints-via-create-table-ddl.md) and
-   [ADR-0003](./adr/0003-ephemeral-duckdb-per-run.md).
-4. **Transform** — execute the ~44 bundled `.sql` files against the DuckDB database, strictly in
-   execution-order-config order (done: `transform.py` only *lists* these files today; executing
-   them is not yet implemented). See [ADR-0005](./adr/0005-execution-order-via-config-file.md).
-5. **Publish** — export every Product (name ends in `_data`) as CSV for the wrapper flow to upload;
-   Intermediate tables (e.g. `_map`) are never exported.
+3. **Runsheet** — declare, per BGC/CPR pipeline, which source tables to load and which transforms
+   to run, in dependency order (done: `config.py`'s `RunsheetConfig`/`load_runsheet`, plus
+   `bgc_runsheet.yaml`/`cpr_runsheet.yaml`).
+4. **Load** — generate `CREATE TABLE` DDL per source table (types + `PRIMARY KEY` from the schema,
+   `FOREIGN KEY` spliced in from the matching `foreign_keys/<name>.sql` file, if any) and load the
+   validated CSV into the DuckDB file. A constraint violation blocks that table's dependent
+   transforms but not the raw CSV upload (wrapper flow's job). See
+   [ADR-0002](./adr/0002-pk-fk-constraints-via-create-table-ddl.md),
+   [ADR-0003](./adr/0003-ephemeral-duckdb-per-run.md),
+   [ADR-0006](./adr/0006-bulk-stage-functions-return-result-not-raise.md), and
+   [ADR-0007](./adr/0007-stage-functions-use-db-path-not-connection.md). *Not yet implemented.*
+5. **Transform** — execute the 44 bundled transform `.sql` files against the DuckDB file, strictly
+   in runsheet order, applying the same block-dependents-on-failure policy. See
+   [ADR-0005](./adr/0005-execution-order-via-config-file.md). *Not yet implemented.*
+6. **Store** — export every Product (name ends in `_data`) as CSV for the wrapper flow to upload;
+   Intermediate tables (e.g. `_map`) are never exported. *Not yet implemented.*
 
-## What's not yet implemented (start here)
+## Implementation plan
 
-- **Execution order config** — a YAML file bundled alongside the resource descriptors and SQL
-  files, declaring each source table's and transform's position in the load/execute order. Add a
-  test that the declared order never places a dependency after its dependent.
-- **DDL generator** — build `CREATE TABLE` statements from a Resource's schema + its FK `.sql` file
-  (all 11 FK files follow one pattern: `ALTER TABLE <table>\n ADD FOREIGN KEY (<col>) REFERENCES
-  <ref_table>\n;` — trivial to parse and splice in). Keep column identifiers **unquoted** — schemas
-  use UPPERCASE columns, transform SQL uses lowercase, and DuckDB's case-insensitive unquoted
-  identifier folding is what makes them interoperate.
-- **Public API** for the wrapper flow to call, e.g. `load_source_tables(conn, order)` and
-  `run_transforms(conn, order)` — plain functions/classes, no Prefect dependency.
-- **CTD Parquet integration** — some transforms need CTD profile data from the
-  `aodn-cloud-optimised` S3 bucket, read via DuckDB's `httpfs` extension. Exact dataset path/table
-  name still unknown; AWS credential injection should be passed in by the caller, not loaded
-  directly by this package.
-- **Spatial extension** — load DuckDB's `spatial` extension; 8 of the 44 transform files use
-  `ST_GeomFromText`/`ST_AsWKB`.
-- Add `duckdb` (and spatial/httpfs setup) to `pyproject.toml` dependencies.
+Every stage-4/5/6 function takes `db_path: Path` (a temporary on-disk DuckDB file), not a live
+connection — see ADR-0007. Each function is meant to become one Prefect `@task` in the wrapper
+flow, so **per-item** functions (one source table / one transform / one product) are the primary
+API; **bulk** functions are a thin loop over runsheet order for local/dev use and as a reference for
+the wrapper flow's eventual per-task looping + skip logic (ADR-0006).
+
+- **`connection.py`** (new): `create_connection(db_path: Path) -> DuckDBPyConnection` — opens the
+  DuckDB file and loads the `spatial` extension. Called internally by every stage function below;
+  callers never share a connection across calls (ADR-0007).
+
+- **`load.py`** (new) — DDL generation + CSV loading:
+  - `generate_create_table_sql(name: DescriptorName) -> str` — builds `CREATE TABLE` from the
+    Resource's Frictionless schema. Type mapping: `string`→`VARCHAR`, `integer`→`INTEGER`,
+    `number`→`DOUBLE`, `date`→`DATE`, `datetime`→`TIMESTAMP`; `required`→`NOT NULL`,
+    `unique`→`UNIQUE`, `primaryKey`→trailing `PRIMARY KEY (...)`. Splices in the `FOREIGN KEY`
+    clause verbatim from `<bgc_data|cpr_data>/foreign_keys/<name>.sql` if present (found via
+    `resource_files_dict("*/foreign_keys/*", suffix=".sql")`). Column identifiers stay
+    **unquoted** — schemas use UPPERCASE columns, transform SQL uses lowercase, and DuckDB's
+    case-insensitive unquoted identifier folding is what makes them interoperate.
+  - `load_source_table(db_path: Path, name: DescriptorName, csv_path: Path) -> None` — runs the
+    generated DDL then loads `csv_path` into it (date/datetime columns loaded via DuckDB's
+    `read_csv(..., dateformat=..., timestampformat=...)`, reusing the schema's Frictionless
+    `format` strings directly — they're already `strftime`-compatible).
+  - `load_source_tables(db_path: Path, runsheet: RunsheetConfig, csv_dir: Path) -> LoadResult` —
+    loops `runsheet.source_tables` in order, catching per-table failures, skipping a table's
+    dependents (per ADR-0006), returning `LoadResult(succeeded, failed, skipped)`.
+
+- **`transform.py`** (extend existing module) — add transform *execution* alongside the existing
+  `sql_files_dict`/`sql_files_list` (listing):
+  - `run_transform(db_path: Path, name: TransformName) -> None` — executes the bundled `.sql` file.
+  - `run_transforms(db_path: Path, runsheet: RunsheetConfig) -> TransformResult` — loops
+    `runsheet.transforms` in order, same catch/skip/result contract as `load_source_tables`.
+
+- **`store.py`** (new) — Publish stage:
+  - `is_product(name: str) -> bool` — `True` iff `name` ends in `_data`.
+  - `store_product(db_path: Path, name: TransformName, output_dir: Path) -> Path` — exports one
+    table to CSV.
+  - `store_all_products(db_path: Path, runsheet: RunsheetConfig, output_dir: Path) -> list[Path]` —
+    filters `runsheet.transforms` to `is_product(t.name)` and calls `store_product` for each.
+
+- **`config.py`** (extend): `runsheet_paths_dict() -> dict[str, Path]` (keys `"bgc"`/`"cpr"`,
+  stripped of the `_runsheet` suffix); `load_runsheet(name_or_path: str | Path)` accepts a bundled
+  name or explicit path, same pattern as `resolve_resource()`.
+
+- **CTD Parquet + spatial extension** — 8 of the 44 transform files use
+  `ST_GeomFromText`/`ST_AsWKB` (handled by `create_connection`'s `spatial` extension load). CTD
+  profile data needs DuckDB's `httpfs` extension to read from the `aodn-cloud-optimised` S3 bucket
+  — exact dataset path/table name still unknown, and AWS credential injection needs to be passed in
+  by the caller (not loaded directly by this package). **Blocked** on coordination with another
+  team; deferred until that's resolved.
+
+- Add `duckdb` to `pyproject.toml` dependencies.
+
+## Sequencing note
+
+Stage functions always run sequentially against a given `db_path` — DuckDB doesn't support
+concurrent writers to one file, and with dependencies between transforms already limiting possible
+concurrency (and total data volume being small), sequential execution is not a performance concern.
+See [ADR-0007](./adr/0007-stage-functions-use-db-path-not-connection.md).
 
 ## Verified facts (tested against DuckDB 1.5.5, save yourself re-testing)
 
@@ -53,6 +100,14 @@ in [`CONTEXT.md`](../CONTEXT.md).
   `resources/README.md`'s Postgres→DuckDB translation table.
 - Product vs Intermediate naming rule verified against all 44 transform files with zero
   exceptions: name ends in `_data` → Product; anything else → Intermediate.
+- All bundled schemas use only 5 Frictionless types (`string`, `number`, `integer`, `date`,
+  `datetime`) and only 2 constraints (`required`, `unique`) — no `enum`/`pattern`/min-max, keeping
+  DDL generation simple. `date`/`datetime` `format` strings are already `strftime`-compatible and
+  can be passed directly to DuckDB's `read_csv(dateformat=..., timestampformat=...)`.
+- `importlib.resources`' `Traversable.glob` supports multi-segment patterns (e.g.
+  `"*/foreign_keys/*.sql"`), so FK files nested one level deeper than `bgc_data/`/`cpr_data/` are
+  both easy to find *and* automatically excluded from `sql_files_dict()`'s default two-level
+  `"*/*"` glob — no extra filtering code needed.
 
 ## Open questions
 

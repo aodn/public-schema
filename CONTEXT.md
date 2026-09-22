@@ -43,11 +43,12 @@ _Avoid_: output, deliverable
 A transform whose output name does not end in `_data` (e.g. `_map`) — never exported.
 _Avoid_: staging view, helper table
 
-**Execution order config**:
-A config file bundled with `public_schema` declaring the explicit position of every source table
-and transform, so each item appears after everything it depends on. Replaces both the old
-`aodn/chef-private` data bags and any idea of inferring order from a parsed dependency graph.
-_Avoid_: dependency graph, DAG
+**Runsheet**:
+A YAML config file bundled with `public_schema` (e.g. `bgc_runsheet.yaml`) declaring the source
+tables to load and the transforms to run, with each transform's dependencies, such that every item
+appears after everything it depends on. Replaces both the old `aodn/chef-private` data bags and any
+idea of inferring order from a parsed dependency graph.
+_Avoid_: execution order config, dependency graph, DAG
 
 **Wrapper flow**:
 The thin Prefect flow in `aodn/dataflow-orchestration` (`projects/water_sampling_db/flow.py`) that

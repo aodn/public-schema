@@ -11,9 +11,19 @@ Within each subdirectory, two types of files are present.
 - Naming convention: `<resource_name>.dataresource.yaml`.
 
 ## SQL transformations
-  - SQL code to transform the source data into various products, or to apply constraints between tables in the database.
+  - SQL code to transform the source data into various products.
   - Naming convention: `<table_name>.sql`, where `<table_name>` is the name of the table or view that will be created 
-    or modified by the SQL code.
+    by the SQL code.
+
+## Foreign key constraints
+  - Each subdirectory has a nested `foreign_keys/` folder containing `ALTER TABLE ... ADD FOREIGN KEY` statements
+    that apply constraints between source tables (e.g. `bgc_data/foreign_keys/bgc_chemistry.sql`).
+  - Naming convention: same as the source table they constrain (`<table_name>.sql`).
+  - These are *not* transforms — DuckDB rejects `ALTER TABLE ADD FOREIGN KEY` (see
+    [ADR-0002](../../../docs/adr/0002-pk-fk-constraints-via-create-table-ddl.md)), so the `FOREIGN KEY` clause is
+    spliced verbatim into the source table's generated `CREATE TABLE` DDL instead of being executed directly.
+    Being nested one level deeper than `bgc_data/`/`cpr_data/`, they are excluded from `sql_files_dict()`'s default
+    two-level glob (`*/*`), keeping them out of the Transform namespace.
 
 ### Translate SQL statements from PostgreSQL to DuckDB dialect. 
 The original transformations were written for PostgreSQL. They have now been adapted to run in DuckDB.
