@@ -59,6 +59,11 @@ schema:
   primaryKey:
   - SAMPLE
   - TAXON_NAME
+  databaseForeignKeys:
+  - fields:
+    - SAMPLE
+    reference:
+      resource: cpr_samp
 licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0

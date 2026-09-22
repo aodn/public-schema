@@ -44,9 +44,9 @@ the wrapper flow's eventual per-task looping + skip logic (ADR-0006).
   - `generate_create_table_sql(name: DescriptorName) -> str` — builds `CREATE TABLE` from the
     Resource's Frictionless schema. Type mapping: `string`→`VARCHAR`, `integer`→`INTEGER`,
     `number`→`DOUBLE`, `date`→`DATE`, `datetime`→`TIMESTAMP`; `required`→`NOT NULL`,
-    `unique`→`UNIQUE`, `primaryKey`→trailing `PRIMARY KEY (...)`. Splices in the `FOREIGN KEY`
-    clause verbatim from `<bgc_data|cpr_data>/foreign_keys/<name>.sql` if present (found via
-    `resource_files_dict("*/foreign_keys/*", suffix=".sql")`). Column identifiers stay
+    `unique`→`UNIQUE`, `primaryKey`→trailing `PRIMARY KEY (...)`. Builds the `FOREIGN KEY` clause
+    from the schema's non-standard `databaseForeignKeys` property, if present (see
+    [ADR-0008](./adr/0008-foreign-keys-declared-in-dataresource-yaml.md)). Column identifiers stay
     **unquoted** — schemas use UPPERCASE columns, transform SQL uses lowercase, and DuckDB's
     case-insensitive unquoted identifier folding is what makes them interoperate.
   - `load_source_table(db_path: Path, name: DescriptorName, csv_path: Path) -> None` — runs the
@@ -104,10 +104,10 @@ See [ADR-0007](./adr/0007-stage-functions-use-db-path-not-connection.md).
   `datetime`) and only 2 constraints (`required`, `unique`) — no `enum`/`pattern`/min-max, keeping
   DDL generation simple. `date`/`datetime` `format` strings are already `strftime`-compatible and
   can be passed directly to DuckDB's `read_csv(dateformat=..., timestampformat=...)`.
-- `importlib.resources`' `Traversable.glob` supports multi-segment patterns (e.g.
-  `"*/foreign_keys/*.sql"`), so FK files nested one level deeper than `bgc_data/`/`cpr_data/` are
-  both easy to find *and* automatically excluded from `sql_files_dict()`'s default two-level
-  `"*/*"` glob — no extra filtering code needed.
+- Frictionless silently ignores unknown `schema` properties, so a non-standard
+  `databaseForeignKeys` property can sit alongside a resource's real schema without breaking
+  validation — see [ADR-0008](./adr/0008-foreign-keys-declared-in-dataresource-yaml.md). All 11
+  FK constraints are single-column and never reference a non-primary-key column.
 
 ## Open questions
 

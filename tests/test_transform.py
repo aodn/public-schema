@@ -42,7 +42,9 @@ def test_sql_files_list_contains_known_cpr():
     assert "cpr_phytoplankton_map" in names
 
 
-def test_sql_files_list_excludes_foreign_keys():
+def test_sql_files_list_excludes_resource_names():
+    # bgc_chemistry/cpr_phyto_raw are Resource names, not Transforms — they must never appear
+    # here, whether or not a resource happens to share a name with some unrelated .sql file.
     names = {p.stem for p in sql_files_list()}
     assert "bgc_chemistry" not in names
     assert "cpr_phyto_raw" not in names
@@ -79,7 +81,7 @@ def test_sql_files_dict_contains_known_cpr():
     assert "cpr_phytoplankton_map" in sql_files_dict()
 
 
-def test_sql_files_dict_excludes_foreign_keys():
+def test_sql_files_dict_excludes_resource_names():
     d = sql_files_dict()
     assert "bgc_chemistry" not in d
     assert "cpr_phyto_raw" not in d

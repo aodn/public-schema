@@ -28,7 +28,7 @@ _Avoid_: offline validation, schema check
 
 **Source table**:
 A DuckDB table loaded from one Resource's downloaded CSV, with columns/types/`PRIMARY KEY` derived
-from its schema and any `FOREIGN KEY` clause spliced in from the matching `.sql` file.
+from its schema, and any `FOREIGN KEY` clause built from the schema's `databaseForeignKeys`.
 _Avoid_: raw table, staging table
 
 **Transform**:
@@ -49,6 +49,13 @@ tables to load and the transforms to run, with each transform's dependencies, su
 appears after everything it depends on. Replaces both the old `aodn/chef-private` data bags and any
 idea of inferring order from a parsed dependency graph.
 _Avoid_: execution order config, dependency graph, DAG
+
+**`databaseForeignKeys`**:
+A non-standard `schema` property in a Descriptor declaring FK constraints for a Source table's
+generated `CREATE TABLE` DDL. Deliberately not Frictionless's real `foreignKeys` property, since
+that fails validation unless the referencing and referenced resources are in one Data Package;
+Frictionless silently ignores unknown properties, so this one validates cleanly per-resource.
+_Avoid_: foreignKeys, FK constraint file
 
 **Wrapper flow**:
 The thin Prefect flow in `aodn/dataflow-orchestration` (`projects/water_sampling_db/flow.py`) that

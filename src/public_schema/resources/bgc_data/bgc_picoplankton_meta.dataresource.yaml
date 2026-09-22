@@ -96,6 +96,11 @@ schema:
     title: "Optional comments on batch process"
     type: string                               
   primaryKey: SAMPLE_CODE
+  databaseForeignKeys:
+  - fields:
+    - TRIP_CODE
+    reference:
+      resource: bgc_trip
 licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0

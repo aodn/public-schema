@@ -42,6 +42,11 @@ schema:
   primaryKey:
   - I_SAMPLE_ID
   - SCIENTIFICNAME
+  databaseForeignKeys:
+  - fields:
+    - I_SAMPLE_ID
+    reference:
+      resource: bgc_lfish_samples
 licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0

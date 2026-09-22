@@ -59,6 +59,11 @@ schema:
   - TRIP_CODE
   - TAXON_NAME
   - METHODS
+  databaseForeignKeys:
+  - fields:
+    - TRIP_CODE
+    reference:
+      resource: bgc_trip
 licenses:
 - name: CC-BY-4.0
   title: Creative Commons Attribution 4.0
