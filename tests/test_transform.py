@@ -34,12 +34,18 @@ def test_sql_files_list_is_sorted():
 
 def test_sql_files_list_contains_known_bgc():
     names = {p.stem for p in sql_files_list()}
-    assert "bgc_chemistry" in names
+    assert "bgc_trip_metadata" in names
 
 
 def test_sql_files_list_contains_known_cpr():
     names = {p.stem for p in sql_files_list()}
-    assert "cpr_phyto_raw" in names
+    assert "cpr_phytoplankton_map" in names
+
+
+def test_sql_files_list_excludes_foreign_keys():
+    names = {p.stem for p in sql_files_list()}
+    assert "bgc_chemistry" not in names
+    assert "cpr_phyto_raw" not in names
 
 
 # --- sql_files_dict ---
@@ -66,11 +72,17 @@ def test_sql_files_dict_paths_exist():
 
 
 def test_sql_files_dict_contains_known_bgc():
-    assert "bgc_chemistry" in sql_files_dict()
+    assert "bgc_trip_metadata" in sql_files_dict()
 
 
 def test_sql_files_dict_contains_known_cpr():
-    assert "cpr_phyto_raw" in sql_files_dict()
+    assert "cpr_phytoplankton_map" in sql_files_dict()
+
+
+def test_sql_files_dict_excludes_foreign_keys():
+    d = sql_files_dict()
+    assert "bgc_chemistry" not in d
+    assert "cpr_phyto_raw" not in d
 
 
 def test_sql_files_dict_key_matches_stem():
