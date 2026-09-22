@@ -7,6 +7,7 @@ Data resources (YAML + SQL) are bundled under `public_schema.resources`:
     path = files("public_schema.resources.bgc_data") / "bgc_chemistry.dataresource.yaml"
 """
 
+from public_schema.connection import create_connection
 from public_schema.export import (
     download_resource,
     resolve_resource,
@@ -33,6 +34,7 @@ __all__ = [
     "StageResult",
     "StoreResult",
     "TransformResult",
+    "create_connection",
     "download_resource",
     "resolve_resource",
     "resource_descriptors_dict",

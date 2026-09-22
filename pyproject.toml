@@ -5,6 +5,7 @@ description = "IMOS public schema definitions and validation utilities"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "duckdb>=1.5",
     "frictionless>=5",
     "pydantic>=2.13.4",
     "pyyaml>=6",
