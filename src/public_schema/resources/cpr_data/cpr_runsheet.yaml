@@ -11,89 +11,73 @@ source_tables:
 
 transforms:
   - name: cpr_phytoplankton_map
-    type: table
     depends:
       - cpr_samp
       - cpr_phyto_raw
   - name: cpr_phytoplankton_abundance_raw_data
-    type: table
     depends:
       - cpr_phyto_raw
       - cpr_phytoplankton_map
   - name: cpr_phytoplankton_abundance_species_data
-    type: table
     depends:
       - cpr_phyto_raw
       - cpr_phyto_changelog
       - cpr_phytoplankton_map
   - name: cpr_phytoplankton_abundance_genus_data
-    type: table
     depends:
       - cpr_phyto_raw
       - cpr_phyto_changelog
       - cpr_phytoplankton_map
   - name: cpr_phytoplankton_abundance_htg_data
-    type: table
     depends:
       - cpr_phyto_raw
       - cpr_phytoplankton_map
   - name: cpr_zooplankton_map
-    type: table
     depends:
       - cpr_samp
       - cpr_zoop_raw
   - name: cpr_zooplankton_abundance_raw_data
-    type: table
     depends:
       - cpr_zoop_raw
       - cpr_zooplankton_map
   - name: cpr_zooplankton_abundance_genus_data
-    type: table
     depends:
       - cpr_zoop_raw
       - cpr_zoop_changelog
       - cpr_zooplankton_map
   - name: cpr_zooplankton_abundance_htg_data
-    type: table
     depends:
       - cpr_zoop_raw
       - cpr_zooplankton_map
   - name: cpr_zooplankton_abundance_copepods_data
-    type: table
     depends:
       - cpr_zoop_raw
       - cpr_zoop_changelog
       - cpr_zooplankton_map
   - name: cpr_zooplankton_abundance_non_copepods_data
-    type: table
     depends:
       - cpr_zoop_raw
       - cpr_zoop_changelog
       - cpr_zooplankton_map
   - name: cpr_phytoplankton_biovolume_raw_data
-    type: table
     depends:
       - cpr_phyto_raw
       - cpr_phytoplankton_map
   - name: cpr_phytoplankton_biovolume_species_data
-    type: table
     depends:
       - cpr_phyto_raw
       - cpr_phyto_changelog
       - cpr_phytoplankton_map
   - name: cpr_phytoplankton_biovolume_genus_data
-    type: table
     depends:
       - cpr_phyto_raw
       - cpr_phyto_changelog
       - cpr_phytoplankton_map
   - name: cpr_phytoplankton_biovolume_htg_data
-    type: table
     depends:
       - cpr_phyto_raw
       - cpr_phytoplankton_map
   - name: cpr_derived_indices_data
-    type: table
     depends:
       - zoopinfo
       - cpr_zoop_raw

@@ -20,25 +20,19 @@ source_tables:
   #- bgc_lfish_countraw
 
 transforms:
-  # TODO: remove type keys unless they turn out to be useful for something
   - name: bgc_trip_metadata
-    type: view
     depends:
       - bgc_trip
 #  - name: nrs_depth_binned_ctd_map
-#    type: view
 #    depends:
 #      - bgc_trip_metadata
 #  - name: nrs_depth_binned_ctd_data
-#    type: table
 #    depends:
 #      - nrs_depth_binned_ctd_map
 #  - name: nrs_ctd_surface_values
-#    type: view
 #    depends:
 #      - nrs_depth_binned_ctd_data
 #  - name: combined_bgc_map
-#    type: table
 #    depends:
 #      - bgc_trip_metadata
 #      - bgc_chemistry
@@ -46,27 +40,22 @@ transforms:
 #      - bgc_pigments
 #      - bgc_tss
 #  - name: bgc_tss_data
-#    type: table
 #    depends:
 #      - combined_bgc_map
 #      - bgc_tss_meta
 #  - name: bgc_picoplankton_data
-#    type: table
 #    depends:
 #      - combined_bgc_map
 #      - bgc_picoplankton_meta
 #  - name: bgc_chemistry_data
-#    type: table
 #    depends:
 #      - combined_bgc_map
 #      - bgc_chemistry
 #  - name: bgc_pigments_data
-#    type: table
 #    depends:
 #      - combined_bgc_map
 #      - bgc_pigments
 #  - name: combined_bgc_data
-#    type: table
 #    depends:
 #      - combined_bgc_map
 #      - bgc_tss
@@ -74,91 +63,75 @@ transforms:
 #      - bgc_chemistry_data
 #      - bgc_pigments_data
   - name: bgc_phytoplankton_map
-    type: table
     depends:
       - bgc_trip_metadata
       - bgc_phyto_raw
 #      - nrs_ctd_surface_values
   - name: bgc_phytoplankton_abundance_raw_data
-    type: table
     depends:
       - bgc_phytoplankton_map
       - bgc_phyto_raw
   - name: bgc_phytoplankton_abundance_htg_data
-    type: table
     depends:
       - bgc_phytoplankton_map
       - bgc_phyto_raw
   - name: bgc_phytoplankton_abundance_genus_data
-    type: table
     depends:
       - bgc_phytoplankton_map
       - bgc_phyto_raw
       - bgc_phyto_changelog
   - name: bgc_phytoplankton_abundance_species_data
-    type: table
     depends:
       - bgc_phytoplankton_map
       - bgc_phyto_raw
       - bgc_phyto_changelog
   - name: bgc_phytoplankton_biovolume_raw_data
-    type: table
     depends:
       - bgc_phytoplankton_map
       - bgc_phyto_raw
   - name: bgc_phytoplankton_biovolume_htg_data
-    type: table
     depends:
       - bgc_phytoplankton_map
       - bgc_phyto_raw
   - name: bgc_phytoplankton_biovolume_genus_data
-    type: table
     depends:
       - bgc_phytoplankton_map
       - bgc_phyto_raw
       - bgc_phyto_changelog
   - name: bgc_phytoplankton_biovolume_species_data
-    type: table
     depends:
       - bgc_phytoplankton_map
       - bgc_phyto_raw
       - bgc_phyto_changelog
 #  - name: bgc_zooplankton_map
-#    type: table
 #    depends:
 #      - bgc_trip_metadata
 #      - bgc_zoop_raw
 #      - nrs_ctd_surface_values
 #  - name: bgc_zooplankton_abundance_raw_data
-#    type: table
 #    depends:
 #      - bgc_zooplankton_map
 #      - bgc_zoop_raw
 #  - name: bgc_zooplankton_abundance_htg_data
-#    type: table
 #    depends:
 #      - bgc_zooplankton_map
 #      - bgc_zoop_raw
 #  - name: bgc_zooplankton_abundance_genus_data
-#    type: table
 #    depends:
 #      - bgc_zooplankton_map
 #      - bgc_zoop_raw
 #      - bgc_zoop_changelog
 #  - name: bgc_zooplankton_abundance_copepods_data
-#    type: table
 #    depends:
 #      - bgc_zooplankton_map
 #      - bgc_zoop_raw
 #      - bgc_zoop_changelog
 #  - name: bgc_zooplankton_abundance_non_copepods_data
-#    type: table
 #    depends:
 #      - bgc_zooplankton_map
 #      - bgc_zoop_raw
 #      - bgc_zoop_changelog
 #  - name: nrs_derived_indices_data
-#    type: table
 #    depends:
 #      - bgc_trip_metadata
 #      - bgc_zoop_raw
@@ -168,12 +141,10 @@ transforms:
 #      - bgc_chemistry
 #      - bgc_pigments
 #  - name: bgc_larval_fish_map
-#    type: view
 #    depends:
 #      - bgc_lfish_samples
 #      - nrs_ctd_surface_values
 #  - name: bgc_larval_fish_count_raw_data
-#    type: table
 #    depends:
 #      - bgc_larval_fish_map
 #      - bgc_lfish_countraw
