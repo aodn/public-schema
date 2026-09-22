@@ -18,10 +18,14 @@ flowchart TD
       R --> ORDER
     end
 
-    subgraph SourceLoad["Export/validate source tables"]
+    subgraph Export["Export/validate source tables"]
         direction LR
         DL[Download CSV via WFS URL] --> VAL[Validate against<br/>Frictionless schema]
-        VAL --> DDL[CREATE TABLE<br/>based on source data desriptors + FK .sql files]
+    end
+
+    subgraph Load["Load source tables"]
+        direction TB
+        DDL[CREATE TABLE<br/>based on source data desriptors]
         DDL --> LOAD[Load CSV into DuckDB table,<br/>following config order]
         LOAD -->|PK/FK violation| SKIP1[Block dependent transforms]
     end
@@ -34,15 +38,16 @@ flowchart TD
         CTD[(CTD Parquet<br/>aodn-cloud-optimised via httpfs)] -.-> EXEC
     end
 
-    subgraph Publish["Publish"]
+    subgraph Store["Store"]
         PROD{"Name ends in _data?"}
-        PROD -->|yes: Product| CSVOUT[Export CSV]
-        PROD -->|no: Intermediate _map etc.| DROP[Not published]
+        PROD -->|yes: Product| CSVOUT[Output CSV]
+        PROD -->|no: Intermediate _map etc.| DROP[Not Storeed]
     end
 
-    ORDER --> SourceLoad
-    SourceLoad --> Transform
-    Transform --> Publish
+    ORDER --> Export
+    Export --> Load
+    Load --> Transform
+    Transform --> Store
 
     style SKIP1 fill:#f99,color:#000
     style SKIP2 fill:#f99,color:#000
