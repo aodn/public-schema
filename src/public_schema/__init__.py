@@ -14,6 +14,11 @@ from public_schema.export import (
     resource_descriptors_dict,
     resource_descriptors_list,
 )
+from public_schema.load import (
+    generate_create_table_sql,
+    load_source_table,
+    load_source_tables,
+)
 from public_schema.results import (
     LoadResult,
     StageResult,
@@ -36,6 +41,9 @@ __all__ = [
     "TransformResult",
     "create_connection",
     "download_resource",
+    "generate_create_table_sql",
+    "load_source_table",
+    "load_source_tables",
     "resolve_resource",
     "resource_descriptors_dict",
     "resource_descriptors_list",
