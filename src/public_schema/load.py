@@ -122,7 +122,8 @@ def load_source_table(db_path: Path, name: DescriptorName, csv_path: Path) -> No
     schema = _load_schema(name)
     con = create_connection(db_path)
     try:
-        con.execute(generate_create_table_sql(name))
+        create_table_sql = generate_create_table_sql(name)
+        con.execute(create_table_sql)
 
         csv_relation = con.read_csv(str(csv_path), header=True, all_varchar=True)
         csv_columns = set(csv_relation.columns)
@@ -143,7 +144,7 @@ def load_source_tables(
     db_path: Path,
     runsheet: RunsheetConfig,
     csv_dir: Path,
-    skip: dict[str, str] = {},  # noqa: B006 (never mutated; see results.py's shared-model note)
+    skip: dict[str, str] | None = None,
 ) -> LoadResult:
     """
     Load every Source table declared in *runsheet*, in order, into the DuckDB file at *db_path*.
@@ -160,7 +161,7 @@ def load_source_tables(
     :param skip: name -> reason, seeded from an earlier stage's result.
     :return: :class:`LoadResult` listing succeeded, failed, and skipped table names.
     """
-    result = LoadResult(skipped=dict(skip))
+    result = LoadResult(skipped=skip if skip is not None else {})
 
     for name in runsheet.source_tables:
         if name in result.skipped:
