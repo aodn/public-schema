@@ -1,6 +1,7 @@
 """Tests for public_schema.load — DDL generation and CSV loading (ADR-0002/0006/0007/0008)."""
 
 from pathlib import Path
+from unittest.mock import patch
 
 import duckdb
 import pytest
@@ -14,12 +15,85 @@ from public_schema.load import (
 )
 from public_schema.results import LoadResult
 
+BGC_TRIP_CSV_TEXT = (
+    "FID,PROJECTNAME,TRIP_CODE,TRIP_ID,SAMPLEDATEUTC\n"
+    "1,proj,TRIP1,ID1,2020-01-01 00:00:00\n"
+)
+
+
+@pytest.fixture(scope="module", autouse=True)
+def mock_load_schema():
+    def _mock_load_schema(name: str) -> dict:
+        """
+        Mock schemas here so that tests don't depend on the actual bundled Frictionless descriptors.
+        The mock schemas are simplified and only include the fields needed for the tests.
+        """
+        if name == "bgc_trip":
+            return {
+                "fields": [
+                    {
+                        "name": "TRIP_CODE",
+                        "type": "string",
+                        "constraints": {"required": True},
+                    },
+                    {
+                        "name": "TRIP_ID",
+                        "type": "string",
+                        "constraints": {"required": True, "unique": True},
+                    },
+                    {"name": "PROJECTNAME", "type": "string"},
+                    {
+                        "name": "SAMPLEDATEUTC",
+                        "type": "datetime",
+                        "format": "%Y-%m-%d %H:%M:%S",
+                        "constraints": {"required": True},
+                    },
+                ],
+                "primaryKey": "TRIP_CODE",
+            }
+        elif name == "bgc_chemistry":
+            return {
+                "fields": [
+                    {
+                        "name": "TRIP_CODE",
+                        "type": "string",
+                        "constraints": {"required": True},
+                    },
+                    {
+                        "name": "SAMPLEDEPTH_M",
+                        "type": "number",
+                        "constraints": {"required": True},
+                    },
+                    {"name": "SAMPLEDATELOCAL", "type": "datetime"},
+                    {"name": "SALINITY_FLAG", "type": "integer"},
+                ],
+                "primaryKey": ["TRIP_CODE", "SAMPLEDEPTH_M"],
+            }
+        elif name == "bgc_tss_meta":
+            return {
+                "fields": [
+                    {"name": "TRIP_CODE", "type": "string"},
+                ],
+                "databaseForeignKeys": [
+                    {
+                        "fields": ["TRIP_CODE"],
+                        "reference": {"resource": "bgc_trip"},
+                    }
+                ],
+            }
+        else:
+            raise ValueError(f"Unknown schema name: {name}")
+
+    with patch("public_schema.load._load_schema", _mock_load_schema):
+        yield
+
+
 # --- generate_create_table_sql ---
 
 
 def test_generate_create_table_sql_returns_create_table():
     sql = generate_create_table_sql("bgc_trip")
-    assert sql.strip().upper().startswith("CREATE TABLE BGC_TRIP".upper())
+    assert sql.strip().startswith("CREATE TABLE bgc_trip")
 
 
 def test_generate_create_table_sql_maps_types():
@@ -37,14 +111,14 @@ def test_generate_create_table_sql_required_becomes_not_null():
 
 def test_generate_create_table_sql_not_required_has_no_not_null():
     sql = generate_create_table_sql("bgc_chemistry")
-    # SILICATE_UMOLL has no constraints
-    assert "SILICATE_UMOLL DOUBLE\n" in sql or "SILICATE_UMOLL DOUBLE," in sql
-    assert "SILICATE_UMOLL DOUBLE NOT NULL" not in sql
+    # SALINITY_FLAG has no constraints
+    assert "SALINITY_FLAG INTEGER\n" in sql or "SALINITY_FLAG INTEGER," in sql
+    assert "SALINITY_FLAG INTEGER NOT NULL" not in sql
 
 
 def test_generate_create_table_sql_unique_field():
-    sql = generate_create_table_sql("bgc_lfish_samples")
-    assert "I_SAMPLE_ID INTEGER NOT NULL UNIQUE" in sql
+    sql = generate_create_table_sql("bgc_trip")
+    assert "TRIP_ID VARCHAR NOT NULL UNIQUE" in sql
 
 
 def test_generate_create_table_sql_single_column_primary_key():
@@ -83,10 +157,7 @@ def test_generate_create_table_sql_is_valid_duckdb_ddl():
 def test_load_source_table_loads_csv(tmp_path: Path):
     db_path = tmp_path / "test.duckdb"
     csv_path = tmp_path / "bgc_trip.csv"
-    csv_path.write_text(
-        "FID,PROJECTNAME,TRIP_CODE,STATIONNAME,STATIONCODE,LONGITUDE,LATITUDE,SAMPLEDATEUTC\n"
-        "1,proj,TRIP1,station,STN,123.4,-33.1,2020-01-01 00:00:00\n"
-    )
+    csv_path.write_text(BGC_TRIP_CSV_TEXT)
     load_source_table(db_path, "bgc_trip", csv_path)
 
     con = create_connection(db_path)
@@ -133,10 +204,7 @@ def test_load_source_tables_all_succeed(tmp_path: Path):
     db_path = tmp_path / "test.duckdb"
     csv_dir = tmp_path / "csv"
     csv_dir.mkdir()
-    (csv_dir / "bgc_trip.csv").write_text(
-        "FID,PROJECTNAME,TRIP_CODE,STATIONNAME,STATIONCODE,LONGITUDE,LATITUDE,SAMPLEDATEUTC\n"
-        "1,proj,TRIP1,station,STN,123.4,-33.1,2020-01-01 00:00:00\n"
-    )
+    (csv_dir / "bgc_trip.csv").write_text(BGC_TRIP_CSV_TEXT)
     result = load_source_tables(db_path, _runsheet(["bgc_trip"]), csv_dir)
     assert isinstance(result, LoadResult)
     assert result.succeeded == ["bgc_trip"]
