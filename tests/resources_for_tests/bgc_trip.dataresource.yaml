@@ -1,0 +1,29 @@
+profile: tabular-data-resource
+name: bgc_trip
+path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_trip
+format: csv
+mediatype: text/csv
+encoding: utf-8
+schema:
+  fields:
+  - name: FID
+    type: integer
+  - name: PROJECTNAME
+    type: string
+    constraints:
+      required: true
+  - name: TRIP_CODE
+    type: string
+    constraints:
+      required: true
+  - name: TRIP_ID
+    type: string
+    constraints:
+      required: true
+      unique: true
+  - name: SAMPLEDATEUTC
+    type: datetime
+    format: "%Y-%m-%d %H:%M:%S"
+    constraints:
+      required: true
+  primaryKey: TRIP_CODE

@@ -5,6 +5,8 @@ from public_schema import resolve_resource, validate_local
 
 # --- validate_local ---
 
+# TODO: use test fixtures for schema and data files, rather than relying on bundled resources.
+
 
 def test_validate_local_valid_csv(tmp_path):
     """Header-only CSV matching bgc_chemistry schema columns should be valid."""

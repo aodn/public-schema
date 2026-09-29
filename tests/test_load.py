@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 import duckdb
 import pytest
+from conftest import _mock_load_schema
 
 from public_schema.config import RunsheetConfig
 from public_schema.connection import create_connection
@@ -23,67 +24,6 @@ BGC_TRIP_CSV_TEXT = (
 
 @pytest.fixture(scope="module", autouse=True)
 def mock_load_schema():
-    def _mock_load_schema(name: str) -> dict:
-        """
-        Mock schemas here so that tests don't depend on the actual bundled Frictionless descriptors.
-        The mock schemas are simplified and only include the fields needed for the tests.
-        """
-        if name == "bgc_trip":
-            return {
-                "fields": [
-                    {
-                        "name": "TRIP_CODE",
-                        "type": "string",
-                        "constraints": {"required": True},
-                    },
-                    {
-                        "name": "TRIP_ID",
-                        "type": "string",
-                        "constraints": {"required": True, "unique": True},
-                    },
-                    {"name": "PROJECTNAME", "type": "string"},
-                    {
-                        "name": "SAMPLEDATEUTC",
-                        "type": "datetime",
-                        "format": "%Y-%m-%d %H:%M:%S",
-                        "constraints": {"required": True},
-                    },
-                ],
-                "primaryKey": "TRIP_CODE",
-            }
-        elif name == "bgc_chemistry":
-            return {
-                "fields": [
-                    {
-                        "name": "TRIP_CODE",
-                        "type": "string",
-                        "constraints": {"required": True},
-                    },
-                    {
-                        "name": "SAMPLEDEPTH_M",
-                        "type": "number",
-                        "constraints": {"required": True},
-                    },
-                    {"name": "SAMPLEDATELOCAL", "type": "datetime"},
-                    {"name": "SALINITY_FLAG", "type": "integer"},
-                ],
-                "primaryKey": ["TRIP_CODE", "SAMPLEDEPTH_M"],
-            }
-        elif name == "bgc_tss_meta":
-            return {
-                "fields": [
-                    {"name": "TRIP_CODE", "type": "string"},
-                ],
-                "databaseForeignKeys": [
-                    {
-                        "fields": ["TRIP_CODE"],
-                        "reference": {"resource": "bgc_trip"},
-                    }
-                ],
-            }
-        else:
-            raise ValueError(f"Unknown schema name: {name}")
-
     with patch("public_schema.load._load_schema", _mock_load_schema):
         yield
 
