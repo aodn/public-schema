@@ -8,7 +8,11 @@ import yaml
 from frictionless import FrictionlessException, Resource, Schema, validate
 from frictionless.schemes.remote import RemoteControl
 
-from public_schema.export import resolve_resource
+from public_schema.config import RunsheetConfig
+from public_schema.export import download_resource, resolve_resource
+from public_schema.results import ExportResult
+
+# TODO: check that the file name follows convention "<resource_name>.dataresource.yaml" for bundled resources
 
 
 def validate_local(
@@ -77,3 +81,32 @@ def validate_resource(name_or_path: str | Path, http_timeout: int = 100):
         return False, [f"An exception occurred during validation:\n{e}"]
 
     return report.valid, report.flatten(["name", "message"])
+
+
+def download_and_validate_source_tables(
+    runsheet: RunsheetConfig, csv_dir: Path, http_timeout: int = 100
+) -> ExportResult:
+    """
+    Download the CSV data for all resources in the runsheet and validate them against their schemas.
+
+    :param runsheet: runsheet declaring ``source_tables`` to download & validate.
+    :param csv_dir: directory to save each source table to (as ``<name>.csv``).
+    :param http_timeout: HTTP response timeout in seconds
+    :return: :class:`ExportResult` listing succeeded, failed, and skipped table names.
+    """
+    # TODO: add tests
+    # TODO: retries?
+
+    result = ExportResult()
+    for name in runsheet.source_tables:
+        try:
+            csv_path = download_resource(name, csv_dir, http_timeout=http_timeout)
+            valid, errors = validate_local(csv_path, name)
+            if valid:
+                result.succeeded.append(name)
+            else:
+                result.failed[name] = f"Validation failed: {errors}"
+        except Exception as e:  # noqa: BLE001 (per-item catch is the ADR-0006 contract)
+            result.failed[name] = str(e)
+
+    return result

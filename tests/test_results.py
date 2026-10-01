@@ -1,11 +1,12 @@
 """Tests for public_schema.results — the shared StageResult model (see ADR-0006).
 
-StageResult is reused across pipeline stages via type aliases (LoadResult/TransformResult/
+StageResult is reused across pipeline stages via subclasses (LoadResult/TransformResult/
 StoreResult) so that a later stage's `skip` input can be built directly from an earlier stage's
 result — see `docs/water_sampling_db.md`'s "Cross-stage skip propagation".
 """
 
 from public_schema.results import (
+    ExportResult,
     LoadResult,
     StageResult,
     StoreResult,
@@ -15,6 +16,7 @@ from public_schema.results import (
 
 def test_stage_result_defaults_are_empty():
     result = StageResult()
+    assert result.name == ""
     assert result.succeeded == []
     assert result.failed == {}
     assert result.skipped == {}
@@ -46,10 +48,11 @@ def test_stage_result_instances_are_independent():
 
 
 def test_load_transform_store_result_are_stage_result():
-    # aliases (or subclasses) of the one shared model, per water_sampling_db.md
-    assert LoadResult is StageResult or issubclass(LoadResult, StageResult)
-    assert TransformResult is StageResult or issubclass(TransformResult, StageResult)
-    assert StoreResult is StageResult or issubclass(StoreResult, StageResult)
+    # subclasses of the one shared model, per water_sampling_db.md
+    assert issubclass(LoadResult, StageResult)
+    assert issubclass(TransformResult, StageResult)
+    assert issubclass(StoreResult, StageResult)
+    assert issubclass(ExportResult, StageResult)
 
 
 def test_stage_result_chains_skip_dict_across_stages():
@@ -59,8 +62,7 @@ def test_stage_result_chains_skip_dict_across_stages():
         failed={"bgc_trip": "constraint violation"},
         skipped={"bgc_trip_metadata": "depends on failed bgc_trip"},
     )
-    skip = {**load_result.failed, **load_result.skipped}
-    assert skip == {
+    assert load_result.skip_downstream() == {
         "bgc_trip": "constraint violation",
         "bgc_trip_metadata": "depends on failed bgc_trip",
     }

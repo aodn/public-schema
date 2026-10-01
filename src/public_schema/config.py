@@ -65,6 +65,7 @@ class RunsheetConfig(BaseModel):
         transforms: List of SQL transforms and their dependencies on other tables.
     """
 
+    # TODO: source_tables list should include optional `depends:` to specify dependencies for foreign keys
     source_tables: list[DescriptorName]
     transforms: list[TransformConfig]
 
