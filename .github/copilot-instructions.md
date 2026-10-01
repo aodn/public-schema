@@ -61,6 +61,7 @@ The CI workflow (`ci.yaml`) runs on PRs to `v2` and automatically validates any 
 Access bundled resource files from code:
 ```python
 from importlib.resources import files
+
 path = files("public_schema.resources.bgc_data") / "bgc_chemistry.dataresource.yaml"
 ```
 

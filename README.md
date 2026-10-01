@@ -61,8 +61,10 @@ path = sql["bgc_chemistry_data"]  # Path to bgc_chemistry_data.sql
 ```python
 from importlib.resources import files
 
-yaml_path = files("public_schema.resources.bgc_data") / "bgc_chemistry.dataresource.yaml"
-sql_path  = files("public_schema.resources.cpr_data") / "cpr_phyto_raw.sql"
+yaml_path = (
+    files("public_schema.resources.bgc_data") / "bgc_chemistry.dataresource.yaml"
+)
+sql_path = files("public_schema.resources.cpr_data") / "cpr_phyto_raw.sql"
 ```
 
 ### Resolve a resource by name or path
@@ -70,7 +72,7 @@ sql_path  = files("public_schema.resources.cpr_data") / "cpr_phyto_raw.sql"
 ```python
 from public_schema import resolve_resource
 
-path = resolve_resource("bgc_chemistry")          # looks up bundled descriptor
+path = resolve_resource("bgc_chemistry")  # looks up bundled descriptor
 path = resolve_resource("path/to/my.dataresource.yaml")  # uses file directly
 ```
 

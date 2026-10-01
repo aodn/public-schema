@@ -46,8 +46,15 @@ stage's result:
 
 ```python
 load_result = load_source_tables(db_path, runsheet, csv_dir)
-transform_result = run_transforms(db_path, runsheet, skip={**load_result.failed, **load_result.skipped})
-store_result = store_all_products(db_path, runsheet, output_dir, skip={**transform_result.failed, **transform_result.skipped})
+transform_result = run_transforms(
+    db_path, runsheet, skip={**load_result.failed, **load_result.skipped}
+)
+store_result = store_all_products(
+    db_path,
+    runsheet,
+    output_dir,
+    skip={**transform_result.failed, **transform_result.skipped},
+)
 ```
 
 Each function merges its `skip` input with whatever it discovers itself while walking runsheet
