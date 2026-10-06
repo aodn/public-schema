@@ -1,8 +1,9 @@
 """Top-level flow implementing the IMOS Water Sampling DB ELT pipeline."""
 
 import argparse
+import logging
 from pathlib import Path
-from pprint import pprint
+from pprint import pformat
 from shutil import rmtree
 
 from public_schema import StageResult
@@ -10,13 +11,14 @@ from public_schema.config import load_runsheet
 from public_schema.load import load_source_tables
 from public_schema.validate import download_and_validate_source_tables
 
+logger = logging.getLogger(__name__)
 
-def report_result(result: StageResult):
-    print(
+
+def format_result(result: StageResult):
+    return (
         f"{result.name.title()} result: {len(result.succeeded)} succeeded, {len(result.failed)} failed,"
         f" {len(result.skipped)} skipped."
     )
-    pprint(result.model_dump())
 
 
 def run_pipeline(
@@ -31,6 +33,8 @@ def run_pipeline(
     :param base_dir: base directory for database and exported tables (if None, a temporary directory is created)
     :param http_timeout: http response timeout in seconds (for downloading source tables)
     """
+    logger.info(f"Starting pipeline with runsheet: {runsheet_path}")
+
     # Load the runsheet
     runsheet = load_runsheet(runsheet_path)
 
@@ -50,20 +54,21 @@ def run_pipeline(
     if db_path.exists():
         db_path.unlink()
 
-    print(
-        f"Running pipeline with\n  runsheet: {runsheet_path}\n  db_path: {db_path}\n  source_tables_dir: {source_tables_dir}\n  http_timeout: {http_timeout}"
+    logger.info(
+        f"Pipeline configuration: db_path={db_path}, source_tables_dir={source_tables_dir}, http_timeout={http_timeout}"
     )
 
     # Download and validate source tables
-    print("\nDownloading and validating source tables...")
+    logger.info("Starting export/validation stage")
     export_result = download_and_validate_source_tables(
         runsheet, csv_dir=source_tables_dir, http_timeout=http_timeout
     )
 
-    report_result(export_result)
+    logger.info(format_result(export_result))
+    logger.debug(pformat(export_result.model_dump()))
 
     # Load source tables into the database
-    print("\nLoading source tables into the database...")
+    logger.info("Starting load stage")
     load_result = load_source_tables(
         db_path,
         runsheet,
@@ -71,12 +76,18 @@ def run_pipeline(
         skip=export_result.skip_downstream(),
     )
 
-    report_result(load_result)
+    logger.info(format_result(load_result))
+    logger.debug(pformat(load_result.model_dump()))
 
-    print("\nPipeline completed.")
+    logger.info("Pipeline completed")
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    )
+
     parser = argparse.ArgumentParser(
         description="Run the IMOS Water Sampling DB ELT pipeline."
     )

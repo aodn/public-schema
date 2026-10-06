@@ -2,6 +2,7 @@
 Helper functions for validating schemas and resources using the Frictionless framework
 """
 
+import logging
 from pathlib import Path
 
 import yaml
@@ -11,6 +12,8 @@ from frictionless.schemes.remote import RemoteControl
 from public_schema.config import RunsheetConfig
 from public_schema.export import download_resource, resolve_resource
 from public_schema.results import ExportResult
+
+logger = logging.getLogger(__name__)
 
 # TODO: check that the file name follows convention "<resource_name>.dataresource.yaml" for bundled resources
 
@@ -97,16 +100,27 @@ def download_and_validate_source_tables(
     # TODO: add tests
     # TODO: retries?
 
+    logger.info(
+        f"Starting download and validation of {len(runsheet.source_tables)} source tables"
+    )
     result = ExportResult()
     for name in runsheet.source_tables:
+        logger.debug(f"[{name}] Processing source table")
         try:
             csv_path = download_resource(name, csv_dir, http_timeout=http_timeout)
+            logger.debug(f"[{name}] Downloaded to {csv_path}")
             valid, errors = validate_local(csv_path, name)
             if valid:
+                logger.info(f"[{name}] Validation succeeded")
                 result.succeeded.append(name)
             else:
+                logger.warning(f"[{name}] Validation failed: {errors}")
                 result.failed[name] = f"Validation failed: {errors}"
-        except Exception as e:  # noqa: BLE001 (per-item catch is the ADR-0006 contract)
+        except Exception as e:
+            logger.exception(f"[{name}] Error processing")
             result.failed[name] = str(e)
 
+    logger.info(
+        f"Download and validation complete: {len(result.succeeded)} succeeded, {len(result.failed)} failed"
+    )
     return result

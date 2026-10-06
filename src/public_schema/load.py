@@ -3,6 +3,7 @@ Load stage — DDL generation from Frictionless schemas and CSV loading into Duc
 ADR-0002, ADR-0006, ADR-0007, ADR-0008).
 """
 
+import logging
 from pathlib import Path
 
 import yaml
@@ -11,6 +12,8 @@ from public_schema.config import DescriptorName, RunsheetConfig
 from public_schema.connection import create_connection
 from public_schema.export import resolve_resource
 from public_schema.results import LoadResult
+
+logger = logging.getLogger(__name__)
 
 _TYPE_MAP = {
     "string": "VARCHAR",
@@ -161,10 +164,14 @@ def load_source_tables(
     :param skip: name -> reason, seeded from an earlier stage's result.
     :return: :class:`LoadResult` listing succeeded, failed, and skipped table names.
     """
+    logger.info(
+        f"Starting load of {len(runsheet.source_tables)} source tables into {db_path}"
+    )
     result = LoadResult(skipped=skip if skip is not None else {})
 
     for name in runsheet.source_tables:
         if name in result.skipped:
+            logger.debug(f"[{name}] Skipping (already marked as skipped)")
             continue
 
         depends = _foreign_key_dependencies(_load_schema(name))
@@ -172,13 +179,22 @@ def load_source_tables(
             dep for dep in depends if dep in result.failed or dep in result.skipped
         ]
         if blocking:
+            logger.warning(
+                f"[{name}] Skipping (depends on failed/skipped table(s): {blocking})"
+            )
             result.skipped[name] = f"depends on failed/skipped table(s): {blocking}"
             continue
 
+        logger.debug(f"[{name}] Loading source table")
         try:
             load_source_table(db_path, name, csv_dir / f"{name}.csv")
+            logger.info(f"[{name}] Load succeeded")
             result.succeeded.append(name)
-        except Exception as e:  # noqa: BLE001 (per-item catch is the ADR-0006 contract)
+        except Exception as e:
+            logger.exception(f"[{name}] Error loading")
             result.failed[name] = str(e)
 
+    logger.info(
+        f"Load complete: {len(result.succeeded)} succeeded, {len(result.failed)} failed, {len(result.skipped)} skipped"
+    )
     return result
