@@ -1,6 +1,6 @@
 profile: tabular-data-resource
 name: bgc_chemistry
-path: https://www.cmar.csiro.au/geoserver/imos/wfs?service=wfs&version=1.1.0&request=GetFeature&outputformat=csv&typename=imos%3Abgc_chemistry
+path: __MOCK_PATH__
 format: csv
 mediatype: text/csv
 encoding: utf-8

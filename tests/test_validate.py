@@ -1,27 +1,18 @@
 from unittest.mock import patch
 
 import pytest
-import yaml
-from conftest import TEST_RESOURCES_DIR
+from conftest import TEST_RESOURCES_DIR, mock_download_resource, mock_resolve_resource
 
-from public_schema import resolve_resource, validate_local
+from public_schema import validate_local
 from public_schema.config import RunsheetConfig
 from public_schema.validate import download_and_validate_source_tables
 
 # --- validate_local ---
 
-# TODO: use test fixtures for schema and data files, rather than relying on bundled resources.
 
-
+@patch("public_schema.validate.resolve_resource", mock_resolve_resource)
 def test_validate_local_valid_csv(tmp_path):
-    """Header-only CSV matching bgc_chemistry schema columns should be valid."""
-    descriptor_path = resolve_resource("bgc_chemistry")
-    with open(descriptor_path, encoding="utf-8") as f:
-        descriptor = yaml.safe_load(f)
-
-    headers = [f["name"] for f in descriptor["schema"]["fields"]]
-    csv_path = tmp_path / "bgc_chemistry.csv"
-    csv_path.write_text(",".join(headers) + "\n", encoding="utf-8")
+    csv_path = TEST_RESOURCES_DIR / "bgc_chemistry.csv"
 
     valid, errors = validate_local(csv_path, "bgc_chemistry")
     assert isinstance(valid, bool)
@@ -43,7 +34,9 @@ def test_validate_local_missing_csv():
 # --- download_and_validate_source_tables ---
 
 
-def test_download_and_validate_source_tables_single_success(tmp_path):
+@patch("public_schema.validate.resolve_resource", mock_resolve_resource)
+@patch("public_schema.validate.download_resource", side_effect=mock_download_resource)
+def test_download_and_validate_source_tables_single_success(mock_download, tmp_path):
     """Test successful download and validation of a single table."""
     # Create a runsheet with one source table
     runsheet = RunsheetConfig(
@@ -51,17 +44,7 @@ def test_download_and_validate_source_tables_single_success(tmp_path):
         transforms=[],
     )
 
-    # Mock download_resource and resolve_resource to use test resources
-    with (
-        patch("public_schema.validate.download_resource") as mock_download,
-        patch("public_schema.validate.resolve_resource") as mock_resolve,
-    ):
-        mock_download.return_value = TEST_RESOURCES_DIR / "bgc_chemistry.csv"
-        mock_resolve.return_value = (
-            TEST_RESOURCES_DIR / "bgc_chemistry.dataresource.yaml"
-        )
-
-        result = download_and_validate_source_tables(runsheet, tmp_path)
+    result = download_and_validate_source_tables(runsheet, tmp_path)
 
     assert result.succeeded == ["bgc_chemistry"]
     assert result.failed == {}
@@ -70,29 +53,16 @@ def test_download_and_validate_source_tables_single_success(tmp_path):
     mock_download.assert_called_once()
 
 
-def test_download_and_validate_source_tables_multiple_success(tmp_path):
+@patch("public_schema.validate.resolve_resource", mock_resolve_resource)
+@patch("public_schema.validate.download_resource", side_effect=mock_download_resource)
+def test_download_and_validate_source_tables_multiple_success(mock_download, tmp_path):
     """Test successful download and validation of multiple tables."""
     runsheet = RunsheetConfig(
         source_tables=["bgc_chemistry", "bgc_trip"],
         transforms=[],
     )
 
-    with (
-        patch("public_schema.validate.download_resource") as mock_download,
-        patch("public_schema.validate.resolve_resource") as mock_resolve,
-    ):
-
-        def download_side_effect(name, output_dir, **kwargs):
-            # Return the appropriate test CSV file based on the name
-            return TEST_RESOURCES_DIR / f"{name}.csv"
-
-        def resolve_side_effect(name):
-            return TEST_RESOURCES_DIR / f"{name}.dataresource.yaml"
-
-        mock_download.side_effect = download_side_effect
-        mock_resolve.side_effect = resolve_side_effect
-
-        result = download_and_validate_source_tables(runsheet, tmp_path)
+    result = download_and_validate_source_tables(runsheet, tmp_path)
 
     assert set(result.succeeded) == {"bgc_chemistry", "bgc_trip"}
     assert result.failed == {}
@@ -100,7 +70,11 @@ def test_download_and_validate_source_tables_multiple_success(tmp_path):
     assert mock_download.call_count == 2
 
 
-def test_download_and_validate_source_tables_validation_failure(tmp_path):
+@patch("public_schema.validate.resolve_resource", mock_resolve_resource)
+@patch("public_schema.validate.download_resource")
+def test_download_and_validate_source_tables_validation_failure(
+    mock_download, tmp_path
+):
     """Test that validation errors are caught and recorded in the failed dict."""
     runsheet = RunsheetConfig(
         source_tables=["bgc_chemistry"],
@@ -110,17 +84,9 @@ def test_download_and_validate_source_tables_validation_failure(tmp_path):
     # Create an invalid CSV file that doesn't match the schema
     invalid_csv = tmp_path / "invalid.csv"
     invalid_csv.write_text("COL_A,COL_B\n1,2\n", encoding="utf-8")
+    mock_download.return_value = invalid_csv
 
-    with (
-        patch("public_schema.validate.download_resource") as mock_download,
-        patch("public_schema.validate.resolve_resource") as mock_resolve,
-    ):
-        mock_download.return_value = invalid_csv
-        mock_resolve.return_value = (
-            TEST_RESOURCES_DIR / "bgc_chemistry.dataresource.yaml"
-        )
-
-        result = download_and_validate_source_tables(runsheet, tmp_path)
+    result = download_and_validate_source_tables(runsheet, tmp_path)
 
     assert result.succeeded == []
     assert "bgc_chemistry" in result.failed
@@ -128,17 +94,18 @@ def test_download_and_validate_source_tables_validation_failure(tmp_path):
     assert result.skipped == {}
 
 
-def test_download_and_validate_source_tables_download_failure(tmp_path):
+@patch("public_schema.validate.resolve_resource", mock_resolve_resource)
+@patch("public_schema.validate.download_resource")
+def test_download_and_validate_source_tables_download_failure(mock_download, tmp_path):
     """Test that download exceptions are caught and recorded."""
     runsheet = RunsheetConfig(
         source_tables=["bgc_chemistry"],
         transforms=[],
     )
 
-    with patch("public_schema.validate.download_resource") as mock_download:
-        mock_download.side_effect = Exception("Network error: connection timeout")
+    mock_download.side_effect = Exception("Network error: connection timeout")
 
-        result = download_and_validate_source_tables(runsheet, tmp_path)
+    result = download_and_validate_source_tables(runsheet, tmp_path)
 
     assert result.succeeded == []
     assert "bgc_chemistry" in result.failed
@@ -146,7 +113,9 @@ def test_download_and_validate_source_tables_download_failure(tmp_path):
     assert result.skipped == {}
 
 
-def test_download_and_validate_source_tables_mixed_results(tmp_path):
+@patch("public_schema.validate.resolve_resource", mock_resolve_resource)
+@patch("public_schema.validate.download_resource")
+def test_download_and_validate_source_tables_mixed_results(mock_download, tmp_path):
     """Test mixed results where some tables succeed and others fail."""
     runsheet = RunsheetConfig(
         source_tables=["bgc_chemistry", "bgc_trip", "bgc_tss_meta"],
@@ -157,26 +126,17 @@ def test_download_and_validate_source_tables_mixed_results(tmp_path):
     invalid_csv = tmp_path / "invalid_trip.csv"
     invalid_csv.write_text("WRONG_COL\n1\n", encoding="utf-8")
 
-    with (
-        patch("public_schema.validate.download_resource") as mock_download,
-        patch("public_schema.validate.resolve_resource") as mock_resolve,
-    ):
+    def download_side_effect(name, output_dir, **kwargs):
+        if name == "bgc_trip":
+            return invalid_csv
+        elif name == "bgc_tss_meta":
+            raise ValueError("Resource not found")
+        else:
+            return TEST_RESOURCES_DIR / f"{name}.csv"
 
-        def download_side_effect(name, output_dir, **kwargs):
-            if name == "bgc_trip":
-                return invalid_csv
-            elif name == "bgc_tss_meta":
-                raise ValueError("Resource not found")
-            else:
-                return TEST_RESOURCES_DIR / f"{name}.csv"
+    mock_download.side_effect = download_side_effect
 
-        def resolve_side_effect(name):
-            return TEST_RESOURCES_DIR / f"{name}.dataresource.yaml"
-
-        mock_download.side_effect = download_side_effect
-        mock_resolve.side_effect = resolve_side_effect
-
-        result = download_and_validate_source_tables(runsheet, tmp_path)
+    result = download_and_validate_source_tables(runsheet, tmp_path)
 
     assert result.succeeded == ["bgc_chemistry"]
     assert "bgc_trip" in result.failed  # Validation failed
@@ -198,25 +158,16 @@ def test_download_and_validate_source_tables_empty_runsheet(tmp_path):
     assert result.skipped == {}
 
 
-def test_download_and_validate_source_tables_with_http_timeout(tmp_path):
+@patch("public_schema.validate.resolve_resource", mock_resolve_resource)
+@patch("public_schema.validate.download_resource", side_effect=mock_download_resource)
+def test_download_and_validate_source_tables_with_http_timeout(mock_download, tmp_path):
     """Test that http_timeout parameter is passed to download_resource."""
     runsheet = RunsheetConfig(
         source_tables=["bgc_chemistry"],
         transforms=[],
     )
 
-    with (
-        patch("public_schema.validate.download_resource") as mock_download,
-        patch("public_schema.validate.resolve_resource") as mock_resolve,
-    ):
-        mock_download.return_value = TEST_RESOURCES_DIR / "bgc_chemistry.csv"
-        mock_resolve.return_value = (
-            TEST_RESOURCES_DIR / "bgc_chemistry.dataresource.yaml"
-        )
-
-        result = download_and_validate_source_tables(
-            runsheet, tmp_path, http_timeout=200
-        )
+    result = download_and_validate_source_tables(runsheet, tmp_path, http_timeout=200)
 
     assert result.succeeded == ["bgc_chemistry"]
     # Verify http_timeout was passed
