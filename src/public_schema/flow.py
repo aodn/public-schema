@@ -2,6 +2,7 @@
 
 import argparse
 import logging
+import tempfile
 from pathlib import Path
 from pprint import pformat
 from shutil import rmtree
@@ -39,7 +40,7 @@ def run_pipeline(
     runsheet = load_runsheet(runsheet_path)
 
     if base_dir is None:
-        base_dir = Path("/tmp/water_sampling_db")
+        base_dir = Path(tempfile.mkdtemp(prefix="water_sampling_db_"))
     else:
         base_dir = Path(base_dir).resolve()
 

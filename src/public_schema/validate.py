@@ -97,7 +97,6 @@ def download_and_validate_source_tables(
     :param http_timeout: HTTP response timeout in seconds
     :return: :class:`ExportResult` listing succeeded, failed, and skipped table names.
     """
-    # TODO: add tests
     # TODO: retries?
 
     logger.info(

@@ -9,7 +9,9 @@ in [`CONTEXT.md`](../CONTEXT.md).
 
 ## Pipeline stages
 
-1. **Export** — download each Resource's CSV from its WFS `path` URL (done: `export.py`).
+1. **Export** — download each Resource's CSV from its WFS `path` URL (done: `export.py`;
+   `validate.py`'s `download_and_validate_source_tables` bulk-runs this and Validate together, see
+   below).
 2. **Validate** — check each CSV against its Frictionless schema (done: `validate.py`).
 3. **Runsheet** — declare, per BGC/CPR pipeline, which source tables to load and which transforms
    to run, in dependency order (done: `config.py`'s `RunsheetConfig`/`load_runsheet`, plus
@@ -41,19 +43,17 @@ the wrapper flow's eventual per-task looping + skip logic (ADR-0006).
 `load_source_tables`, `run_transforms`, and `store_all_products` each apply ADR-0006's "block
 dependents" policy *within* their own stage, but a later stage has no way to know a name failed or
 was skipped in an *earlier* stage unless that's passed in explicitly. Every bulk function therefore
-takes an additional `skip: dict[str, str] = {}` parameter (name → reason), seeded from the previous
-stage's result:
+takes an additional `skip: dict[str, str] | None = None` parameter (name → reason), seeded from the
+previous stage's result via its `skip_downstream()` method (`{**result.failed, **result.skipped}`):
 
 ```python
-load_result = load_source_tables(db_path, runsheet, csv_dir)
-transform_result = run_transforms(
-    db_path, runsheet, skip={**load_result.failed, **load_result.skipped}
+export_result = download_and_validate_source_tables(runsheet, csv_dir)
+load_result = load_source_tables(
+    db_path, runsheet, csv_dir, skip=export_result.skip_downstream()
 )
+transform_result = run_transforms(db_path, runsheet, skip=load_result.skip_downstream())
 store_result = store_all_products(
-    db_path,
-    runsheet,
-    output_dir,
-    skip={**transform_result.failed, **transform_result.skipped},
+    db_path, runsheet, output_dir, skip=transform_result.skip_downstream()
 )
 ```
 
@@ -63,13 +63,20 @@ new skips (Products are leaf nodes — nothing in this package depends on a Prod
 it only consults its `skip` input and otherwise tries every Product independently.
 
 - **`results.py`** (new): one shared `StageResult` model (`succeeded: list[str]`,
-  `failed: dict[str, str]`, `skipped: dict[str, str]`), reused (via type alias or subclass) as
+  `failed: dict[str, str]`, `skipped: dict[str, str]`), reused via subclasses `ExportResult`,
   `LoadResult`, `TransformResult`, `StoreResult` — this is what makes the chaining above type-check
-  cleanly across stages.
+  cleanly across stages. `StageResult.skip_downstream()` returns `{**failed, **skipped}`, the dict
+  to pass as the next stage's `skip` argument.
 
 - **`connection.py`** (new): `create_connection(db_path: Path) -> DuckDBPyConnection` — opens the
   DuckDB file and loads the `spatial` extension. Called internally by every stage function below;
   callers never share a connection across calls (ADR-0007).
+
+- **`validate.py`** (extend existing module) — `download_and_validate_source_tables(runsheet:
+  RunsheetConfig, csv_dir: Path, http_timeout: int = 100) -> ExportResult` — loops
+  `runsheet.source_tables`, downloading and locally validating each one, catching per-table
+  failures per the same contract as the stage-4/5/6 bulk functions (though, being the first stage,
+  it takes no `skip` input and never derives dependents-of-failure skips itself).
 
 - **`load.py`** (new) — DDL generation + CSV loading:
   - `generate_create_table_sql(name: DescriptorName) -> str` — builds `CREATE TABLE` from the
@@ -84,21 +91,21 @@ it only consults its `skip` input and otherwise tries every Product independentl
     generated DDL then loads `csv_path` into it (date/datetime columns loaded via DuckDB's
     `read_csv(..., dateformat=..., timestampformat=...)`, reusing the schema's Frictionless
     `format` strings directly — they're already `strftime`-compatible).
-  - `load_source_tables(db_path: Path, runsheet: RunsheetConfig, csv_dir: Path, skip: dict[str, str] = {}) -> LoadResult` —
+  - `load_source_tables(db_path: Path, runsheet: RunsheetConfig, csv_dir: Path, skip: dict[str, str] | None = None) -> LoadResult` —
     loops `runsheet.source_tables` in order, catching per-table failures, skipping a table's
     dependents (per ADR-0006), returning `LoadResult(succeeded, failed, skipped)`.
 
 - **`transform.py`** (extend existing module) — add transform *execution* alongside the existing
   `sql_files_dict`/`sql_files_list` (listing):
   - `run_transform(db_path: Path, name: TransformName) -> None` — executes the bundled `.sql` file.
-  - `run_transforms(db_path: Path, runsheet: RunsheetConfig, skip: dict[str, str] = {}) -> TransformResult` —
+  - `run_transforms(db_path: Path, runsheet: RunsheetConfig, skip: dict[str, str] | None = None) -> TransformResult` —
     loops `runsheet.transforms` in order, same catch/skip/result contract as `load_source_tables`.
 
 - **`store.py`** (new) — Publish stage:
   - `is_product(name: str) -> bool` — `True` iff `name` ends in `_data`.
   - `store_product(db_path: Path, name: TransformName, output_dir: Path) -> Path` — exports one
     table to CSV.
-  - `store_all_products(db_path: Path, runsheet: RunsheetConfig, output_dir: Path, skip: dict[str, str] = {}) -> StoreResult` —
+  - `store_all_products(db_path: Path, runsheet: RunsheetConfig, output_dir: Path, skip: dict[str, str] | None = None) -> StoreResult` —
     filters `runsheet.transforms` to `is_product(t.name)`, skips names in `skip`, and calls
     `store_product` for everything else, catching per-item failures (no further skip-derivation
     needed — see above).

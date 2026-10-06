@@ -20,6 +20,7 @@ from public_schema.load import (
     load_source_tables,
 )
 from public_schema.results import (
+    ExportResult,
     LoadResult,
     StageResult,
     StoreResult,
@@ -30,16 +31,19 @@ from public_schema.transform import (
     sql_files_list,
 )
 from public_schema.validate import (
+    download_and_validate_source_tables,
     validate_local,
     validate_resource,
 )
 
 __all__ = [
+    "ExportResult",
     "LoadResult",
     "StageResult",
     "StoreResult",
     "TransformResult",
     "create_connection",
+    "download_and_validate_source_tables",
     "download_resource",
     "generate_create_table_sql",
     "load_source_table",
