@@ -10,6 +10,7 @@ from shutil import rmtree
 from public_schema import StageResult
 from public_schema.config import load_runsheet
 from public_schema.load import load_source_tables
+from public_schema.transform import run_transforms
 from public_schema.validate import download_and_validate_source_tables
 
 logger = logging.getLogger(__name__)
@@ -79,6 +80,17 @@ def run_pipeline(
 
     logger.info(format_result(load_result))
     logger.debug(pformat(load_result.model_dump()))
+
+    # Run transforms against the loaded database
+    logger.info("Starting transform stage")
+    transform_result = run_transforms(
+        db_path,
+        runsheet,
+        skip=load_result.skip_downstream(),
+    )
+
+    logger.info(format_result(transform_result))
+    logger.debug(pformat(transform_result.model_dump()))
 
     logger.info("Pipeline completed")
 
