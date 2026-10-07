@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 import duckdb
 import pytest
-from conftest import _mock_load_schema
+from conftest import TEST_RESOURCES_DIR, mock_download_resource, mock_resolve_resource
 
 from public_schema.config import RunsheetConfig
 from public_schema.connection import create_connection
@@ -16,15 +16,12 @@ from public_schema.load import (
 )
 from public_schema.results import LoadResult
 
-BGC_TRIP_CSV_TEXT = (
-    "FID,PROJECTNAME,TRIP_CODE,TRIP_ID,SAMPLEDATEUTC\n"
-    "1,proj,TRIP1,ID1,2020-01-01 00:00:00\n"
-)
 
-
+# Patch resolve_resource to return test resource descriptors instead of the real ones, so that the tests
+# don't require network access or the real resource descriptors (which could potentially change over time).
 @pytest.fixture(scope="module", autouse=True)
-def mock_load_schema():
-    with patch("public_schema.load._load_schema", _mock_load_schema):
+def patch_resolve_resource():
+    with patch("public_schema.load.resolve_resource", mock_resolve_resource):
         yield
 
 
@@ -96,16 +93,17 @@ def test_generate_create_table_sql_is_valid_duckdb_ddl():
 
 def test_load_source_table_loads_csv(tmp_path: Path):
     db_path = tmp_path / "test.duckdb"
-    csv_path = tmp_path / "bgc_trip.csv"
-    csv_path.write_text(BGC_TRIP_CSV_TEXT)
+    csv_path = TEST_RESOURCES_DIR / "bgc_trip.csv"
     load_source_table(db_path, "bgc_trip", csv_path)
 
     con = create_connection(db_path)
     try:
-        rows = con.execute("SELECT TRIP_CODE FROM bgc_trip").fetchall()
+        rows = con.execute(
+            "SELECT TRIP_CODE FROM bgc_trip ORDER BY TRIP_CODE"
+        ).fetchall()
     finally:
         con.close()
-    assert rows == [("TRIP1",)]
+    assert rows == [("TRIP001",), ("TRIP002",)]
 
 
 def test_load_source_table_raises_on_missing_required_column(tmp_path: Path):
@@ -124,11 +122,8 @@ def test_load_source_table_raises_on_foreign_key_violation(tmp_path: Path):
     # bgc_tss_meta.TRIP_CODE references bgc_trip, which is never loaded here
     con = create_connection(db_path)
     con.close()
-    csv_path = tmp_path / "bgc_tss_meta.csv"
-    csv_path.write_text(
-        "FID,TRIP_CODE,SAMPLEDATELOCAL,SAMPLEDEPTH_M,REPLICATE,TSS_FLAG\n"
-        "1,NOPE,2020-01-01 00:00:00,1,1,1\n"
-    )
+    csv_path = TEST_RESOURCES_DIR / "bgc_tss_meta.csv"
+
     with pytest.raises(duckdb.Error):
         load_source_table(db_path, "bgc_tss_meta", csv_path)
 
@@ -142,9 +137,7 @@ def _runsheet(source_tables):
 
 def test_load_source_tables_all_succeed(tmp_path: Path):
     db_path = tmp_path / "test.duckdb"
-    csv_dir = tmp_path / "csv"
-    csv_dir.mkdir()
-    (csv_dir / "bgc_trip.csv").write_text(BGC_TRIP_CSV_TEXT)
+    csv_dir = TEST_RESOURCES_DIR
     result = load_source_tables(db_path, _runsheet(["bgc_trip"]), csv_dir)
     assert isinstance(result, LoadResult)
     assert result.succeeded == ["bgc_trip"]
@@ -168,10 +161,8 @@ def test_load_source_tables_skips_dependent_of_failed_table(tmp_path: Path):
     csv_dir.mkdir()
     # bgc_trip fails (bad CSV); bgc_tss_meta depends on it via databaseForeignKeys
     (csv_dir / "bgc_trip.csv").write_text("not,a,valid,csv\n1,2\n")
-    (csv_dir / "bgc_tss_meta.csv").write_text(
-        "FID,TRIP_CODE,SAMPLEDATELOCAL,SAMPLEDEPTH_M,REPLICATE,TSS_FLAG\n"
-        "1,TRIP1,2020-01-01 00:00:00,1,1,1\n"
-    )
+    mock_download_resource("bgc_tss_meta", csv_dir)
+
     result = load_source_tables(
         db_path, _runsheet(["bgc_trip", "bgc_tss_meta"]), csv_dir
     )
