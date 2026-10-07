@@ -26,8 +26,9 @@ in [`CONTEXT.md`](../CONTEXT.md).
    [ADR-0007](./adr/0007-stage-functions-use-db-path-not-connection.md), and
    [ADR-0008](./adr/0008-foreign-keys-declared-in-dataresource-yaml.md). *Not yet implemented.*
 5. **Transform** — execute the 44 bundled transform `.sql` files against the DuckDB file, strictly
-   in runsheet order, applying the same block-dependents-on-failure policy. See
-   [ADR-0005](./adr/0005-execution-order-via-config-file.md). *Not yet implemented.*
+   in runsheet order, applying the same block-dependents-on-failure policy (done:
+   `transform.py`'s `run_transform`/`run_transforms`). See
+   [ADR-0005](./adr/0005-execution-order-via-config-file.md).
 6. **Store** — export every Product (name ends in `_data`) as CSV for the wrapper flow to upload;
    Intermediate tables (e.g. `_map`) are never exported. *Not yet implemented.*
 
@@ -95,11 +96,15 @@ it only consults its `skip` input and otherwise tries every Product independentl
     loops `runsheet.source_tables` in order, catching per-table failures, skipping a table's
     dependents (per ADR-0006), returning `LoadResult(succeeded, failed, skipped)`.
 
-- **`transform.py`** (extend existing module) — add transform *execution* alongside the existing
+- **`transform.py`** (extend existing module) — transform *execution*, alongside the existing
   `sql_files_dict`/`sql_files_list` (listing):
-  - `run_transform(db_path: Path, name: TransformName) -> None` — executes the bundled `.sql` file.
+  - `run_transform(db_path: Path, name: TransformName) -> None` — executes the bundled `.sql` file
+    (each is a single `CREATE OR REPLACE TABLE ... AS` statement, so the file's contents are run
+    as-is).
   - `run_transforms(db_path: Path, runsheet: RunsheetConfig, skip: dict[str, str] | None = None) -> TransformResult` —
-    loops `runsheet.transforms` in order, same catch/skip/result contract as `load_source_tables`.
+    loops `runsheet.transforms` in order, same catch/skip/result contract as `load_source_tables`,
+    except dependents are derived from each `TransformConfig`'s declared `depends` list (not
+    parsed from the SQL itself).
 
 - **`store.py`** (new) — Publish stage:
   - `is_product(name: str) -> bool` — `True` iff `name` ends in `_data`.

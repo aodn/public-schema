@@ -27,6 +27,8 @@ from public_schema.results import (
     TransformResult,
 )
 from public_schema.transform import (
+    run_transform,
+    run_transforms,
     sql_files_dict,
     sql_files_list,
 )
@@ -51,6 +53,8 @@ __all__ = [
     "resolve_resource",
     "resource_descriptors_dict",
     "resource_descriptors_list",
+    "run_transform",
+    "run_transforms",
     "sql_files_dict",
     "sql_files_list",
     "validate_local",

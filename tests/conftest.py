@@ -39,3 +39,10 @@ def mock_download_resource(
         dst.write(src.read())
 
     return output_path.resolve()
+
+
+def mock_sql_files_dict(pattern: str = "*/*") -> dict[str, Path]:
+    """
+    Mock sql_files_dict to return the test fixture `.sql` files instead of the real bundled ones.
+    """
+    return {p.stem: p.resolve() for p in TEST_RESOURCES_DIR.glob("*.sql")}
