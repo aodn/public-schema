@@ -37,7 +37,7 @@ copepod_species_by_sample_species AS (
     -- taxon_name updated to identify each unique species
     -- grouped by sample & taxon_name
     SELECT sample,
-           genus || ' ' || substring(species, '^\w+') AS taxon_name,
+           genus || ' ' || regexp_extract(species, '^\w+') AS taxon_name,
            nullif(sum(taxon_count), 0) AS taxon_count
     FROM cpr_zoop_raw
     WHERE copepod = 'COPEPOD' AND
@@ -46,7 +46,7 @@ copepod_species_by_sample_species AS (
           species NOT LIKE '%/%' AND
           species NOT LIKE '%grp%' AND
           species NOT LIKE '%complex%'
-    GROUP BY sample, genus || ' ' || substring(species, '^\w+')
+    GROUP BY sample, genus || ' ' || regexp_extract(species, '^\w+')
 ),
 copepod_species_by_sample AS (
     -- count number of copepod species
@@ -70,7 +70,7 @@ phyto_filtered AS (
                       species LIKE '%complex%' OR
                       species LIKE '%type%' OR
                       species LIKE '%cyst%') THEN NULL
-                ELSE genus || ' ' || substring(species, '^\w+')
+                ELSE genus || ' ' || regexp_extract(species, '^\w+')
                END AS genus_species,
            CASE WHEN phyto_abundance_m3 = 0 THEN 0 --cell_l is phyto_abundance_m3 in cpr
                 WHEN taxon_group = 'Dinoflagellate' THEN phyto_abundance_m3 * 0.76 * (biovol_um3m3/phyto_abundance_m3)^0.819

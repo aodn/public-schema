@@ -5,7 +5,7 @@ WITH bgc_zoop_raw_species AS (
     -- concatenate genus and first word of species to create a simplified species name
     SELECT r.trip_code,
            r.taxon_name,
-           r.genus || ' ' || substring(r.species, '^\w+') AS species,
+           r.genus || ' ' || regexp_extract(r.species, '^\w+') AS species,
            r.zoop_abundance_m3
     FROM bgc_zoop_raw r
     WHERE r.copepod = 'COPEPOD' AND

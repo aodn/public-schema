@@ -6,7 +6,7 @@ WITH grouped AS (
     SELECT r.sample,
            r.genus,
            c.startdate,
-           substring(taxon_name, '^\w+') != substring(parent_name, '^\w+') AS genus_changed,
+           regexp_extract(taxon_name, '^\w+') != regexp_extract(parent_name, '^\w+') AS genus_changed,
            sum(r.phyto_abundance_m3) AS phyto_abundance_m3
     FROM cpr_phyto_raw r LEFT JOIN cpr_phyto_changelog c USING (taxon_name)
     WHERE r.genus IS NOT NULL AND

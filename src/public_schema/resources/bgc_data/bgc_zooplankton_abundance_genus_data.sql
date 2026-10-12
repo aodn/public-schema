@@ -6,7 +6,7 @@ WITH grouped AS (
 	SELECT r.trip_code,
            r.genus,
            c.startdate,
-           substring(taxon_name, '^\w+') != substring(parent_name, '^\w+') AS genus_changed,
+           regexp_extract(taxon_name, '^\w+') != regexp_extract(parent_name, '^\w+') AS genus_changed,
            sum(r.zoop_abundance_m3) AS zoop_abundance_m3
     FROM bgc_zoop_raw r LEFT JOIN bgc_zoop_changelog c USING (taxon_name)
     WHERE r.genus IS NOT NULL AND 

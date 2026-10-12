@@ -7,7 +7,7 @@ WITH grouped AS (
            r.methods,
            r.genus,
            c.startdate,
-           substring(taxon_name, '^\w+') != substring(parent_name, '^\w+') AS genus_changed,
+           regexp_extract(taxon_name, '^\w+') != regexp_extract(c.parent_name, '^\w+') AS genus_changed,
            sum(r.cell_l) AS cell_l
     FROM bgc_phyto_raw r LEFT JOIN bgc_phyto_changelog c USING (taxon_name)
     WHERE r.genus IS NOT NULL AND
