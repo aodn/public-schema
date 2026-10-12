@@ -41,11 +41,11 @@ jobs:
           python-version: "3.11"
           enable-cache: true
 
-#      - name: Lint
-#        run: |
-#          uv sync --group dev
-#          uv run ruff check --extend-select I
-#          uv run ruff format --check
+      - name: Lint
+        run: |
+          uv sync --group dev
+          uv run ruff check --extend-select I
+          uv run ruff format --check
 
       - name: Build python wheel/sdist
         run: uv build
