@@ -26,6 +26,7 @@ from public_schema.results import (
     StoreResult,
     TransformResult,
 )
+from public_schema.store import is_product, store_all_products, store_product
 from public_schema.transform import (
     run_transform,
     run_transforms,
@@ -48,6 +49,7 @@ __all__ = [
     "download_and_validate_source_tables",
     "download_resource",
     "generate_create_table_sql",
+    "is_product",
     "load_source_table",
     "load_source_tables",
     "resolve_resource",
@@ -57,6 +59,8 @@ __all__ = [
     "run_transforms",
     "sql_files_dict",
     "sql_files_list",
+    "store_all_products",
+    "store_product",
     "validate_local",
     "validate_resource",
 ]

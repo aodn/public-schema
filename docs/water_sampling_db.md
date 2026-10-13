@@ -30,7 +30,8 @@ in [`CONTEXT.md`](../CONTEXT.md).
    `transform.py`'s `run_transform`/`run_transforms`). See
    [ADR-0005](./adr/0005-execution-order-via-config-file.md).
 6. **Store** — export every Product (name ends in `_data`) as CSV for the wrapper flow to upload;
-   Intermediate tables (e.g. `_map`) are never exported. *Not yet implemented.*
+   Intermediate tables (e.g. `_map`) are never exported (done: `store.py`'s
+   `is_product`/`store_product`/`store_all_products`).
 
 ## Implementation plan
 
@@ -113,7 +114,7 @@ it only consults its `skip` input and otherwise tries every Product independentl
   - `store_all_products(db_path: Path, runsheet: RunsheetConfig, output_dir: Path, skip: dict[str, str] | None = None) -> StoreResult` —
     filters `runsheet.transforms` to `is_product(t.name)`, skips names in `skip`, and calls
     `store_product` for everything else, catching per-item failures (no further skip-derivation
-    needed — see above).
+    needed — see above). Done.
 
 - **`config.py`** (extend): `runsheet_paths_dict() -> dict[str, Path]` (keys `"bgc"`/`"cpr"`,
   stripped of the `_runsheet` suffix); `load_runsheet(name_or_path: str | Path)` accepts a bundled

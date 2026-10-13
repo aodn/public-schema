@@ -10,6 +10,7 @@ from shutil import rmtree
 from public_schema import StageResult
 from public_schema.config import load_runsheet
 from public_schema.load import load_source_tables
+from public_schema.store import store_all_products
 from public_schema.transform import run_transforms
 from public_schema.validate import download_and_validate_source_tables
 
@@ -51,13 +52,19 @@ def run_pipeline(
         rmtree(source_tables_dir)
     source_tables_dir.mkdir(parents=True, exist_ok=True)
 
+    # set up subdirectory for exported products and clear it if it already exists
+    products_dir = base_dir / "products"
+    if products_dir.exists():
+        rmtree(products_dir)
+    products_dir.mkdir(parents=True, exist_ok=True)
+
     # set up path for the DuckDB database file and clear it if it already exists
     db_path = base_dir / "water_sampling.duckdb"
     if db_path.exists():
         db_path.unlink()
 
     logger.info(
-        f"Pipeline configuration: db_path={db_path}, source_tables_dir={source_tables_dir}, http_timeout={http_timeout}"
+        f"Pipeline configuration: db_path={db_path}, source_tables_dir={source_tables_dir}, products_dir={products_dir}, http_timeout={http_timeout}"
     )
 
     # Download and validate source tables
@@ -91,6 +98,18 @@ def run_pipeline(
 
     logger.info(format_result(transform_result))
     logger.debug(pformat(transform_result.model_dump()))
+
+    # Export Products to CSV
+    logger.info("Starting store stage")
+    store_result = store_all_products(
+        db_path,
+        runsheet,
+        output_dir=products_dir,
+        skip=transform_result.skip_downstream(),
+    )
+
+    logger.info(format_result(store_result))
+    logger.debug(pformat(store_result.model_dump()))
 
     logger.info("Pipeline completed")
 
