@@ -5,19 +5,19 @@
 source_tables:
   - bgc_trip
   - bgc_chemistry
-  #- bgc_tss
-  #- bgc_tss_meta
-  #- bgc_picoplankton
-  #- bgc_picoplankton_meta
-  #- bgc_pigments
+  - bgc_tss
+  - bgc_tss_meta
+  - bgc_picoplankton
+  - bgc_picoplankton_meta
+  - bgc_pigments
   - bgc_phyto_changelog
   - bgc_phyto_raw
-  #- bgc_zoop_raw
-  #- bgc_zoop_changelog
-  #- phytoinfo
-  #- zoopinfo
-  #- bgc_lfish_samples
-  #- bgc_lfish_countraw
+  - bgc_zoop_raw
+  - bgc_zoop_changelog
+  - phytoinfo
+  - zoopinfo
+  - bgc_lfish_samples
+  - bgc_lfish_countraw
 
 transforms:
   - name: bgc_trip_metadata
@@ -32,36 +32,36 @@ transforms:
 #  - name: nrs_ctd_surface_values
 #    depends:
 #      - nrs_depth_binned_ctd_data
-#  - name: combined_bgc_map
-#    depends:
-#      - bgc_trip_metadata
-#      - bgc_chemistry
-#      - bgc_picoplankton
-#      - bgc_pigments
-#      - bgc_tss
-#  - name: bgc_tss_data
-#    depends:
-#      - combined_bgc_map
-#      - bgc_tss_meta
-#  - name: bgc_picoplankton_data
-#    depends:
-#      - combined_bgc_map
-#      - bgc_picoplankton_meta
-#  - name: bgc_chemistry_data
-#    depends:
-#      - combined_bgc_map
-#      - bgc_chemistry
-#  - name: bgc_pigments_data
-#    depends:
-#      - combined_bgc_map
-#      - bgc_pigments
-#  - name: combined_bgc_data
-#    depends:
-#      - combined_bgc_map
-#      - bgc_tss
-#      - bgc_picoplankton
-#      - bgc_chemistry_data
-#      - bgc_pigments_data
+  - name: combined_bgc_map
+    depends:
+      - bgc_trip_metadata
+      - bgc_chemistry
+      - bgc_picoplankton
+      - bgc_pigments
+      - bgc_tss
+  - name: bgc_tss_data
+    depends:
+      - combined_bgc_map
+      - bgc_tss_meta
+  - name: bgc_picoplankton_data
+    depends:
+      - combined_bgc_map
+      - bgc_picoplankton_meta
+  - name: bgc_chemistry_data
+    depends:
+      - combined_bgc_map
+      - bgc_chemistry
+  - name: bgc_pigments_data
+    depends:
+      - combined_bgc_map
+      - bgc_pigments
+  - name: combined_bgc_data
+    depends:
+      - combined_bgc_map
+      - bgc_tss
+      - bgc_picoplankton
+      - bgc_chemistry_data
+      - bgc_pigments_data
   - name: bgc_phytoplankton_map
     depends:
       - bgc_trip_metadata
@@ -103,34 +103,34 @@ transforms:
       - bgc_phytoplankton_map
       - bgc_phyto_raw
       - bgc_phyto_changelog
-#  - name: bgc_zooplankton_map
-#    depends:
-#      - bgc_trip_metadata
-#      - bgc_zoop_raw
+  - name: bgc_zooplankton_map
+    depends:
+      - bgc_trip_metadata
+      - bgc_zoop_raw
 #      - nrs_ctd_surface_values
-#  - name: bgc_zooplankton_abundance_raw_data
-#    depends:
-#      - bgc_zooplankton_map
-#      - bgc_zoop_raw
-#  - name: bgc_zooplankton_abundance_htg_data
-#    depends:
-#      - bgc_zooplankton_map
-#      - bgc_zoop_raw
-#  - name: bgc_zooplankton_abundance_genus_data
-#    depends:
-#      - bgc_zooplankton_map
-#      - bgc_zoop_raw
-#      - bgc_zoop_changelog
-#  - name: bgc_zooplankton_abundance_copepods_data
-#    depends:
-#      - bgc_zooplankton_map
-#      - bgc_zoop_raw
-#      - bgc_zoop_changelog
-#  - name: bgc_zooplankton_abundance_non_copepods_data
-#    depends:
-#      - bgc_zooplankton_map
-#      - bgc_zoop_raw
-#      - bgc_zoop_changelog
+  - name: bgc_zooplankton_abundance_raw_data
+    depends:
+      - bgc_zooplankton_map
+      - bgc_zoop_raw
+  - name: bgc_zooplankton_abundance_htg_data
+    depends:
+      - bgc_zooplankton_map
+      - bgc_zoop_raw
+  - name: bgc_zooplankton_abundance_genus_data
+    depends:
+      - bgc_zooplankton_map
+      - bgc_zoop_raw
+      - bgc_zoop_changelog
+  - name: bgc_zooplankton_abundance_copepods_data
+    depends:
+      - bgc_zooplankton_map
+      - bgc_zoop_raw
+      - bgc_zoop_changelog
+  - name: bgc_zooplankton_abundance_non_copepods_data
+    depends:
+      - bgc_zooplankton_map
+      - bgc_zoop_raw
+      - bgc_zoop_changelog
 #  - name: nrs_derived_indices_data
 #    depends:
 #      - bgc_trip_metadata

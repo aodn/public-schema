@@ -96,11 +96,6 @@ def run_pipeline(
 
 
 if __name__ == "__main__":
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    )
-
     parser = argparse.ArgumentParser(
         description="Run the IMOS Water Sampling DB ELT pipeline."
     )
@@ -117,7 +112,18 @@ if __name__ == "__main__":
         default=100,
         help="HTTP response timeout in seconds (for downloading source tables; default 100)",
     )
+    parser.add_argument(
+        "-d",
+        "--debug",
+        action="store_true",
+        help="Enable debug logging",
+    )
     args = parser.parse_args()
+
+    logging.basicConfig(
+        level=logging.DEBUG if args.debug else logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    )
 
     run_pipeline(
         runsheet_path=args.runsheet_path,
