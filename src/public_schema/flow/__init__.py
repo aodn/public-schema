@@ -1,18 +1,24 @@
-"""Top-level flow implementing the IMOS Water Sampling DB ELT pipeline."""
+"""
+Top-level Prefect flow implementing the IMOS Water Sampling DB ELT pipeline (see ADR-0009).
 
-import argparse
+Requires the optional ``prefect`` dependency group (``uv sync --group prefect``); the rest of
+``public_schema`` has no Prefect dependency.
+"""
+
 import logging
 import tempfile
 from pathlib import Path
 from pprint import pformat
 from shutil import rmtree
 
-from public_schema import StageResult
+from prefect import flow
+
 from public_schema.config import load_runsheet
-from public_schema.load import load_source_tables
-from public_schema.store import store_all_products
-from public_schema.transform import run_transforms
-from public_schema.validate import download_and_validate_source_tables
+from public_schema.flow.export import download_and_validate_source_tables
+from public_schema.flow.load import load_source_tables
+from public_schema.flow.store import store_all_products
+from public_schema.flow.transform import run_transforms
+from public_schema.results import StageResult
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +30,7 @@ def format_result(result: StageResult):
     )
 
 
+@flow
 def run_pipeline(
     runsheet_path: str | Path,
     base_dir: str | Path | None = None,
@@ -112,40 +119,3 @@ def run_pipeline(
     logger.debug(pformat(store_result.model_dump()))
 
     logger.info("Pipeline completed")
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Run the IMOS Water Sampling DB ELT pipeline."
-    )
-    parser.add_argument("runsheet_path", type=Path, help="Path to the runsheet file")
-    parser.add_argument(
-        "--base_dir",
-        type=Path,
-        default=None,
-        help="Base directory for database and exported tables (default: temporary directory)",
-    )
-    parser.add_argument(
-        "--http_timeout",
-        type=int,
-        default=100,
-        help="HTTP response timeout in seconds (for downloading source tables; default 100)",
-    )
-    parser.add_argument(
-        "-d",
-        "--debug",
-        action="store_true",
-        help="Enable debug logging",
-    )
-    args = parser.parse_args()
-
-    logging.basicConfig(
-        level=logging.DEBUG if args.debug else logging.INFO,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    )
-
-    run_pipeline(
-        runsheet_path=args.runsheet_path,
-        base_dir=args.base_dir,
-        http_timeout=args.http_timeout,
-    )
