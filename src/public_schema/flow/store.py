@@ -4,6 +4,7 @@ ADR-0009).
 """
 
 from pathlib import Path
+from pprint import pformat
 
 from prefect import get_run_logger, task
 
@@ -57,4 +58,6 @@ def store_all_products(
     logger.info(
         f"Store complete: {len(result.succeeded)} succeeded, {len(result.failed)} failed, {len(result.skipped)} skipped"
     )
+    logger.debug(pformat(result.model_dump(), sort_dicts=False))
+
     return result

@@ -11,20 +11,13 @@ from pprint import pformat
 from shutil import rmtree
 
 from prefect import flow, get_run_logger
+from prefect.states import Failed
 
 from public_schema.config import load_runsheet
 from public_schema.flow.export import download_and_validate_source_tables
 from public_schema.flow.load import load_source_tables
 from public_schema.flow.store import store_all_products
 from public_schema.flow.transform import run_transforms
-from public_schema.results import StageResult
-
-
-def format_result(result: StageResult):
-    return (
-        f"{result.name.title()} result: {len(result.succeeded)} succeeded, {len(result.failed)} failed,"
-        f" {len(result.skipped)} skipped."
-    )
 
 
 @flow
@@ -68,8 +61,14 @@ def run_pipeline(
     if db_path.exists():
         db_path.unlink()
 
+    config_dict = {
+        "db_path": db_path,
+        "source_tables_dir": source_tables_dir,
+        "products_dir": products_dir,
+        "http_timeout": http_timeout,
+    }
     logger.info(
-        f"Pipeline configuration: db_path={db_path}, source_tables_dir={source_tables_dir}, products_dir={products_dir}, http_timeout={http_timeout}"
+        f"Pipeline configuration:\n{pformat(config_dict, sort_dicts=False, indent=2)}"
     )
 
     # Download and validate source tables
@@ -77,9 +76,6 @@ def run_pipeline(
     export_result = download_and_validate_source_tables(
         runsheet, csv_dir=source_tables_dir, http_timeout=http_timeout
     )
-
-    logger.info(format_result(export_result))
-    logger.debug(pformat(export_result.model_dump()))
 
     # Load source tables into the database
     logger.info("Starting load stage")
@@ -90,9 +86,6 @@ def run_pipeline(
         skip=export_result.skip_downstream(),
     )
 
-    logger.info(format_result(load_result))
-    logger.debug(pformat(load_result.model_dump()))
-
     # Run transforms against the loaded database
     logger.info("Starting transform stage")
     transform_result = run_transforms(
@@ -100,9 +93,6 @@ def run_pipeline(
         runsheet,
         skip=load_result.skip_downstream(),
     )
-
-    logger.info(format_result(transform_result))
-    logger.debug(pformat(transform_result.model_dump()))
 
     # Export Products to CSV
     logger.info("Starting store stage")
@@ -113,7 +103,9 @@ def run_pipeline(
         skip=transform_result.skip_downstream(),
     )
 
-    logger.info(format_result(store_result))
-    logger.debug(pformat(store_result.model_dump()))
+    # Determine final status of the pipeline - fail unless all stages succeeded (or were skipped)
+    not_processed = list(store_result.skipped) + list(store_result.failed)
+    if not_processed:
+        return Failed(message="Not all products were successfully processed.")
 
     logger.info("Pipeline completed")

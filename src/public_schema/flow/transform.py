@@ -4,6 +4,7 @@ ADR-0006, ADR-0007, ADR-0009).
 """
 
 from pathlib import Path
+from pprint import pformat
 
 from prefect import get_run_logger, task
 
@@ -66,4 +67,6 @@ def run_transforms(
     logger.info(
         f"Transform complete: {len(result.succeeded)} succeeded, {len(result.failed)} failed, {len(result.skipped)} skipped"
     )
+    logger.debug(pformat(result.model_dump(), sort_dicts=False))
+
     return result

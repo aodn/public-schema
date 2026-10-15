@@ -4,6 +4,7 @@ ADR-0006, ADR-0009).
 """
 
 from pathlib import Path
+from pprint import pformat
 
 from prefect import get_run_logger, task
 
@@ -50,4 +51,6 @@ def download_and_validate_source_tables(
     logger.info(
         f"Download and validation complete: {len(result.succeeded)} succeeded, {len(result.failed)} failed"
     )
+    logger.debug(pformat(result.model_dump(), sort_dicts=False))
+
     return result
