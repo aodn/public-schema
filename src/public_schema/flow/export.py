@@ -3,17 +3,14 @@ Export+Validate stage task — Prefect wrapper for bulk download/validation of s
 ADR-0006, ADR-0009).
 """
 
-import logging
 from pathlib import Path
 
-from prefect import task
+from prefect import get_run_logger, task
 
 from public_schema.config import RunsheetConfig
 from public_schema.export import download_resource
 from public_schema.results import ExportResult
 from public_schema.validate import validate_local
-
-logger = logging.getLogger(__name__)
 
 
 @task
@@ -29,7 +26,7 @@ def download_and_validate_source_tables(
     :return: :class:`ExportResult` listing succeeded, failed, and skipped table names.
     """
     # TODO: retries?
-
+    logger = get_run_logger()
     logger.info(
         f"Starting download and validation of {len(runsheet.source_tables)} source tables"
     )

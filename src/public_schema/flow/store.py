@@ -3,16 +3,13 @@ Store stage task — Prefect wrapper for bulk export of Products to CSV (see ADR
 ADR-0009).
 """
 
-import logging
 from pathlib import Path
 
-from prefect import task
+from prefect import get_run_logger, task
 
 from public_schema.config import RunsheetConfig
 from public_schema.results import StoreResult
 from public_schema.store import is_product, store_product
-
-logger = logging.getLogger(__name__)
 
 
 @task
@@ -38,6 +35,7 @@ def store_all_products(
     :param skip: name -> reason, seeded from an earlier stage's result.
     :return: :class:`StoreResult` listing succeeded, failed, and skipped Product names.
     """
+    logger = get_run_logger()
     products = [t.name for t in runsheet.transforms if is_product(t.name)]
     logger.info(f"Starting store of {len(products)} products from {db_path}")
     result = StoreResult(skipped=skip if skip is not None else {})

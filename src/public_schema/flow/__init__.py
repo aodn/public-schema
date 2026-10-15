@@ -5,13 +5,12 @@ Requires the optional ``prefect`` dependency group (``uv sync --group prefect``)
 ``public_schema`` has no Prefect dependency.
 """
 
-import logging
 import tempfile
 from pathlib import Path
 from pprint import pformat
 from shutil import rmtree
 
-from prefect import flow
+from prefect import flow, get_run_logger
 
 from public_schema.config import load_runsheet
 from public_schema.flow.export import download_and_validate_source_tables
@@ -19,8 +18,6 @@ from public_schema.flow.load import load_source_tables
 from public_schema.flow.store import store_all_products
 from public_schema.flow.transform import run_transforms
 from public_schema.results import StageResult
-
-logger = logging.getLogger(__name__)
 
 
 def format_result(result: StageResult):
@@ -43,6 +40,7 @@ def run_pipeline(
     :param base_dir: base directory for database and exported tables (if None, a temporary directory is created)
     :param http_timeout: http response timeout in seconds (for downloading source tables)
     """
+    logger = get_run_logger()
     logger.info(f"Starting pipeline with runsheet: {runsheet_path}")
 
     # Load the runsheet

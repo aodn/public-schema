@@ -3,16 +3,13 @@ Transform stage task — Prefect wrapper for bulk execution of transform SQL fil
 ADR-0006, ADR-0007, ADR-0009).
 """
 
-import logging
 from pathlib import Path
 
-from prefect import task
+from prefect import get_run_logger, task
 
 from public_schema.config import RunsheetConfig
 from public_schema.results import TransformResult
 from public_schema.transform import run_transform
-
-logger = logging.getLogger(__name__)
 
 
 @task
@@ -35,6 +32,7 @@ def run_transforms(
     :param skip: name -> reason, seeded from an earlier stage's result.
     :return: :class:`TransformResult` listing succeeded, failed, and skipped transform names.
     """
+    logger = get_run_logger()
     logger.info(f"Starting {len(runsheet.transforms)} transforms into {db_path}")
     result = TransformResult(skipped=skip if skip is not None else {})
 

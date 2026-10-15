@@ -3,10 +3,9 @@ Load stage task — Prefect wrapper for bulk loading of source tables into DuckD
 ADR-0006, ADR-0007, ADR-0009).
 """
 
-import logging
 from pathlib import Path
 
-from prefect import task
+from prefect import get_run_logger, task
 
 from public_schema.config import RunsheetConfig
 from public_schema.load import (
@@ -15,8 +14,6 @@ from public_schema.load import (
     load_source_table,
 )
 from public_schema.results import LoadResult
-
-logger = logging.getLogger(__name__)
 
 
 @task
@@ -41,6 +38,7 @@ def load_source_tables(
     :param skip: name -> reason, seeded from an earlier stage's result.
     :return: :class:`LoadResult` listing succeeded, failed, and skipped table names.
     """
+    logger = get_run_logger()
     logger.info(
         f"Starting load of {len(runsheet.source_tables)} source tables into {db_path}"
     )

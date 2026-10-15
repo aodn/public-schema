@@ -40,3 +40,6 @@ source = "vcs"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
+[tool.prefect]
+home = ".prefect"
+
