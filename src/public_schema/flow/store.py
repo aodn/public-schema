@@ -7,6 +7,7 @@ from pathlib import Path
 from pprint import pformat
 
 from prefect import get_run_logger, task
+from prefect_aws import S3Bucket
 
 from public_schema.config import RunsheetConfig
 from public_schema.results import StoreResult
@@ -61,3 +62,25 @@ def store_all_products(
     logger.debug(pformat(result.model_dump(), sort_dicts=False))
 
     return result
+
+
+@task
+def upload_to_s3(
+    source_dir: Path,
+    output_bucket_block_name: str,
+    folder: str | None = None,
+) -> None:
+    """
+    Upload all files in *source_dir* to the S3 bucket, under an optional *folder* prefix, using the Prefect block
+     named *output_bucket_block_name*.
+
+    :param source_dir: path to file or directory containing files to upload.
+    :param output_bucket_block_name: name of the Prefect block to upload to.
+    :param folder: optional folder prefix in the S3 bucket (additional to any bucket_folder defined in the bucket block).
+    """
+    logger = get_run_logger()
+    s3_bucket = S3Bucket.load(output_bucket_block_name)
+    logger.info(
+        f"Uploading files from {source_dir} to S3 bucket {s3_bucket.bucket_name}."
+    )
+    s3_bucket.upload_from_folder(from_folder=source_dir, to_folder=folder)

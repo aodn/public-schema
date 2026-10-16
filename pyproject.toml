@@ -29,6 +29,7 @@ dev = [
 ]
 prefect = [
     "prefect>=3.8.8",
+    "prefect-aws>=0.7.12",
 ]
 
 [tool.hatch.build.targets.wheel]
