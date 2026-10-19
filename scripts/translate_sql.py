@@ -9,6 +9,7 @@ src/public_schema/resources/bgc_data/ and .../cpr_data/:
   3. to_char(ts, 'YYYY-MM-DD HH24:MI:SS')  →  strftime(ts, '%Y-%m-%d %H:%M:%S')
   4. to_char(ts, 'HH24:MI')           →  strftime(ts, '%H:%M')
   5. st_geomfromtext('POINT(...)', 4326) →  ST_AsWKB(ST_GeomFromText('POINT(...)'))
+  6. substring(text, pattern) → regexp_extract()  (DuckDB's substring function is simple indexing, not regex-based)
 
 jsonb_object_agg → PIVOT rewrites are NOT handled here (done manually per file).
 DISTINCT ON is NOT changed.
@@ -78,6 +79,17 @@ def apply_substitutions(sql: str) -> tuple[str, list[str]]:
     )
     if n:
         changes.append(f"  st_geomfromtext → ST_AsWKB(ST_GeomFromText) ({n}x)")
+    sql = new
+
+    # 6. substring(text, pattern) → regexp_extract(text, pattern)
+    new, n = re.subn(
+        r"substring\(([^,]+),\s*([^,]+)\)",
+        r"regexp_extract(\1, \2)",
+        sql,
+        flags=re.IGNORECASE,
+    )
+    if n:
+        changes.append(f"  substring → regexp_extract ({n}x)")
     sql = new
 
     return sql, changes
