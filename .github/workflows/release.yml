@@ -44,8 +44,8 @@ jobs:
       - name: Lint
         run: |
           uv sync --group dev
-          uv run ruff check --extend-select I
-          uv run ruff format --check
+          uvx ruff check --extend-select I
+          uvx ruff format --check
 
       - name: Build python wheel/sdist
         run: uv build
