@@ -1,5 +1,11 @@
 # Most flow logic is packaged in `public_schema`
 
+> **Superseded by [ADR-0009](./0009-prefect-flow-packaged-in-public-schema.md).** The orchestration
+> layer (Prefect `@flow`/`@task` wrapping) was later moved into this package too, as
+> `public_schema.flow`, rather than staying in a separate wrapper-flow repository. The rest of this
+> ADR (flow *logic* — DDL generation, execution order, load/transform/export — living in this
+> package) still holds.
+
 The full ETL (DDL generation, CSV load, validation, transform execution,
 product export) was originally implemented elsewhere, with `public_schema`
 supplying only the raw data — resource descriptors and SQL files — that the flow read.

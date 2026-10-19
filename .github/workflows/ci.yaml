@@ -19,7 +19,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: uv sync --group dev
+        run: uv sync --group dev --group prefect
 
       - name: Run tests
         run: uv run pytest -v

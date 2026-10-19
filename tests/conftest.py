@@ -1,4 +1,9 @@
+import os
 from pathlib import Path
+
+# Tasks are called directly (not within a @flow run) in several tests below; suppress Prefect's
+# warning about logging to the API without a flow run id in that case.
+os.environ.setdefault("PREFECT_LOGGING_TO_API_WHEN_MISSING_FLOW", "ignore")
 
 TEST_BASE_DIR = Path(__file__).resolve().parent
 TEST_RESOURCES_DIR = TEST_BASE_DIR / "resources_for_tests"

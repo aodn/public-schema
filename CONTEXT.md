@@ -57,7 +57,11 @@ that fails validation unless the referencing and referenced resources are in one
 Frictionless silently ignores unknown properties, so this one validates cleanly per-resource.
 _Avoid_: foreignKeys, FK constraint file
 
-**Wrapper flow**:
-The thin Prefect flow in `aodn/dataflow-orchestration` (`projects/water_sampling_db/flow.py`) that
-calls this package's public API and wraps each step in a `@task`. It owns no pipeline logic itself.
-_Avoid_: orchestrator, pipeline (when meaning specifically the Prefect layer)
+**Flow** (or **pipeline flow**):
+The Prefect `@flow` `public_schema.flow.run_pipeline`, in this package's `public_schema.flow`
+sub-package (requires the optional `prefect` dependency group). Calls the four bulk stage `@task`s
+(`download_and_validate_source_tables`, `load_source_tables`, `run_transforms`,
+`store_all_products`) in order, piping each stage's `skip_downstream()` into the next. See
+[ADR-0009](./docs/adr/0009-prefect-flow-packaged-in-public-schema.md); supersedes the earlier
+"Wrapper flow" concept of a separate `aodn/dataflow-orchestration` repo owning this wiring.
+_Avoid_: wrapper flow, orchestrator (when meaning specifically this package's own flow)
