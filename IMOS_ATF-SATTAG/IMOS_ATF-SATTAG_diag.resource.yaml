@@ -82,7 +82,7 @@ schema:
     - name: v_mask
       type: integer
       constraints:
-        required: true
+        required: false
     - name: alt
       type: number
     - name: est_speed
@@ -112,7 +112,7 @@ schema:
     - name: diag_id
       type: integer
       constraints:
-        required: true
+        required: false
     - name: ssm_lon
       type: number
       constraints:
