@@ -37,7 +37,7 @@ schema:
     - name: device_wmo_ref
       type: string
       constraints:
-        required: true
+        required: false
     - name: tag_type
       type: string
       constraints:
