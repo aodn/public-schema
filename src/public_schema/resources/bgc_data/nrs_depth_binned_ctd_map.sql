@@ -12,22 +12,29 @@ WITH nrs_trips AS (
              WHEN stationcode = 'VBM' THEN 'VBM100'
              ELSE CONCAT(projectname, stationcode)
          END AS site_code
-      FROM imos_bgc_db.bgc_trip
+      FROM bgc_trip
       WHERE projectname = 'NRS'
 ),
---calculate the absolute time difference 
+ctd_debployments AS (
+      SELECT DISTINCT
+         site_code,
+         filename,
+         time::timestamp AS cast_time
+      FROM nrs_ctd_profiles_from_parquet
+      WHERE site_code LIKE 'NRS%'
+),
+--calculate the absolute time difference
 --match the site code and time
 ctd_profiles AS (
       SELECT
          nt.trip_code,
-         dp.file_id,
-         dp.time_coverage_start AT TIME ZONE 'UTC' AS cast_time,
-         GREATEST((nt.sampledateutc - dp.time_coverage_start AT TIME ZONE 'UTC'),
-                  -(nt.sampledateutc - dp.time_coverage_start AT TIME ZONE 'UTC'))
+         dp.filename,
+         dp.cast_time,
+         GREATEST((nt.sampledateutc - dp.cast_time), -(nt.sampledateutc - dp.cast_time))
              AS absolute_time_difference
-      FROM nrs_trips nt INNER JOIN anmn_nrs_ctd_profiles.deployments dp
-         ON dp.time_coverage_start AT TIME ZONE 'UTC' BETWEEN (nt.sampledateutc - INTERVAL '1' DAY) AND
-                                                              (nt.sampledateutc + INTERVAL '1' DAY)
+      FROM nrs_trips nt INNER JOIN ctd_debployments dp
+         ON dp.cast_time BETWEEN (nt.sampledateutc - INTERVAL '1' DAY) AND
+                                 (nt.sampledateutc + INTERVAL '1' DAY)
          AND dp.site_code = nt.site_code
 ),
 --for each trip, pick the cast that is closest in time
@@ -38,7 +45,7 @@ matched_profiles AS (
 )
 --create the final list for the materialised view
       SELECT
-         bt."Project", --required for filter in Geoserver (step 2 portal)
+         bt."Project",
          bt."StationName",
          trip_code AS "TripCode",
          mp.cast_time AS "CastTimeUTC",
@@ -46,9 +53,9 @@ matched_profiles AS (
          bt."Latitude",
          bt."Longitude",
          -- last 4 columns only included for joining to other tables and filtering on the Portal
-         mp.file_id,
+         mp.filename,
          bt."SampleTime_Local",
-         bt."SampleTime_UTC", --required for filter in Geoserver (step 2 portal)
+         bt."SampleTime_UTC",
          trip_code,
          bt.geom
       FROM bgc_trip_metadata bt

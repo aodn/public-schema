@@ -23,15 +23,19 @@ transforms:
   - name: bgc_trip_metadata
     depends:
       - bgc_trip
-#  - name: nrs_depth_binned_ctd_map
-#    depends:
-#      - bgc_trip_metadata
-#  - name: nrs_depth_binned_ctd_data
-#    depends:
-#      - nrs_depth_binned_ctd_map
-#  - name: nrs_ctd_surface_values
-#    depends:
-#      - nrs_depth_binned_ctd_data
+  - name: nrs_ctd_profiles_from_parquet
+    # No dependencies, this is a source table that reads from Parquet via SQL
+  - name: nrs_depth_binned_ctd_map
+    depends:
+      - bgc_trip_metadata
+      - nrs_ctd_profiles_from_parquet
+  - name: nrs_depth_binned_ctd_data
+    depends:
+      - nrs_depth_binned_ctd_map
+      - nrs_ctd_profiles_from_parquet
+  - name: nrs_ctd_surface_values
+    depends:
+      - nrs_depth_binned_ctd_data
   - name: combined_bgc_map
     depends:
       - bgc_trip_metadata
@@ -66,7 +70,7 @@ transforms:
     depends:
       - bgc_trip_metadata
       - bgc_phyto_raw
-#      - nrs_ctd_surface_values
+      - nrs_ctd_surface_values
   - name: bgc_phytoplankton_abundance_raw_data
     depends:
       - bgc_phytoplankton_map
@@ -107,7 +111,7 @@ transforms:
     depends:
       - bgc_trip_metadata
       - bgc_zoop_raw
-#      - nrs_ctd_surface_values
+      - nrs_ctd_surface_values
   - name: bgc_zooplankton_abundance_raw_data
     depends:
       - bgc_zooplankton_map
