@@ -30,6 +30,7 @@ def validate_local(
     :param name_or_path: resource name or path to a ``.dataresource.yaml`` file
     :return: tuple (valid:bool, errors:list)
     """
+    # TODO: add check that the file contains data, not just a header? - which frictionless considers valid!
     csv_path = Path(csv_path)
     if not csv_path.exists():
         raise FileNotFoundError(f"CSV file {csv_path.resolve()} does not exist")
