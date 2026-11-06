@@ -5,9 +5,15 @@ CSV for the wrapper flow to upload (see ADR-0006, ADR-0007).
 
 import logging
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-from public_schema.config import TransformName
 from public_schema.connection import create_connection
+
+if TYPE_CHECKING:
+    # Deferred: a module-level import here would make `public_schema.config` get fully imported
+    # as a side effect of `import public_schema` (since this module is imported eagerly from
+    # public_schema/__init__.py), which breaks `python -m public_schema.config`.
+    from public_schema.config import TransformName
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +29,7 @@ def is_product(name: str) -> bool:
     return name.endswith("_data")
 
 
-def store_product(db_path: Path, name: TransformName, output_dir: Path) -> Path:
+def store_product(db_path: Path, name: "TransformName", output_dir: Path) -> Path:
     """
     Export the table *name* from the DuckDB file at *db_path* to ``<output_dir>/<name>.csv``.
 

@@ -5,12 +5,18 @@ ADR-0002, ADR-0006, ADR-0007, ADR-0008).
 
 import logging
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import yaml
 
-from public_schema.config import DescriptorName
 from public_schema.connection import create_connection
 from public_schema.export import resolve_resource
+
+if TYPE_CHECKING:
+    # Deferred: a module-level import here would make `public_schema.config` get fully imported
+    # as a side effect of `import public_schema` (since this module is imported eagerly from
+    # public_schema/__init__.py), which breaks `python -m public_schema.config`.
+    from public_schema.config import DescriptorName
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +29,7 @@ _TYPE_MAP = {
 }
 
 
-def _load_schema(name: DescriptorName) -> dict:
+def _load_schema(name: "DescriptorName") -> dict:
     descriptor_path = resolve_resource(name)
     with open(descriptor_path, encoding="utf-8") as f:
         descriptor = yaml.safe_load(f)
@@ -46,7 +52,7 @@ def _foreign_key_dependencies(schema: dict) -> list[str]:
     return [fk["reference"]["resource"] for fk in schema.get("databaseForeignKeys", [])]
 
 
-def generate_create_table_sql(name: DescriptorName) -> str:
+def generate_create_table_sql(name: "DescriptorName") -> str:
     """
     Generate the ``CREATE TABLE`` DDL for a Source table from its Resource's Frictionless schema.
 
@@ -106,7 +112,7 @@ def _select_expr(field: dict, csv_columns: set[str]) -> str:
     return f"CAST({name} AS {sql_type}) AS {name}"
 
 
-def load_source_table(db_path: Path, name: DescriptorName, csv_path: Path) -> None:
+def load_source_table(db_path: Path, name: "DescriptorName", csv_path: Path) -> None:
     """
     Create the Source table for *name* (per :func:`generate_create_table_sql`) and load
     *csv_path* into it.
