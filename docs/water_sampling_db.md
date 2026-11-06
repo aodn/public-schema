@@ -142,9 +142,12 @@ it only consults its `skip` input and otherwise tries every Product independentl
   - `flow/__main__.py` — CLI entry point (`python -m public_schema.flow <runsheet_path>
     [--base_dir ...] [--http_timeout ...] [-d]`), calling `run_pipeline`.
 
-- **`config.py`** (extend): `runsheet_paths_dict() -> dict[str, Path]` (keys `"bgc"`/`"cpr"`,
-  stripped of the `_runsheet` suffix); `load_runsheet(name_or_path: str | Path)` accepts a bundled
-  name or explicit path, same pattern as `resolve_resource()`.
+- **`config.py`** — `resolve_runsheet(name_or_path: str | Path) -> Path` (done) resolves a bare
+  bundled runsheet name (e.g. `"bgc_runsheet"`) to its absolute path by recursively globbing
+  `public_schema.resources` for `<name>.yaml`, or returns an explicit path as-is — same pattern as
+  `export.py`'s `resolve_resource()`. `load_runsheet(name_or_path: str | Path)` (done) calls
+  `resolve_runsheet()` before parsing, so it also accepts either a bundled name or an explicit
+  path.
 
 - **CTD Parquet + spatial extension** — 8 of the 44 transform files use
   `ST_GeomFromText`/`ST_AsWKB` (handled by `create_connection`'s `spatial` extension load). CTD

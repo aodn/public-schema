@@ -3,6 +3,7 @@ Config validation and loading for the public_schema package.
 """
 
 import sys
+from importlib.resources import as_file, files
 from pathlib import Path
 from typing import Annotated
 
@@ -94,18 +95,52 @@ class RunsheetConfig(BaseModel):
         return self
 
 
-def load_runsheet(path: str | Path) -> RunsheetConfig:
+def resolve_runsheet(name_or_path: str | Path) -> Path:
+    """
+    Resolve a runsheet name or path to the absolute path of its YAML file.
+
+    If *name_or_path* looks like an existing YAML file path, return it directly. Otherwise, treat
+    it as a runsheet name and search the bundled ``public_schema.resources`` package (recursively)
+    for ``<name>.yaml``.
+
+    :param name_or_path: runsheet name (e.g. ``"bgc_runsheet"``) or path to a YAML file
+    :return: resolved absolute :class:`~pathlib.Path`
+    :raises FileNotFoundError: if *name_or_path* is a path that does not exist
+    :raises ValueError: if *name_or_path* is a name that matches no bundled runsheet
+    """
+    candidate = Path(name_or_path)
+    if candidate.suffix in (".yaml", ".yml") or candidate.exists():
+        if not candidate.exists():
+            raise FileNotFoundError(
+                f"Runsheet file {candidate.resolve()} does not exist"
+            )
+        return candidate.resolve()
+
+    name = str(name_or_path)
+    filename = f"{name}.yaml"
+    pkg_dir = files("public_schema.resources")
+    for entry in pkg_dir.glob(f"**/{filename}"):
+        with as_file(entry) as p:
+            return Path(p).resolve()
+
+    raise ValueError(f"No bundled runsheet named {name!r}.")
+
+
+def load_runsheet(name_or_path: str | Path) -> RunsheetConfig:
     """
     Load a runsheet configuration from a YAML file and validate it against the RunsheetConfig schema.
 
     Args:
-        path: Path to the YAML file containing the runsheet configuration.
+        name_or_path: Runsheet name (e.g. "bgc_runsheet") or path to the YAML file containing the
+            runsheet configuration. A bare name is resolved via :func:`resolve_runsheet` by
+            searching the bundled ``public_schema.resources`` package.
 
     Returns:
         An instance of RunsheetConfig containing the validated configuration.
     """
     import yaml
 
+    path = resolve_runsheet(name_or_path)
     with open(path, "r") as f:
         config_data = yaml.safe_load(f)
     return RunsheetConfig.model_validate(config_data)
@@ -116,7 +151,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Validate runsheet configuration.")
     parser.add_argument(
-        "runsheet_path", type=Path, help="Path to the runsheet YAML file."
+        "runsheet_path",
+        help="Bundled runsheet name (e.g. 'bgc_runsheet') or path to a runsheet YAML file.",
     )
     args = parser.parse_args()
 

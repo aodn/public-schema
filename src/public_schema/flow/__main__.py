@@ -9,7 +9,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Run the IMOS Water Sampling DB ELT pipeline."
     )
-    parser.add_argument("runsheet_path", type=Path, help="Path to the runsheet file")
+    parser.add_argument(
+        "runsheet_path",
+        type=Path,
+        help="Bundled runsheet name (e.g. 'bgc_runsheet') or path to a runsheet YAML file",
+    )
     parser.add_argument(
         "--base_dir",
         type=Path,

@@ -68,7 +68,7 @@ def run_pipeline(
     """
     Run the IMOS Water Sampling DB ELT pipeline.
 
-    :param runsheet_path: path to the runsheet file
+    :param runsheet_path: bundled runsheet name (e.g. "bgc_runsheet") or path to a runsheet YAML file
     :param output_bucket_block_name: name of the Prefect block to upload the source and product tables to (if None, products are not uploaded)
     :param base_dir: base directory for database and exported tables (if None, a temporary directory is created)
     :param http_timeout: http response timeout in seconds (for downloading source tables)
