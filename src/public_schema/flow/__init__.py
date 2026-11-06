@@ -14,7 +14,7 @@ from prefect import flow, get_run_logger
 from prefect.runtime import flow_run
 from prefect.states import Failed
 
-from public_schema.config import load_runsheet
+from public_schema.config import load_runsheet, resolve_runsheet
 from public_schema.flow.export import download_and_validate_source_tables
 from public_schema.flow.load import load_source_tables
 from public_schema.flow.store import store_all_products, upload_to_s3
@@ -60,7 +60,7 @@ def _setup_paths(base_dir: str | Path | None) -> dict[str, Path]:
 
 @flow
 def run_pipeline(
-    runsheet_path: str | Path,
+    runsheet_name_or_path: str | Path,
     output_bucket_block_name: str | None = "processing-temp-7d-bucket",
     base_dir: str | Path | None = None,
     http_timeout: int = 100,
@@ -68,16 +68,18 @@ def run_pipeline(
     """
     Run the IMOS Water Sampling DB ELT pipeline.
 
-    :param runsheet_path: bundled runsheet name (e.g. "bgc_runsheet") or path to a runsheet YAML file
+    :param runsheet_name_or_path: bundled runsheet name (e.g. "bgc_runsheet") or path to a runsheet YAML file
     :param output_bucket_block_name: name of the Prefect block to upload the source and product tables to (if None, products are not uploaded)
     :param base_dir: base directory for database and exported tables (if None, a temporary directory is created)
     :param http_timeout: http response timeout in seconds (for downloading source tables)
     """
     logger = get_run_logger()
-    logger.info(f"Starting pipeline with runsheet: {runsheet_path}")
+    logger.info(
+        f"Starting pipeline with runsheet: {resolve_runsheet(runsheet_name_or_path)}"
+    )
 
     # Load the runsheet
-    runsheet = load_runsheet(runsheet_path)
+    runsheet = load_runsheet(runsheet_name_or_path)
 
     paths = _setup_paths(base_dir)
     logger.info(

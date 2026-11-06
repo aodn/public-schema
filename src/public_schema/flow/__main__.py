@@ -1,4 +1,4 @@
-"""CLI entry point: python -m public_schema.flow <runsheet_path> [options]"""
+"""CLI entry point: python -m public_schema.flow <runsheet> [options]"""
 
 import argparse
 from pathlib import Path
@@ -10,7 +10,7 @@ if __name__ == "__main__":
         description="Run the IMOS Water Sampling DB ELT pipeline."
     )
     parser.add_argument(
-        "runsheet_path",
+        "runsheet",
         type=Path,
         help="Bundled runsheet name (e.g. 'bgc_runsheet') or path to a runsheet YAML file",
     )
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     run_pipeline(
-        runsheet_path=args.runsheet_path,
+        runsheet_name_or_path=args.runsheet,
         base_dir=args.base_dir,
         http_timeout=args.http_timeout,
     )

@@ -151,13 +151,14 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Validate runsheet configuration.")
     parser.add_argument(
-        "runsheet_path",
+        "runsheet",
         help="Bundled runsheet name (e.g. 'bgc_runsheet') or path to a runsheet YAML file.",
     )
     args = parser.parse_args()
 
+    print(f"Validating runsheet configuration in {resolve_runsheet(args.runsheet)}")
     try:
-        runsheet_config = load_runsheet(args.runsheet_path)
+        runsheet_config = load_runsheet(args.runsheet)
         print(f"Runsheet configuration is valid: {runsheet_config}")
     except ValueError as e:
         print(f"Error validating runsheet configuration: {e}")
