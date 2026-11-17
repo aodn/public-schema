@@ -15,13 +15,12 @@ WITH nrs_trips AS (
       FROM bgc_trip
       WHERE projectname = 'NRS'
 ),
-ctd_debployments AS (
+ctd_deployments AS (
       SELECT DISTINCT
          site_code,
          filename,
          time::timestamp AS cast_time
       FROM nrs_ctd_profiles_from_parquet
-      WHERE site_code LIKE 'NRS%'
 ),
 --calculate the absolute time difference
 --match the site code and time
@@ -32,7 +31,7 @@ ctd_profiles AS (
          dp.cast_time,
          GREATEST((nt.sampledateutc - dp.cast_time), -(nt.sampledateutc - dp.cast_time))
              AS absolute_time_difference
-      FROM nrs_trips nt INNER JOIN ctd_debployments dp
+      FROM nrs_trips nt INNER JOIN ctd_deployments dp
          ON dp.cast_time BETWEEN (nt.sampledateutc - INTERVAL '1' DAY) AND
                                  (nt.sampledateutc + INTERVAL '1' DAY)
          AND dp.site_code = nt.site_code

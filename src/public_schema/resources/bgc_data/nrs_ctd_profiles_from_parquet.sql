@@ -20,6 +20,8 @@ CREATE OR REPLACE TABLE nrs_ctd_profiles_from_parquet AS (
         "CNDC_quality_control", 
         "DENS", 
         "DENS_quality_control"
-    FROM read_parquet('s3://aodn-cloud-optimised/vessel_ctd_profiles_delayed_qc.parquet/site_code=NRS*/**/*.parquet',
-         hive_partitioning = true)
+    FROM read_parquet([
+             's3://aodn-cloud-optimised/vessel_ctd_profiles_delayed_qc.parquet/site_code=NRS*/**/*.parquet',
+             's3://aodn-cloud-optimised/vessel_ctd_profiles_delayed_qc.parquet/site_code=VBM100/**/*.parquet'
+           ], hive_partitioning = true)
 );
