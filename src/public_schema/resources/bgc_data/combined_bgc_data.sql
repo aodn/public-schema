@@ -51,9 +51,10 @@ UNION
 UNION
    SELECT 
       che."TripCode",
-      che."SampleDepth_m"::text,
+      che."SampleDepth_m",
       che."SampleID"
    FROM bgc_chemistry_data che
+   WHERE Project = 'NRS'
 )
    SELECT
       bm."Project",
@@ -143,8 +144,7 @@ UNION
       LEFT JOIN tss_avg tss USING ("TripCode", "SampleDepth_m")
       LEFT JOIN picoplankton_avg ppl USING ("TripCode", "SampleDepth_m")
       LEFT JOIN bgc_pigments_data pig USING ("TripCode", "SampleDepth_m")
-      LEFT JOIN bgc_chemistry_data che ON td."TripCode" = che."TripCode"
-         AND td."SampleDepth_m" = che."SampleDepth_m"::text
+      LEFT JOIN bgc_chemistry_data che USING ("TripCode", "SampleDepth_m")
    WHERE bm."Project" = 'NRS'
 ;
 
